@@ -1,0 +1,108 @@
+fileVersion: 1
+id: 73c74612-9d41-4d78-b976-a0b966a257d9
+name: V_SNOP_YIELDS_STAGE_SOLVE_FACTS
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: C_SC_YP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c2434d15-fa39-490c-902c-99e479a02d69
+          stepCounter: 73c74612-9d41-4d78-b976-a0b966a257d9
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: SCENARIO_SNAPSHOT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4e8682c9-a3c5-4be7-955a-16c777485c53
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b5203766-4c5d-41af-b45d-e4ff3f8bf46d
+          stepCounter: 73c74612-9d41-4d78-b976-a0b966a257d9
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: TGT_SCENARIO
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5dd9b122-7645-4020-8123-4248d8cc28bb
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ba94ea6d-4b4d-44ad-9c8a-0addc61c8966
+          stepCounter: 73c74612-9d41-4d78-b976-a0b966a257d9
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SCENARIO_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 286c613e-1e1d-4b9e-9e13-b7802967aef5
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 31e174c3-1a28-4d56-8d65-8a112b7fd7fc
+          stepCounter: 73c74612-9d41-4d78-b976-a0b966a257d9
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: TGT_SYSTEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1a83ae02-a9be-4d6c-834a-680972b7cb68
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9314c45d-5095-4649-b12f-97cfc99c8f6e
+          stepCounter: 73c74612-9d41-4d78-b976-a0b966a257d9
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4dc56369-869c-42b9-8382-b0524079f77b
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_YP
+            nodeName: BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_YP', 'BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN') }} "BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN"
+            GROUP BY ALL
+        name: V_SNOP_YIELDS_STAGE_SOLVE_FACTS
+        noLinkRefs: []
+  name: V_SNOP_YIELDS_STAGE_SOLVE_FACTS
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

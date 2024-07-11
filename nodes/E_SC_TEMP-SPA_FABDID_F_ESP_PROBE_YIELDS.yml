@@ -1,0 +1,201 @@
+fileVersion: 1
+id: c94e8edd-4aa8-4614-a349-7077418acd5f
+name: SPA_FABDID_F_ESP_PROBE_YIELDS
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 13b1661f-4e1b-49a3-b602-4cb8c2c7c890
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a39d27ce-7e9b-4309-a125-87862af5c77d
+                stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fcc32f1d-b9e4-4770-a798-d74bdec343cd
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: PART_SITE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 787ff750-80d8-4ba4-bcac-b74f2563bbdc
+                stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2257a9be-0b1c-4b9c-a26a-c5a291648c1e
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: SNAPSHOT_WW_BEGIN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f882cf66-d281-45b9-bab6-f6785efa4980
+                stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: aaf5f585-970e-4c47-a13f-3bf03303bd26
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: EFFECTIVE_WW_BEGIN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 09bc3b53-e039-4489-8d1a-7b216eaf78af
+                stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4cdf0d92-56f8-487f-b56e-d6bd6765c630
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: NUMBER(38,9)
+        description: ""
+        name: MAXDPW_ORIGINAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2126bb12-8f33-4bd0-aa46-c852c3047e73
+                stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e58e05fd-ab23-481c-b63d-747ac4ad72cd
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: NUMBER(38,9)
+        description: ""
+        name: EXP_DIE_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9b04fdda-aca3-4233-8812-779263443523
+                stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 817afe47-5bee-40af-80ac-7da69cb0c8e3
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: NUMBER(38,9)
+        description: ""
+        name: QTY_YIELD_FE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 99833a5c-bef8-430a-b540-3b234d61f83c
+                stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c721fd89-f882-46fb-ac3e-fffea54d86af
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: NUMBER(38,12)
+        description: ""
+        name: YIELD_1
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a7d8f40e-c79d-4154-8e38-cd0f588f3723
+                stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5fb20053-c23b-438f-ade0-051d5065dbff
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_WORKWEEK_BEGIN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: TO_DATE("F_ESP_PROBE_YIELDS"."SNAPSHOT_WW_BEGIN_DATE")
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a18d711a-5213-48ef-af5c-5900c2419044
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: YIELD_PART_SITE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 269c7171-5c6f-4039-beee-131489a74f80
+                stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: e70ef96f-bf62-4cef-8938-66d4604c6d22
+          stepCounter: c94e8edd-4aa8-4614-a349-7077418acd5f
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: EFFECTIVE_WORKWEEK_BEGIN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: TO_DATE("F_ESP_PROBE_YIELDS"."EFFECTIVE_WW_BEGIN_DATE")
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          F_ESP_PROBE_YIELDS: 3c7ddf87-7180-429b-9ca8-c9252c7958bf
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: C_SC_SP
+            nodeName: F_ESP_PROBE_YIELDS
+        join:
+          joinCondition: FROM {{ ref('C_SC_SP', 'F_ESP_PROBE_YIELDS') }} "F_ESP_PROBE_YIELDS"
+        name: SPA_FABDID_F_ESP_PROBE_YIELDS
+        noLinkRefs: []
+  name: SPA_FABDID_F_ESP_PROBE_YIELDS
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

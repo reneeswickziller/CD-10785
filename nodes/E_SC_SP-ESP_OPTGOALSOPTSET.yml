@@ -1,0 +1,50 @@
+fileVersion: 1
+id: 1a3cfbad-0579-4123-88e1-6c118e74109c
+name: ESP_OPTGOALSOPTSET
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_SP
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: cfbb248e-3fe3-4ddf-babf-c932efaff774
+          stepCounter: 1a3cfbad-0579-4123-88e1-6c118e74109c
+        config: {}
+        dataType: NUMBER(25,0)
+        defaultValue: ""
+        description: ""
+        name: OPT_SETID
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6333daac-16b0-47c0-a2ea-4ad637a10548
+          stepCounter: 1a3cfbad-0579-4123-88e1-6c118e74109c
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: OPT_SETNAME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_SP', 'ESP_OPTGOALSOPTSET') }}
+  name: ESP_OPTGOALSOPTSET
+  schema: ""
+  sqlType: Source
+  table: ESP_OPTGOALSOPTSET
+  type: sourceInput
+  version: 1
+type: Node

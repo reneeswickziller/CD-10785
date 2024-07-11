@@ -1,0 +1,217 @@
+fileVersion: 1
+id: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+name: PLNORDFLGS_P_PLAN_ORD_DELTA1
+operation:
+  config:
+    insertStrategy: UNION
+    postSQL: |-
+      delete from {{ ref('E_SC_TEMP', 'PLNORDFLGS_P_PLAN_ORD_DELTA1')}}
+
+      where  1= CASE WHEN '{{parameters.SIMULATION_NAME}}'='ALL' THEN 1
+                 WHEN SIMULATION_NAME='{{parameters.SIMULATION_NAME}}' THEN 1
+                 ELSE 0 END
+
+      and "LOADDATETIMESTAMP" <=(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+
+                                WHERE PROCEDURE_NAME = 'BV_ESP_PLAN_ORD_FLAGS_INSERT'  and  SCENARIO_NAME='{{parameters.SIMULATION_NAME}}' );
+    preSQL: |-
+      delete from {{ ref('E_SC_TEMP', 'PLNORDFLGS_P_PLAN_ORD_DELTA1')}}
+
+      where (SNAPSHOTDATE,SIMULATION_NAME) IN (SELECT SNAPSHOTDATE,SIMULATION_NAME FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_PLANORDER') }}
+                                              where SIMULATION_NAME='{{parameters.SIMULATION_NAME}}'
+                                              AND "ESP_HUB_OUTPUT_V_PLANORDER"."LOADDATETIMESTAMP">(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                              WHERE PROCEDURE_NAME = 'BV_ESP_PLAN_ORD_FLAGS_INSERT' AND SCENARIO_NAME='{{parameters.SIMULATION_NAME}}')
+                                              GROUP BY SNAPSHOTDATE,SIMULATION_NAME           
+                                              );
+    selectDistinct: false
+    testsEnabled: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 698b66bb-1538-430f-8304-7408d4903027
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: QUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 97bd21d5-4c28-415e-9385-29319295f3b6
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2e9eb001-f585-4378-982e-8122f924488a
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2c434226-86f6-45fb-96c3-e1c8f93eeb67
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9116c49d-b29e-431c-9d19-f1108dcc0f37
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b766e780-3b53-466f-b67f-2269cbea78e2
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: af328400-def0-45f9-b937-384a5a00cb82
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: DATE
+        description: ""
+        name: STARTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 938220da-59af-44d2-a6c9-6f1b7f22c334
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 83b46128-0505-4689-8ace-79fc14bfe9df
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: COPRODORDERTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f9a9d70d-bfe9-4923-af5f-8ea1e125ee17
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9f60abb8-a863-422d-b00c-2e0839f58dbd
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PRODUCTIONMETHOD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 717847fb-10a4-489a-a713-e1fb42dae1e3
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a7cface0-ff2b-499d-9944-872e91151bd8
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SEQNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6bba95d6-4153-43ae-9572-bef1c7d89c7c
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 760aedad-bd82-44fc-9ad7-1214fbe61de9
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: LOC
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 10dfb6ba-f531-4c3e-9ca3-c6fca4985860
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7430a96a-a494-41ff-8134-ad251f65382e
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 50ef963a-74d4-450c-9cd7-3f8d084dd9e7
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2529b195-c3e2-4d7f-9ea6-b77db4d547c9
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 372cf661-51b2-40d2-8a57-c869c604ab90
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 41253aad-d7cf-466a-b712-2d90780d6ef6
+          stepCounter: 49002e87-f0a1-4abf-9a5c-cc7e64a155d5
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 934516ca-5d54-485f-8316-00e18eb1f2fe
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_HUB_OUTPUT_V_PLANORDER: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_PLANORDER
+          - locationName: E_SC_UTIL_USER
+            nodeName: LOAD_CONTROL_SC_SPO
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_PLANORDER') }} "ESP_HUB_OUTPUT_V_PLANORDER"
+            WHERE "ESP_HUB_OUTPUT_V_PLANORDER"."LOADDATETIMESTAMP">(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                                    WHERE PROCEDURE_NAME = 'BV_ESP_PLAN_ORD_FLAGS_INSERT' AND SCENARIO_NAME='{{parameters.SIMULATION_NAME}}')
+            AND "SIMULATION_NAME" = '{{parameters.SIMULATION_NAME}}'
+        name: PLNORDFLGS_P_PLAN_ORD_DELTA1
+        noLinkRefs: []
+  name: PLNORDFLGS_P_PLAN_ORD_DELTA1
+  overrideSQL: false
+  schema: ""
+  sqlType: persistentStage
+  type: sql
+  version: 1
+type: Node

@@ -1,0 +1,184 @@
+fileVersion: 1
+id: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+name: D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 08aca61c-9219-40d8-a527-55fddf389b66
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: VARCHAR(200)
+        description: ""
+        name: SNAPSHOT_VERSION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5c2e6280-6d08-48a3-9b51-daf2786524a6
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a6cb24a9-5fbf-40e1-ad02-eb6d585d9a96
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: SNAPSHOT_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fc0279a6-c42c-4c23-a207-38a96a9ba68b
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a9c4f6fd-3415-4323-b8c8-36a05d2fd99c
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: VARCHAR(200)
+        description: ""
+        name: MATERIAL_NUMBER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 82cb3f0e-7d2c-4563-8ac0-adbb2acb6d72
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4b636486-5fdd-4fd9-9c78-daae739e0378
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: DATE
+        description: ""
+        name: EFFECTIVE_IN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 30b555e8-1cc1-413e-84b8-7185121e675e
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: TO_DATE("DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS"."EFFECTIVE_IN_DATE")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7884201d-efcd-4a29-9fe5-6b5442e805a0
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: VARCHAR(200)
+        description: ""
+        name: PROFIT_CENTER_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1d5dcee1-a2fe-42fc-b2af-8ead24861362
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5ac4ae48-571d-4c96-877d-55acfa4ebeb7
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: VARCHAR(200)
+        description: ""
+        name: DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 99001c87-54c0-40c7-856d-e0f52ac296b8
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ac76e34a-3cf9-4566-8842-3e2463bb5927
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: FLOAT
+        description: ""
+        name: ALLOCATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0529dd7a-93a6-4f2d-9c7a-eb4d588d01c7
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 39158a57-8caf-42c9-b98b-a7cafa850772
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: VARCHAR(200)
+        description: ""
+        name: SOURCE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a98bc12a-31dd-4ed4-bd88-d280456c1cf7
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 20713a52-4882-4bb0-a623-efbbfb8f414b
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4e75bbbf-fd6b-4f57-a851-33801db27088
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: TO_DATE("DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS"."SNAPSHOTDATE")
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1b23872b-172a-496f-9dd0-858e20073cb5
+          stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        config: {}
+        dataType: ""
+        defaultValue: ""
+        description: ""
+        name: ALLOCATION_PRCT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: TO_NUMBER("DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS"."ALLOCATION")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SNOP
+            nodeName: DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS
+        join:
+          joinCondition: FROM {{ ref('E_SC_SNOP', 'DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS') }} "DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS"
+        name: D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST
+        noLinkRefs: []
+  name: D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

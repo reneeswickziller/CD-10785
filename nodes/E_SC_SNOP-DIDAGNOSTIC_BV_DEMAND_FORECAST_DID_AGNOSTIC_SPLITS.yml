@@ -1,0 +1,191 @@
+fileVersion: 1
+id: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+name: DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_SNOP
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5c2e6280-6d08-48a3-9b51-daf2786524a6
+          stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        config: {}
+        dataType: VARCHAR(200)
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_VERSION
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4e75bbbf-fd6b-4f57-a851-33801db27088
+          stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        config: {}
+        dataType: VARCHAR(200)
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 82cb3f0e-7d2c-4563-8ac0-adbb2acb6d72
+          stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        config: {}
+        dataType: VARCHAR(200)
+        defaultValue: ""
+        description: ""
+        name: MATERIAL_NUMBER
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 30b555e8-1cc1-413e-84b8-7185121e675e
+          stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: EFFECTIVE_IN_DATE
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1d5dcee1-a2fe-42fc-b2af-8ead24861362
+          stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        config: {}
+        dataType: VARCHAR(200)
+        defaultValue: ""
+        description: ""
+        name: PROFIT_CENTER_GROUP
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 99001c87-54c0-40c7-856d-e0f52ac296b8
+          stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        config: {}
+        dataType: VARCHAR(200)
+        defaultValue: ""
+        description: ""
+        name: DESIGN_ID
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0529dd7a-93a6-4f2d-9c7a-eb4d588d01c7
+          stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        config: {}
+        dataType: FLOAT
+        defaultValue: ""
+        description: ""
+        name: ALLOCATION
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: a98bc12a-31dd-4ed4-bd88-d280456c1cf7
+          stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        config: {}
+        dataType: VARCHAR(200)
+        defaultValue: ""
+        description: ""
+        name: SOURCE
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: fc0279a6-c42c-4c23-a207-38a96a9ba68b
+          stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_DATETIME
+        nullable: true
+        primaryKey: false
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_TEMP', 'DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS') }}
+  name: DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS
+  schema: ""
+  sqlType: Source
+  table: DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS
+  type: sourceInput
+  version: 1
+type: Node

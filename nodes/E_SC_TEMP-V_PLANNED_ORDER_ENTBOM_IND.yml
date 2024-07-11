@@ -1,0 +1,67 @@
+fileVersion: 1
+id: 8d3e0d50-34fb-48f2-99b3-4b7c78956ba3
+name: V_PLANNED_ORDER_ENTBOM_IND
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 358782d0-6017-4b55-9126-fac4d7d3d81f
+          stepCounter: 8d3e0d50-34fb-48f2-99b3-4b7c78956ba3
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: MATNR
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8693c7aa-ceb0-4e00-b71c-bbf67b352bd4
+                stepCounter: 4a132da6-66f8-480b-ba68-775cb3a62176
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 62def930-e38f-4701-bfd3-3afd37a17626
+          stepCounter: 8d3e0d50-34fb-48f2-99b3-4b7c78956ba3
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: ZZENTBOM_IND
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6a804879-5375-41aa-b232-d8237af65b61
+                stepCounter: 4a132da6-66f8-480b-ba68-775cb3a62176
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: R_SAP_ECC
+            nodeName: V_MARA
+        join:
+          joinCondition: FROM {{ ref('R_SAP_ECC', 'V_MARA') }} "V_MARA"
+        name: V_PLANNED_ORDER_ENTBOM_IND
+        noLinkRefs: []
+  name: V_PLANNED_ORDER_ENTBOM_IND
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

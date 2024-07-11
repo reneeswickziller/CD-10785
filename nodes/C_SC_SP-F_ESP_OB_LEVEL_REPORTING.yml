@@ -1,0 +1,323 @@
+fileVersion: 1
+id: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+name: F_ESP_OB_LEVEL_REPORTING
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: C_SC_SP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 776f2c07-3ffc-4231-aaee-3b4177b3616b
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: NUMBER(25,0)
+        description: ""
+        hashDetails: null
+        name: OPTIONSETID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e8d8afe4-a07f-48b8-800d-d5479a766b64
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 68c0385c-eadd-4190-9fde-8b8f62bcd648
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: NUMBER(25,0)
+        description: ""
+        hashDetails: null
+        name: SEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 32ad7ebd-b30a-4872-b689-47087f48e16b
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a34dde46-7603-4d9c-861f-3fdb4dd62c86
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: NUMBER(25,0)
+        description: ""
+        hashDetails: null
+        name: PRIORITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5839f3a6-a7c7-4069-8e10-c209666e5707
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fe180847-adf3-4882-9634-f065e0dd11ae
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: NUMBER(25,0)
+        description: ""
+        hashDetails: null
+        name: CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3a838a55-c845-4310-a7f8-e5a8dc3c2708
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5fa8457b-2182-4dc7-8f76-6dd8706d7517
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: NUMBER(25,0)
+        description: ""
+        hashDetails: null
+        name: OBJECTIVE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: afa6ec25-fd76-41eb-aa1c-491f9ef1987e
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1548c4af-49fd-4834-bbaf-b40c405a64aa
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: NUMBER(25,0)
+        description: ""
+        hashDetails: null
+        name: QUALIFIERGROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c1167978-2945-43d1-a474-7e69a5ff7c60
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3ca76449-8b2f-4bd3-bc92-87a0c1b2d794
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: NUMBER(25,0)
+        description: ""
+        hashDetails: null
+        name: START_DURATION_MINUTES
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 51e4ea65-6a1d-4f78-8361-6c0112dd01d5
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: SUM("OB_LEVEL_REPORTING_AGGR"."START_DURATION_MINUTES")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0227c073-ca62-4fb6-8c66-587f41147c52
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: NUMBER(25,0)
+        description: ""
+        hashDetails: null
+        name: END_DURATION_MINUTES
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 19f1279a-d0ad-4b93-b31e-aec1c4d8144f
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: SUM("OB_LEVEL_REPORTING_AGGR"."END_DURATION_MINUTES")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fd2c55c2-57f5-414e-be19-15e1955ee3d7
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: NUMBER(25,0)
+        description: ""
+        hashDetails: null
+        name: QUALIFIER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6b689937-c958-4f7c-9022-d2f5191ff02d
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ba72c9cc-20d7-4fd4-b3f9-79b7b1708d37
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: VALUE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3b516d28-49a6-4890-b4ff-9b23a135e59a
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 89b26c95-ee97-45f6-acb6-645f65d98734
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: OPT_SETNAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 89b58f69-db3b-4396-8f55-9c9ffba172bd
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7754499d-4475-4c5a-b3da-6cd57fc5251f
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: QUALIFIER_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7c234cba-d462-4de2-9a59-fdf926eb4f67
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ef51cc20-3d32-42e5-9649-b2cce6dbd642
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: CATEGORY_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 312d2006-1677-4255-abfe-62dae25da999
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b945bcba-8539-48dd-85a9-1566cbb4c7ec
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: OBJECTIVE_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d2eed0b7-2518-4564-9e42-856b8331cbd4
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 170c754b-ce43-452d-9f61-924dd24f27d4
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: QUALIFIER_GROUP_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3627bd2c-06fa-4337-8cca-bc0cceeba428
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8e879d37-24e2-4135-9713-2dc6958082e4
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1285f599-df67-448b-ae93-1d10a7323905
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 31285907-ea11-4761-ade8-4237621d009e
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: LOAD_DATE_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f6510dbc-d20a-4c2b-ad1b-2e30e6b0c25c
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 084cbc0e-40ee-4f1f-b65c-8e7c91ba4175
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: FLOAT
+        description: ""
+        hashDetails: null
+        name: START_DURATION_DAYS
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: de0e4102-5ce6-44f4-9d5c-98d7a66c99ce
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: SUM("OB_LEVEL_REPORTING_AGGR"."START_DURATION_DAYS")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: abf8111a-bb5e-475b-98c7-a8c6c871665f
+          stepCounter: bcf9a61a-f6b8-4593-9b51-7ea63d0a1901
+        config: {}
+        dataType: FLOAT
+        description: ""
+        hashDetails: null
+        name: END_DURATION_IN_DAYS
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b9de70c6-c159-460d-b9f0-2b522947cf36
+                stepCounter: 80ff2ae7-7bb2-42e2-880e-84d615b71b78
+            transform: SUM("OB_LEVEL_REPORTING_AGGR"."END_DURATION_IN_DAYS")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: OB_LEVEL_REPORTING_AGGR
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'OB_LEVEL_REPORTING_AGGR') }} "OB_LEVEL_REPORTING_AGGR"
+            GROUP BY ALL
+        name: F_ESP_OB_LEVEL_REPORTING
+        noLinkRefs: []
+  name: F_ESP_OB_LEVEL_REPORTING
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

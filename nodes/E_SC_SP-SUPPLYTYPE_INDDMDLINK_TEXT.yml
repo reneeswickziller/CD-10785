@@ -1,0 +1,50 @@
+fileVersion: 1
+id: 8dc5cb4f-49b3-43d3-9f40-459b54158d50
+name: SUPPLYTYPE_INDDMDLINK_TEXT
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_SP
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: d9caddbb-264f-4ebb-840e-3a3a065f3a39
+          stepCounter: 8dc5cb4f-49b3-43d3-9f40-459b54158d50
+        config: {}
+        dataType: VARCHAR(5)
+        defaultValue: ""
+        description: ""
+        name: SUPPLYTYPE
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4edb791d-acf3-42ff-96fd-7769fec34447
+          stepCounter: 8dc5cb4f-49b3-43d3-9f40-459b54158d50
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: SUPPLYTYPETXT
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_SP', 'SUPPLYTYPE_INDDMDLINK_TEXT') }}
+  name: SUPPLYTYPE_INDDMDLINK_TEXT
+  schema: ""
+  sqlType: Source
+  table: SUPPLYTYPE_INDDMDLINK_TEXT
+  type: sourceInput
+  version: 1
+type: Node

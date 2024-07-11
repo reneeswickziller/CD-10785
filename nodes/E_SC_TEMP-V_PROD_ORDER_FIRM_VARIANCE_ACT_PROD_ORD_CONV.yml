@@ -1,0 +1,133 @@
+fileVersion: 1
+id: 828ae30e-809d-4988-95ad-277497978fae
+name: V_PROD_ORDER_FIRM_VARIANCE_ACT_PROD_ORD_CONV
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4ea4789b-e760-407f-a289-79759f124a1b
+          stepCounter: 828ae30e-809d-4988-95ad-277497978fae
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: PLANNED_ORDER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 342ba6c3-e420-42eb-b4bc-7be6f843d226
+                stepCounter: 96a16509-d132-45a3-b9ec-f89ca8385fc7
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 75985816-e97b-4427-9873-e5982141adc7
+          stepCounter: 828ae30e-809d-4988-95ad-277497978fae
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        hashDetails: null
+        name: TOTAL_ORDER_QUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ae34b745-b3cd-481a-974e-6ee60dffbc73
+                stepCounter: 96a16509-d132-45a3-b9ec-f89ca8385fc7
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 19a0a362-5196-4fe6-8f52-54c6dc98dd07
+          stepCounter: 828ae30e-809d-4988-95ad-277497978fae
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: ACTUAL_START_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9625a69a-97e9-4f07-a885-5feae74ece1f
+                stepCounter: 96a16509-d132-45a3-b9ec-f89ca8385fc7
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e53461ff-af8e-461c-aff8-76f88f88cb35
+          stepCounter: 828ae30e-809d-4988-95ad-277497978fae
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: CREATED_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f288e865-8b32-4796-a1a1-aeaefc4056a3
+                stepCounter: 96a16509-d132-45a3-b9ec-f89ca8385fc7
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b1f09efa-11dd-4ff0-9375-a52afda3c805
+          stepCounter: 828ae30e-809d-4988-95ad-277497978fae
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: BASIC_START_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3ff1c1b1-409a-4bd6-b9a2-e60ecf91729a
+                stepCounter: 96a16509-d132-45a3-b9ec-f89ca8385fc7
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 66f16cc1-53bd-469d-8dea-af548f59abe9
+          stepCounter: 828ae30e-809d-4988-95ad-277497978fae
+        config: {}
+        dataType: DECIMAL(30,3)
+        defaultValue: ""
+        description: ""
+        name: D_TOTAL_ACTUAL_ORDER_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFNULL("BV_ACTUAL_PRODUCTION_ORDER"."TOTAL_ORDER_QUANTITY",0)
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: BV_ACTUAL_PRODUCTION_ORDER
+        join:
+          joinCondition: FROM {{ ref('E_SC_SP', 'BV_ACTUAL_PRODUCTION_ORDER') }} "BV_ACTUAL_PRODUCTION_ORDER"
+        name: V_PROD_ORDER_FIRM_VARIANCE_ACT_PROD_ORD_CONV
+        noLinkRefs: []
+  name: V_PROD_ORDER_FIRM_VARIANCE_ACT_PROD_ORD_CONV
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

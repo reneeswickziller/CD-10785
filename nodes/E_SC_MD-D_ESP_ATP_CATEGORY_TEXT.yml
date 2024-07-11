@@ -1,0 +1,50 @@
+fileVersion: 1
+id: c4ecd9f8-567e-447e-b869-38ddaca997ef
+name: D_ESP_ATP_CATEGORY_TEXT
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_MD
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b6b14db3-7e08-4869-8c5f-8b1ba131b295
+          stepCounter: c4ecd9f8-567e-447e-b869-38ddaca997ef
+        config: {}
+        dataType: VARCHAR(40)
+        defaultValue: ""
+        description: ""
+        name: ATPCAT_CATEGORY
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5aad9b5d-ecb6-48d0-8e7b-26da0fe81853
+          stepCounter: c4ecd9f8-567e-447e-b869-38ddaca997ef
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: ATPCAT_CATEGORY_TEXT
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_SP', 'D_ESP_ATP_CATEGORY_TEXT') }}
+  name: D_ESP_ATP_CATEGORY_TEXT
+  schema: ""
+  sqlType: Source
+  table: D_ESP_ATP_CATEGORY_TEXT
+  type: sourceInput
+  version: 1
+type: Node

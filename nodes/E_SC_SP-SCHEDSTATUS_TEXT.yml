@@ -1,0 +1,50 @@
+fileVersion: 1
+id: c055ffd3-a432-4f19-a8fb-536027f1e146
+name: SCHEDSTATUS_TEXT
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_SP
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: e7ab0d2a-71ca-4762-bdcc-7add264856db
+          stepCounter: c055ffd3-a432-4f19-a8fb-536027f1e146
+        config: {}
+        dataType: VARCHAR(5)
+        defaultValue: ""
+        description: ""
+        name: SCHEDSTATUS
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 055db80d-393f-4f9a-8962-cf44590c5b87
+          stepCounter: c055ffd3-a432-4f19-a8fb-536027f1e146
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: SCHEDSTATUSTXT
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_MP', 'SCHEDSTATUS_TEXT') }}
+  name: SCHEDSTATUS_TEXT
+  schema: ""
+  sqlType: Source
+  table: SCHEDSTATUS_TEXT
+  type: sourceInput
+  version: 1
+type: Node

@@ -1,0 +1,309 @@
+fileVersion: 1
+id: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+name: INVENTORY_HEALTH_DETAIL_R_IDEAL_ESPDATE_PROJ
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2285cd63-12bb-49b2-9f1e-4d43a807aadf
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: FULL_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b22c0cd7-4d35-4c4d-a983-701d5c1caf04
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c1649e51-8761-48a6-8641-6d196dd7d4a9
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        hashDetails: null
+        name: WORK_WEEK
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 222ab5da-34c3-42e5-a2e4-932e71bb9082
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 93f70d85-28d9-4cdd-b2ff-ebcc167f7a90
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        hashDetails: null
+        name: FISCAL_YEAR
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8831ae36-51ff-4f04-b728-8bdc2482e7b8
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 153a2264-e0ab-4181-8d15-861beb0cc616
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        hashDetails: null
+        name: FISCAL_QUARTER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2111ea35-2e1b-4946-a8e5-a13f5697423f
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a8c13d42-f3a8-44ad-aa8b-352e7040be5a
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: WORK_WEEK_BEGIN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5b2f20fe-42ca-49eb-9a66-5687f5c73fef
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 830e56a1-8671-4694-82cf-63e5bd70a3f8
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: WORK_WEEK_END_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b75a5b91-8031-4e65-9b38-bf8bc1e0741f
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e496d0d8-9ad6-4cff-b52e-7b6ccdd40589
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: FISCAL_MONTH_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 08eac279-03da-45ef-a494-193fb898a173
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 281e3290-d301-45c3-880e-49cce832a4ae
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: FISCAL_PERIOD_SORT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b7e31d92-d21f-426b-98ae-00352764c38e
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 35299d05-b0af-4414-b17b-9e09eb9a2de5
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        hashDetails: null
+        name: FISCAL_QUARTER_BEGIN_DATE_FLAG
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1a09384b-eddc-47c2-a6e5-7c9f16eea1fa
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: db76ef9f-ce1a-4161-8b88-36a0faec0b98
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: FISCAL_MONTH_BEGIN_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 10a0b6ad-c9e0-430c-ad28-0953e507e235
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e4ddc085-6053-45c1-a459-450ec4e76ac7
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        hashDetails: null
+        name: FISCAL_QUARTER_END_DATE_FLAG
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b348b104-69cb-4fe5-93b2-85f0fa184593
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c042b554-8955-4cb1-896a-4cfd3f2d2a29
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: FISCAL_MONTH_END_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2cf9bfcb-808f-49bc-8f76-abc836354e94
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: df2e6099-9746-4c91-84e2-1223b544c079
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        hashDetails: null
+        name: FISCAL_WEEK_COUNT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e9abaabd-800d-4fad-a372-0e9da82dad5c
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fbf2b757-c896-478c-bf74-2fd280ec0984
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        hashDetails: null
+        name: FISCAL_DAY_OF_QUARTER_NUMBER_REMAINING
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6b8db99e-935d-4b31-8cbc-68ef2f00b9ad
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 27b300c1-78be-4599-a34f-3a510ac23847
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: FISCAL_QUARTER_SORT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3b5a8b9c-4195-414a-9188-11694623ae32
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d30bab83-8deb-4aff-ace0-04c97d40045d
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: WORK_WEEK_SORT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 44642cfb-f674-4695-8bd5-b65b0670dd5b
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a74d36bf-a709-4022-abff-1306bcf4858a
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: FISCAL_QUARTER_END_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 270e4b44-f028-4165-b593-f4c7a5fc8129
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2b0ac7e4-f17d-424c-ae30-a393fa354e43
+          stepCounter: b891a951-88bf-47f9-a5c9-1bd2c8e02d46
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: FISCAL_YEAR_END_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1ba0c5b9-8023-4150-9eb4-3a3d1f8c04e9
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_DATE
+        join:
+          joinCondition: FROM {{ ref('E_SC_MD', 'D_ESP_DATE') }} "D_ESP_DATE"
+        name: INVENTORY_HEALTH_DETAIL_R_IDEAL_ESPDATE_PROJ
+        noLinkRefs: []
+  name: INVENTORY_HEALTH_DETAIL_R_IDEAL_ESPDATE_PROJ
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

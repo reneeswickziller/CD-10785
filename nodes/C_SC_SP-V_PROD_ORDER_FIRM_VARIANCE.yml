@@ -1,0 +1,338 @@
+fileVersion: 1
+id: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+name: V_PROD_ORDER_FIRM_VARIANCE
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: C_SC_SP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d9466298-4eb4-4a36-b5df-b17c8d321e00
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: da440f34-f288-4d17-8190-33dcf51fb98f
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4750fb77-bc70-4cec-a519-919517abd009
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: PLANNED_ORDER_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 14970e5a-13db-4741-bbba-8bb246207db3
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a552dae7-120a-4d6f-8c13-ddb4fee0bd0c
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(25)
+        description: ""
+        hashDetails: null
+        name: MEASURE_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7210d1ef-8780-484b-b1d9-7bb8852b7fa2
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a5f89b32-4e9b-4421-85b4-9e305790be48
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a6af6dae-ee03-4bc2-8bd6-9d1472c1763d
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 30c685e1-307c-479d-a103-8ef29d4bde93
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        hashDetails: null
+        name: ENTBOM_IND
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7ec36a12-bea3-4825-b914-752ad8bb59db
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 843da627-7e3e-4d15-9cbc-de334749d85b
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_NUMBER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f7269920-e1c7-451d-bdf5-906c9fedc4a0
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 93667a2b-35f7-4c30-8b00-028e7a2349f1
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        hashDetails: null
+        name: PLANNING_PLANT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2b92b227-84ad-4944-8777-0613bf84a5e1
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2b3ae847-fd0c-4b6d-b268-011234c0c70d
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        hashDetails: null
+        name: PRODUCTION_PLANT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8c49449d-aa50-4e49-a4ae-7674ffa7547d
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ed5c6868-7a11-45b3-8b4b-164b9d3f1dde
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        hashDetails: null
+        name: ORDER_START_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0785d693-cb9a-494e-8a96-ed7780a2afb4
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 71a9d1d9-5167-425e-9da1-dfa44d960f42
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        hashDetails: null
+        name: ORDER_END_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 20c5f061-42c8-4bb5-bef8-fc9e9153a108
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 294c9dfd-b44a-4b78-b1dd-a35d7300e07e
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: DECIMAL(30,3)
+        description: ""
+        hashDetails: null
+        name: LIVE_ACTUAL_ORDER_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4d8347e7-dc28-438c-9359-bbfe79a9f97e
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: SUM("V_PROD_ORDER_FIRM_VARIANCE_CALC_DIFF"."LIVE_ACTUAL_ORDER_QTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 55862006-38ff-4d14-9bb0-b2d4a08faef3
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        hashDetails: null
+        name: PRODUCTION_VERSION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e85cfc25-35fd-427f-b9bb-502799ade408
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 13812771-f6e4-4345-8c4b-dc82ae4e902c
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        hashDetails: null
+        name: FIRMING_INDICATOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 30494a9c-883c-45d6-bdd2-4cc93ba541f1
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 03160358-94b5-4b7f-a852-c6873399ae6a
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: LOAD_DATE_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 86464627-5e51-4e8f-80c6-a066b5a28bc0
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d9566fee-11b3-404e-997e-b3056dcf9d3a
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        hashDetails: null
+        name: IS_MANUAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fd7a492e-49db-455f-970d-8f0a640de0f3
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 448991ba-c982-410b-9dc9-3af2cac239bf
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a265455e-1540-403f-adae-9d8989a47918
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2203c71b-da60-4139-9226-49c4e8971731
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: DECIMAL(30,3)
+        description: ""
+        hashDetails: null
+        name: TOTAL_PLANNED_ORDER_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6d32c27d-4115-4d16-bced-3e5faa8252e0
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: SUM("V_PROD_ORDER_FIRM_VARIANCE_CALC_DIFF"."TOTAL_PLANNED_ORDER_QTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 27953dd6-0b02-4575-8808-13ed753ce2b9
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        hashDetails: null
+        name: ORDER_START_WORK_WEEK
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4170cda5-e728-4a17-97de-2822350c2513
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a0450906-1d11-46c9-a453-c61ac8e70667
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: ""
+        description: ""
+        hashDetails: null
+        name: PLANNED_VS_ACTUAL_ORD_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ff404ddf-60f2-4383-a4dc-a9ca798e27dc
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: SUM("V_PROD_ORDER_FIRM_VARIANCE_CALC_DIFF"."PLANNED_VS_ACTUAL_ORD_QTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a33a18e1-f8f8-4481-80e1-75e83ecf16b8
+          stepCounter: c1b35bda-a513-4720-9a1a-2a7f0fd679d5
+        config: {}
+        dataType: DECIMAL(30,3)
+        description: ""
+        hashDetails: null
+        name: TOTAL_ACTUAL_ORDER_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e8608239-5210-48f9-bf4d-66ce0c59a0b4
+                stepCounter: 70b14993-8205-4cb8-8eff-145d5ed57529
+            transform: SUM("V_PROD_ORDER_FIRM_VARIANCE_CALC_DIFF"."D_TOTAL_ACTUAL_ORDER_QTY")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: V_PROD_ORDER_FIRM_VARIANCE_CALC_DIFF
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'V_PROD_ORDER_FIRM_VARIANCE_CALC_DIFF') }} "V_PROD_ORDER_FIRM_VARIANCE_CALC_DIFF"
+            GROUP BY ALL
+        name: V_PROD_ORDER_FIRM_VARIANCE
+        noLinkRefs: []
+  name: V_PROD_ORDER_FIRM_VARIANCE
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

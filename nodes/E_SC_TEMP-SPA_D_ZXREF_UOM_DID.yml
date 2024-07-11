@@ -1,0 +1,111 @@
+fileVersion: 1
+id: 75ae3b12-1d6e-4b5c-8080-678deb1f5452
+name: SPA_D_ZXREF_UOM_DID
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9c41e7fd-d029-4267-b73f-b7e21f9744d3
+          stepCounter: 75ae3b12-1d6e-4b5c-8080-678deb1f5452
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: MATERIAL
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 211a9e3b-ac94-4ced-a6e5-76bd9721dff1
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c7e29916-de54-4d41-9843-4704852e98e3
+          stepCounter: 75ae3b12-1d6e-4b5c-8080-678deb1f5452
+        config: {}
+        dataType: VARCHAR(32)
+        description: ""
+        name: UNIT_OF_MEASURE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 949ca371-3fa9-40ac-8f12-ce3f0a708746
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 98749b17-e012-48fc-b29c-52c726994f82
+          stepCounter: 75ae3b12-1d6e-4b5c-8080-678deb1f5452
+        config: {}
+        dataType: VARCHAR(16)
+        description: ""
+        name: FAB_DESIGN_ID
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 16b02ca4-ccc7-472e-b8b8-6a08fb88fe0a
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: "\"D_ZXREF_UOM_DID\".\"FAB_DESIGN_HANDLE\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8d983dcd-eb8d-4916-a086-57dab328eb36
+          stepCounter: 75ae3b12-1d6e-4b5c-8080-678deb1f5452
+        config: {}
+        dataType: FLOAT
+        description: ""
+        name: FACTOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8d5fec92-e125-47e7-8905-20a4b9738d4a
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: MAX("D_ZXREF_UOM_DID"."FACTOR")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3d327e0d-e9db-4031-94ec-322fbd3c36f9
+          stepCounter: 75ae3b12-1d6e-4b5c-8080-678deb1f5452
+        config: {}
+        dataType: VARCHAR(14)
+        description: ""
+        name: UNIT_OF_MEASURE_L1
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 20807f9d-834f-4a86-921e-07bc1415b75e
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: C_SC_MASTER_DATA
+            nodeName: D_ZXREF_UOM_DID
+        join:
+          joinCondition: |-
+            FROM {{ ref('C_SC_MASTER_DATA', 'D_ZXREF_UOM_DID') }} "D_ZXREF_UOM_DID"
+            GROUP BY ALL
+        name: SPA_D_ZXREF_UOM_DID
+        noLinkRefs: []
+  name: SPA_D_ZXREF_UOM_DID
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

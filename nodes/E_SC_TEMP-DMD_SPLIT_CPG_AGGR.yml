@@ -1,0 +1,75 @@
+fileVersion: 1
+id: 81998c0c-a3be-4ce6-864b-eb2734c77eed
+name: DMD_SPLIT_CPG_AGGR
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    selectDistinct: false
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8aedb3f8-428f-4d49-9331-e5d27a59f7a1
+          stepCounter: 81998c0c-a3be-4ce6-864b-eb2734c77eed
+        config: {}
+        dataType: NUMBER
+        defaultValue: ""
+        description: ""
+        name: JOIN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "1"
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 36c34751-612f-45e5-b421-fca842dbbc4c
+          stepCounter: 81998c0c-a3be-4ce6-864b-eb2734c77eed
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f097f6e0-e3aa-4fd6-a3bf-1fe3bd47b003
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: MAX("ESP_HUB_OUTPUT_V_INDDMDLINK"."SNAPSHOTDATE")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_HUB_OUTPUT_V_INDDMDLINK: 90ebbb2e-ee8d-461d-a7ab-d9a66108476c
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_INDDMDLINK
+        join:
+          joinCondition: FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }} "ESP_HUB_OUTPUT_V_INDDMDLINK"
+        name: DMD_SPLIT_CPG_AGGR
+        noLinkRefs: []
+  name: DMD_SPLIT_CPG_AGGR
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

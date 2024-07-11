@@ -1,0 +1,88 @@
+fileVersion: 1
+id: 24593b2a-b1c0-44d9-9ffd-b6af0c61ea47
+name: INDDMDPEGGING_D_ECC_PART_UOM_CONVERSION
+operation:
+  config:
+    insertStrategy: UNION
+    postSQL: null
+    preSQL: null
+    selectDistinct: false
+    testsEnabled: false
+    truncateBefore: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3bb631b6-e498-452d-b7e2-5c4b5db14b53
+          stepCounter: 24593b2a-b1c0-44d9-9ffd-b6af0c61ea47
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 57f6b687-5698-42dd-9702-9c0a4171ff54
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a9ef6a96-2830-4066-b102-9271c535a5eb
+          stepCounter: 24593b2a-b1c0-44d9-9ffd-b6af0c61ea47
+        config: {}
+        dataType: VARCHAR(32)
+        description: ""
+        hashDetails: null
+        name: UNIT_OF_MEASURE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 67e668b0-4eb7-4a2f-8377-a2e8a413599b
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c25a6ce8-b38f-47dd-a41c-6e2d1bbb8c1c
+          stepCounter: 24593b2a-b1c0-44d9-9ffd-b6af0c61ea47
+        config: {}
+        dataType: FLOAT
+        description: ""
+        hashDetails: null
+        name: FACTOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 638f5f72-451a-4866-920a-f4321603d9c9
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: MAX("D_ECC_PART_UOM_CONVERSION"."FACTOR")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ECC_PART_UOM_CONVERSION
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_MD', 'D_ECC_PART_UOM_CONVERSION') }} "D_ECC_PART_UOM_CONVERSION"
+            WHERE "D_ECC_PART_UOM_CONVERSION"."UNIT_OF_MEASURE" <> 'Units'
+            GROUP BY ALL
+        name: INDDMDPEGGING_D_ECC_PART_UOM_CONVERSION
+        noLinkRefs: []
+  name: INDDMDPEGGING_D_ECC_PART_UOM_CONVERSION
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

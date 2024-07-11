@@ -1,0 +1,188 @@
+fileVersion: 1
+id: d759e17a-634d-4c04-b060-acc790241b5a
+name: F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_JOINING_BOTH_PROJECTIONS
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1e4bd2db-7c8a-4810-8331-26b0237f2c30
+          stepCounter: d759e17a-634d-4c04-b060-acc790241b5a
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        hashDetails: null
+        name: PLANT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c8844fb1-37cb-4857-ac82-01d46b008dd4
+                stepCounter: 35642d52-cc93-4be7-9e09-eac054d23843
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b7569f49-9853-4fec-8083-08f9e2649faa
+          stepCounter: d759e17a-634d-4c04-b060-acc790241b5a
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fc9586ad-1586-4763-8f51-a2f9f1c7b794
+                stepCounter: 35642d52-cc93-4be7-9e09-eac054d23843
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1a7e42eb-fc6f-40f9-9454-5870ed9ed7e0
+          stepCounter: d759e17a-634d-4c04-b060-acc790241b5a
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        hashDetails: null
+        name: MRP_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c94f0c64-5dc5-40ab-b353-1a44a28e7411
+                stepCounter: 35642d52-cc93-4be7-9e09-eac054d23843
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d65b6855-c88c-4593-8c79-ada15c88381d
+          stepCounter: d759e17a-634d-4c04-b060-acc790241b5a
+        config: {}
+        dataType: VARCHAR(3)
+        description: ""
+        hashDetails: null
+        name: UNIT_OF_MEASURE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 97f2f0fe-410a-4ccd-bd89-733b82bb2c32
+                stepCounter: 35642d52-cc93-4be7-9e09-eac054d23843
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: eb9eac99-22ad-4f27-a8c0-e4c32070aacc
+          stepCounter: d759e17a-634d-4c04-b060-acc790241b5a
+        config: {}
+        dataType: NUMBER(11,3)
+        description: ""
+        hashDetails: null
+        name: UNIQUE_COST_IN_USD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 641e1864-bebb-4665-8e1a-5d3f53458715
+                stepCounter: 35642d52-cc93-4be7-9e09-eac054d23843
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b4a7af81-5421-4191-baee-a49dee5ff530
+          stepCounter: d759e17a-634d-4c04-b060-acc790241b5a
+        config: {}
+        dataType: NUMBER(3,0)
+        description: ""
+        name: LEAD_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5a1d3169-0b28-49ed-b738-8c717a810609
+                stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5359804d-a7a3-454e-8ae0-5d3905bfc834
+          stepCounter: d759e17a-634d-4c04-b060-acc790241b5a
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: MATERIAL_NUMBER_1
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9a33ea56-c838-46a2-b28d-a7291521bb1e
+                stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9123ae42-cf08-4f44-adb7-8e666f89ce08
+          stepCounter: d759e17a-634d-4c04-b060-acc790241b5a
+        config: {}
+        dataType: NUMBER(11,3)
+        defaultValue: ""
+        description: ""
+        name: CC_LEAD_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "\"F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON\".\"LEAD_TIME\"/7"
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1e91239e-3604-42f2-9927-113676b424f3
+          stepCounter: d759e17a-634d-4c04-b060-acc790241b5a
+        config: {}
+        dataType: NUMBER(11,3)
+        defaultValue: ""
+        description: ""
+        name: LEAD_TIME_ROUNDING
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: ROUND("F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON"."LEAD_TIME"/7,0)
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_FIRST_PROJECTON: 35642d52-cc93-4be7-9e09-eac054d23843
+          F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_FIRST_PROJECTON
+          - locationName: E_SC_TEMP
+            nodeName: F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_FIRST_PROJECTON') }} "F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_FIRST_PROJECTON"
+            INNER JOIN {{ ref('E_SC_TEMP', 'F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON') }} "F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON"
+            ON "F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_FIRST_PROJECTON"."CC_PLANT" = "F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON"."CC_PLANT"
+            AND "F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_FIRST_PROJECTON"."MATERIAL_NUMBER" = "F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON"."MATERIAL_NUMBER"
+        name: F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_JOINING_BOTH_PROJECTIONS
+        noLinkRefs: []
+  name: F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_JOINING_BOTH_PROJECTIONS
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

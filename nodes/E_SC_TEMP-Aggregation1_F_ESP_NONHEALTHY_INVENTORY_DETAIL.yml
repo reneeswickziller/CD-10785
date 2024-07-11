@@ -1,0 +1,87 @@
+fileVersion: 1
+id: 9ebe66b8-fb90-4b29-bf06-314a9b37d586
+name: Aggregation1_F_ESP_NONHEALTHY_INVENTORY_DETAIL
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6c672ab7-122c-4ec9-be94-978f630edce8
+          stepCounter: 9ebe66b8-fb90-4b29-bf06-314a9b37d586
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: cda505f9-133a-4055-922b-01bd498ec60c
+                stepCounter: d95ffe2d-41e1-409f-bcd0-41586b33f8e6
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d4709212-c4bc-4009-ae4c-f725b1665913
+          stepCounter: 9ebe66b8-fb90-4b29-bf06-314a9b37d586
+        config: {}
+        dataType: VARCHAR(32)
+        description: ""
+        hashDetails: null
+        name: UNIT_OF_MEASURE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ebdd01f7-82f8-49a7-b085-9b0f61a11cfd
+                stepCounter: d95ffe2d-41e1-409f-bcd0-41586b33f8e6
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a6cd399c-780e-4cba-a6c9-f6e4a866aa6a
+          stepCounter: 9ebe66b8-fb90-4b29-bf06-314a9b37d586
+        config: {}
+        dataType: FLOAT
+        description: ""
+        hashDetails: null
+        name: FACTOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3beb0ecd-b775-4902-b895-fe1c3ae81114
+                stepCounter: d95ffe2d-41e1-409f-bcd0-41586b33f8e6
+            transform: MAX("D_ECC_PART_UOM_CONVERSION"."FACTOR")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ECC_PART_UOM_CONVERSION
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_MD', 'D_ECC_PART_UOM_CONVERSION') }} "D_ECC_PART_UOM_CONVERSION"
+            WHERE "D_ECC_PART_UOM_CONVERSION"."UNIT_OF_MEASURE"<> 'Units'
+            group by all;
+        name: Aggregation1_F_ESP_NONHEALTHY_INVENTORY_DETAIL
+        noLinkRefs: []
+  name: Aggregation1_F_ESP_NONHEALTHY_INVENTORY_DETAIL
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

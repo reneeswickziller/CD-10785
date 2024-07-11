@@ -1,0 +1,67 @@
+fileVersion: 1
+id: bad1297d-ec9e-4432-9b41-b8e8655249a3
+name: V_PLANNED_ORDER_DID
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 09634887-5d71-4ca2-baa5-45fab138f9a3
+          stepCounter: bad1297d-ec9e-4432-9b41-b8e8655249a3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: MATERIAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 15569327-eafb-4014-a2c0-0b2f8af51cfd
+                stepCounter: 3af02dab-3fdd-4bcc-9224-30e8e09bc935
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2586b496-1e58-4a7c-a9ca-35080dea0cc5
+          stepCounter: bad1297d-ec9e-4432-9b41-b8e8655249a3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3875bbd0-87cd-468e-a01f-43dafd2ca07a
+                stepCounter: 3af02dab-3fdd-4bcc-9224-30e8e09bc935
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_MASTER_DATA_MD
+            nodeName: V_D_PRODUCT
+        join:
+          joinCondition: FROM {{ ref('E_MASTER_DATA_MD', 'V_D_PRODUCT') }} "V_D_PRODUCT"
+        name: V_PLANNED_ORDER_DID
+        noLinkRefs: []
+  name: V_PLANNED_ORDER_DID
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

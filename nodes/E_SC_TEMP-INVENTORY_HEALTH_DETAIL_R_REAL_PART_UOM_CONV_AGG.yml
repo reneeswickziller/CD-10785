@@ -1,0 +1,86 @@
+fileVersion: 1
+id: d0447cf9-2dba-40b5-a68f-43463c19aa1b
+name: INVENTORY_HEALTH_DETAIL_R_REAL_PART_UOM_CONV_AGG
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: dc6bda7c-b0e6-4cd3-9020-d948bba33f25
+          stepCounter: d0447cf9-2dba-40b5-a68f-43463c19aa1b
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 57f6b687-5698-42dd-9702-9c0a4171ff54
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9e83880c-1fd0-43fe-9318-e5df9f4766f6
+          stepCounter: d0447cf9-2dba-40b5-a68f-43463c19aa1b
+        config: {}
+        dataType: VARCHAR(32)
+        description: ""
+        hashDetails: null
+        name: UNIT_OF_MEASURE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 67e668b0-4eb7-4a2f-8377-a2e8a413599b
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0c850b3c-85fe-4d13-8a5c-57950832caa6
+          stepCounter: d0447cf9-2dba-40b5-a68f-43463c19aa1b
+        config: {}
+        dataType: FLOAT
+        description: ""
+        hashDetails: null
+        name: FACTOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 638f5f72-451a-4866-920a-f4321603d9c9
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: max(FACTOR)
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ECC_PART_UOM_CONVERSION
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_MD', 'D_ECC_PART_UOM_CONVERSION') }} "D_ECC_PART_UOM_CONVERSION"
+            group by all
+        name: INVENTORY_HEALTH_DETAIL_R_REAL_PART_UOM_CONV_AGG
+        noLinkRefs: []
+  name: INVENTORY_HEALTH_DETAIL_R_REAL_PART_UOM_CONV_AGG
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

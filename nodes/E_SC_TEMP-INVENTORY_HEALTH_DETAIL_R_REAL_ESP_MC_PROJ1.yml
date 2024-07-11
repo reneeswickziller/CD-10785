@@ -1,0 +1,221 @@
+fileVersion: 1
+id: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+name: INVENTORY_HEALTH_DETAIL_R_REAL_ESP_MC_PROJ1
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 715d09c1-a430-4916-b6b7-508793b34ea5
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: DEMAND_PRODUCT_DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d7a64006-97fd-4347-b3ef-6a6c16945c4f
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"DESIGN_ID\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ce1756d3-1aae-48d0-a51e-d1cf83dd27d6
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(128)
+        description: ""
+        name: DEMAND_PRODUCT_ENTBOM_TOAD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6c804256-982d-4732-ab8e-c00e705c8860
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"ENTBOM_TOAD\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 03dbca79-862c-4a33-bd5f-a8413cda6ea5
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: EXCLUSION_STRATEGY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b1c27a4c-ca49-4152-887c-18028972ee8c
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"EXCLUSION_STRATEGY\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 256612ef-b281-442f-a637-707063144b17
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: DEMAND_PRODUCT_MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0b027e42-c2e8-4fb3-a8d1-feae98852944
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"MATERIAL_GROUP\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: af5459c6-7a73-484d-bc09-bc5b138e7e3b
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(61)
+        description: ""
+        name: MFG_PLANNING_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 42b98d4f-8ff4-4346-90fe-7703e6d44e7c
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"MFG_PLANNING_GROUP\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1d1f3727-34c2-459a-8c92-c22fec1238b2
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: DEMAND_PRODUCT_PLANNING_STRATEGY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 28294f4c-ebc1-4673-917f-42c95e60492f
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"PLANNING_STRATEGY\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 154b3887-4b8b-41b6-b910-76a41fe152f8
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(40)
+        description: ""
+        name: DEMAND_PRODUCT_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5651e94d-9815-4bbf-b20c-6e6d0d9de399
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"PRODUCT_DESCRIPTION\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9cbb8af4-9871-4bbc-894a-08389feb14e9
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: DEMAND_PRODUCT_FAMILY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2e0ff928-cc33-46fd-9bd2-a32d51cec4c8
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"PRODUCT_FAMILY\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9c739252-a182-48cf-a4e7-fd1cc12993b3
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PRODUCT_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: cb4bc15b-f74b-4ab7-8233-ffae7497890b
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"PRODUCT_NUMBER\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 379346f3-8aa3-468d-91a1-15f2d64491fe
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: DEMAND_PRODUCT_PROFIT_CENTER_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 43d50934-7928-4378-8b25-a31919c29682
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"PROFIT_CENTER_GROUP\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e68425ef-5024-4e65-8175-5a0b18d00da8
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: DEMAND_PRODUCT_RETAIL_BOUND
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d6d8d485-58e6-442d-ae3e-a05f7575a39a
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"RETAIL_BOUND\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 279c0638-961c-4ae5-b17c-67c7fd009922
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(132)
+        description: ""
+        name: DEMAND_PRODUCT_TECHNOLOGY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e3b08b0e-ae86-455c-8a66-eb5070161211
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"TECHNOLOGY\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: db3a2007-48ab-432f-826e-1ebea711d18f
+          stepCounter: a6a2ce7d-d67e-458f-8f55-25d9fc64362b
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: DEMAND_PRODUCT_POSTPONEMENT_LEVEL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d7f432ef-0b77-4a73-810c-0800573343bb
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: "\"U_PPLEVEL\""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_MATERIAL_CHARACTERISTICS
+        join:
+          joinCondition: FROM {{ ref('E_SC_MD', 'D_ESP_MATERIAL_CHARACTERISTICS') }} "D_ESP_MATERIAL_CHARACTERISTICS"
+        name: INVENTORY_HEALTH_DETAIL_R_REAL_ESP_MC_PROJ1
+        noLinkRefs: []
+  name: INVENTORY_HEALTH_DETAIL_R_REAL_ESP_MC_PROJ1
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

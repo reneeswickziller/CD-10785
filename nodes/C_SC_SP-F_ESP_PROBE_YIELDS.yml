@@ -1,0 +1,211 @@
+fileVersion: 1
+id: 858573bf-c460-44b5-8589-c9d8eeadae6d
+name: F_ESP_PROBE_YIELDS
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    selectDistinct: false
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: C_SC_SP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a39d27ce-7e9b-4309-a125-87862af5c77d
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d7a64006-97fd-4347-b3ef-6a6c16945c4f
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 787ff750-80d8-4ba4-bcac-b74f2563bbdc
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: PART_SITE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1150baf2-5b43-4ce3-ab00-d21db6d35764
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f882cf66-d281-45b9-bab6-f6785efa4980
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: SNAPSHOT_WW_BEGIN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5681bd27-f32b-451f-bd32-c8a3cc7411a6
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 09bc3b53-e039-4489-8d1a-7b216eaf78af
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: EFFECTIVE_WW_BEGIN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: dcd05b8a-066e-491e-b597-dab4ea226b44
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2126bb12-8f33-4bd0-aa46-c852c3047e73
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        name: MAXDPW_ORIGINAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 37a55ebd-318e-4da2-aa60-55ff03d55191
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: SUM("BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN"."MAXDPW")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bd4dbdbb-6b7d-4e06-8317-35d8ef52068d
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        name: MAXDPW_BLENDED
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 392bf41e-d142-4778-9f05-c7aca71e16a8
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: SUM("BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN"."MAXDPW_1")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9b04fdda-aca3-4233-8812-779263443523
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        name: EXP_DIE_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f0cfd3c7-f693-4873-8ac0-509a392c6255
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: SUM("BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN"."EXP_DIE_QTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 99833a5c-bef8-430a-b540-3b234d61f83c
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        name: QTY_YIELD_FE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 13d8dfae-4dcd-42e7-86dd-ecea99f2f70d
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: SUM("BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN"."QTY_YIELD_FE")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a7d8f40e-c79d-4154-8e38-cd0f588f3723
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        name: YIELD_1
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f35211d8-8cf8-44d1-a77f-2b0bccb63468
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: AVG("BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN"."YIELD_1")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 71cba7b2-de1a-4c98-807b-4eeea2ccb85c
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: MATERIAL
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 57589758-f9c4-4224-9b02-75ff2470a0d3
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 269c7171-5c6f-4039-beee-131489a74f80
+          stepCounter: 858573bf-c460-44b5-8589-c9d8eeadae6d
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: YIELD_PART_SITE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8b969934-7776-41f9-81a7-8235077303d3
+                stepCounter: 2289a6e3-9dd6-4c31-b003-3db705b82d24
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_MATERIAL_CHARACTERISTICS
+          - locationName: E_SC_YP
+            nodeName: BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_YP', 'BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN') }} "BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN"
+            LEFT OUTER JOIN (select PRODUCT_NUMBER,DESIGN_ID FROM {{ ref('E_SC_MD', 'D_ESP_MATERIAL_CHARACTERISTICS') }} GROUP BY ALL
+            ) "D_ESP_MATERIAL_CHARACTERISTICS"
+            ON "BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN".MATERIAL = "D_ESP_MATERIAL_CHARACTERISTICS".PRODUCT_NUMBER
+            WHERE "BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN"."SNOP_MFG_STAGE"='PRB' AND "BV_SNOP_YIELDS_STAGE_SOLVE_FACTS_MAIN"."TGT_SYSTEM"='ACCT'
+            /*AND SCENARIO_DATE NOT IN ('2022-04-29',
+            '2022-04-22',
+            '2022-04-15',
+            '2022-04-01',
+            '2022-03-25',
+            '2021-11-19',
+            '2021-02-05',
+            '2021-01-08',
+            '2020-10-09')*/
+            GROUP BY ALL
+        name: F_ESP_PROBE_YIELDS
+        noLinkRefs: []
+  name: F_ESP_PROBE_YIELDS
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

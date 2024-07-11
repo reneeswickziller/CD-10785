@@ -1,0 +1,361 @@
+fileVersion: 1
+id: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+name: V_MAST_STKO
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8b7309f2-6e7e-4125-a21f-15997be6f946
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(3)
+        description: ""
+        name: MANDT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e1134c41-7ed1-4be3-9e17-480447830d1d
+                stepCounter: eaf823fd-fd5b-4f47-84ef-3cac2dbb1d5d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9b4c928f-c34e-4167-8a50-88ad450381d6
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: MATNR
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fdcea22a-e2d4-4aca-bcd5-5e2731d2e862
+                stepCounter: eaf823fd-fd5b-4f47-84ef-3cac2dbb1d5d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2ab107a3-acf2-455a-b8aa-1f771892641b
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        name: WERKS
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2178a605-b67a-405b-8218-e1423b09f415
+                stepCounter: eaf823fd-fd5b-4f47-84ef-3cac2dbb1d5d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 92cc1669-0f88-432f-bd79-db65fb42f810
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: STLAN
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4522b00f-ed40-4012-b97b-080013bd9074
+                stepCounter: eaf823fd-fd5b-4f47-84ef-3cac2dbb1d5d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1d3a776b-27e3-4386-b274-398daac12384
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: STLNR
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7b922f16-4f4f-48a1-99c8-18f5d6ca2525
+                stepCounter: eaf823fd-fd5b-4f47-84ef-3cac2dbb1d5d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bacb3b40-e0c9-4f48-9487-06ac6d042479
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        name: STLAL
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f8be458f-4a58-4774-9791-5ba533466290
+                stepCounter: eaf823fd-fd5b-4f47-84ef-3cac2dbb1d5d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 44b2a7d2-2f1a-44d7-a525-079eaf4abd48
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: SLT_OPERATION_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f4174614-6b83-42cd-bf00-3e7e8b4c744a
+                stepCounter: eaf823fd-fd5b-4f47-84ef-3cac2dbb1d5d
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b2459159-a6bc-45a2-a67f-f54d60f0265b
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(18)
+        defaultValue: ""
+        description: ""
+        name: ZCAL_MATNR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: |-
+              case when LTRIM("V_MAST".MATNR,' +.0123456789')!= '' then "V_MAST".MATNR 
+                  else LPAD("V_MAST".MATNR,18,'0') end
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: c24bbb30-2aac-4a9b-ac29-7e0fdd1e2117
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(2)
+        defaultValue: ""
+        description: ""
+        name: ZCAL_STLAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: LPAD("V_MAST"."STLAL",2,'0')
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 31d870ec-2295-44a4-bfd5-84464ac2c1a5
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(8)
+        defaultValue: ""
+        description: ""
+        name: ZCAL_STLNR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: LPAD("V_MAST"."STLNR",8,'0')
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 76dde353-edb4-41b5-ba51-12f636721091
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: STLTY
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 13528d16-f587-436e-9b6c-3cfc5cf494f0
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4edcb8c7-9a2a-4dd4-9802-6fb20f5e9790
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: STKOZ
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4ac4f725-1ba3-48c5-88fb-2c7403e7d36e
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 15d6b466-b719-42d2-9c2b-5fd4e88f4980
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: DATUV
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 49dc02fb-f4f2-4aaa-87e8-549f85d5e456
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b5d8d3bd-74e0-4db4-8ff8-acf082366eae
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: LKENZ
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fbc5f6b3-5cec-45ef-b178-8afb5058b70d
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0ecd8d16-fb42-4727-95c4-e01b29e0ee0d
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: LOEKZ
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9cdf6c02-8904-4119-8b43-a3f6ec9522c7
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 30b532cd-6da4-459f-ae35-339f066aa728
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        name: STLST
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c2d47d4b-32b5-4e6a-966c-b7a1c42aeb7f
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: aba9641a-d0bc-425d-862d-d537a0a7049e
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(3)
+        description: ""
+        name: BMEIN
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 547aebcb-5b28-429c-9173-e9ac5c3aada7
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d54bd4b5-73f9-4f44-8479-d7851fe8b8e5
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: NUMBER(13,3)
+        description: ""
+        name: BMENG
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 43c12e73-d3e4-4c0a-90ad-b3a65bccd8a4
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 83fe42cb-e6b8-4e05-b6a5-dfea80aa4a5b
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(40)
+        description: ""
+        name: STKTX
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ff8703c8-24b9-4927-82b6-ac35dc1cb0de
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6ba4d15f-9282-446e-976e-5c83b0fdbd30
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: VARCHAR(8)
+        defaultValue: ""
+        description: ""
+        name: ZCAL_STKOZ
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: LPAD("V_STKO"."STKOZ",8,'0')
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2f024be3-3210-4747-9a3b-2c05b37292d2
+          stepCounter: 8d23456f-7732-45ea-91d5-12d44a6cecb4
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        name: SLT_UPDATE_TIMESTAMP
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9322243b-780b-4400-8e58-597103006c19
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          V_MAST: 2230a1c0-a3d7-489f-8fb0-c9cab1a1a795
+          V_STKO: 4ee46912-7dbf-4427-b45e-3e1925262652
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: R_SAP_ECC
+            nodeName: V_MAST
+          - locationName: R_SAP_ECC
+            nodeName: V_STKO
+        join:
+          joinCondition: |-
+            FROM {{ ref('R_SAP_ECC', 'V_MAST') }} "V_MAST"
+            INNER JOIN {{ ref('R_SAP_ECC', 'V_STKO') }} "V_STKO"
+            ON "V_MAST"."MANDT" = "V_STKO"."MANDT"
+            and "V_MAST"."STLAL" = "V_STKO"."STLAL"
+            and "V_MAST"."STLNR" = "V_STKO"."STLNR"
+            where "V_MAST"."SLT_OPERATION_FLAG" != 'D'
+            and "V_STKO"."SLT_OPERATION_FLAG" != 'D' AND "V_STKO"."LOEKZ" !='X'
+            and "V_STKO"."STLST" != '02' and "V_STKO"."STLTY" = 'M'
+            and "V_STKO"."LKENZ" = '' AND "V_STKO"."DATUV" <= to_char(current_date, 'YYYYMMDD')
+        name: V_MAST_STKO
+        noLinkRefs: []
+  name: V_MAST_STKO
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

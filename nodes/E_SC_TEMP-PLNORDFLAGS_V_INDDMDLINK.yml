@@ -1,0 +1,265 @@
+fileVersion: 1
+id: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+name: PLNORDFLAGS_V_INDDMDLINK
+operation:
+  config:
+    insertStrategy: UNION
+    postSQL: |-
+      delete from {{ ref('E_SC_TEMP', 'PLNORDFLAGS_V_INDDMDLINK')}}
+
+      where  1= CASE WHEN '{{parameters.SIMULATION_NAME}}'='ALL' THEN 1
+                 WHEN SIMULATION_NAME='{{parameters.SIMULATION_NAME}}' THEN 1
+                 ELSE 0 END
+
+      and "LOADDATETIMESTAMP" <=(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+
+                                WHERE PROCEDURE_NAME = 'BV_ESP_PLAN_ORD_FLAGS_INSERT'  and  SCENARIO_NAME='{{parameters.SIMULATION_NAME}}' );
+    preSQL: |-
+      delete from {{ ref('E_SC_TEMP', 'PLNORDFLAGS_V_INDDMDLINK')}}
+
+      where (SNAPSHOTDATE,SIMULATION_NAME) IN (SELECT SNAPSHOTDATE,SIMULATION_NAME FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }}
+                                              where SIMULATION_NAME='{{parameters.SIMULATION_NAME}}'
+                                              AND "ESP_HUB_OUTPUT_V_INDDMDLINK"."LOADDATETIMESTAMP">(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                              WHERE PROCEDURE_NAME = 'BV_ESP_PLAN_ORD_FLAGS_INSERT' AND SCENARIO_NAME='{{parameters.SIMULATION_NAME}}')
+                                              GROUP BY SNAPSHOTDATE,SIMULATION_NAME           
+                                              );
+    selectDistinct: false
+    testsEnabled: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d5cdec2f-45d8-4342-9dcd-cb4cb20ddea1
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: SUPPLYPEGQTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 087924cc-603c-4243-a35c-be756e38f2f8
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 063075c6-ec3b-471e-9130-2954861310a5
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: SUPPLYTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2b998d5a-0c42-4c4a-a070-98b9ab98abab
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a5b49ae2-a348-4555-a84d-0a13c23ba78d
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SUPPLYSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ec72d13b-bbd8-47e2-820c-29ae5ebbcc6c
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 03c2ea78-c9b3-42f9-b9f2-0e6432e9942d
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: SUPPLYLOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2fb7b266-bef6-48e7-9f66-95416c48e701
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8736b767-3f61-4504-a8e9-70aa6fdf4330
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: SUPPLYITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 26d5a93f-aca1-480b-ad80-3cccc0c67849
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4df33226-08a0-42ea-b369-d743032d8811
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SCHEDSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d5aba990-c224-45b1-903a-de3e3707b2dd
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 312c0c1c-fecd-425e-bc85-cac654209809
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: DMDTYPE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 865e75dd-a6cc-4445-8aa8-030a3698aeaa
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 267135e7-d07c-45e9-b114-582ce939170f
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: DMDSEQNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 06e6d931-02af-4316-a1ca-450149552b44
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 769e9d84-d924-4695-a603-59b1901363ef
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: ORDERID
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 08b32fbe-8412-4a24-bd26-fdcd9e17c9cb
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b17f3a2d-d339-4d75-bb90-0d048c175384
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c3146ed0-927d-4835-8fb9-a63e233ad4d6
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0651671c-6570-4a4c-b796-38493278d9ba
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: RELATEDSEQNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e0b0a031-d10d-4201-a2cb-522c33ce6e0b
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2568e8bf-5f7a-40e1-a91a-76252aa24372
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 37f63374-388c-4f79-8fed-f015a4132c27
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0a6ebf5a-01c6-421b-bb87-f9287305f5df
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f097f6e0-e3aa-4fd6-a3bf-1fe3bd47b003
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6cf838b5-9eea-4c64-bbd5-753676070f1d
+          stepCounter: 3ac573bd-2a02-47bd-8d77-ebbdaffebeef
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: DMDORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDTYPE" = '1',"ESP_HUB_OUTPUT_V_INDDMDLINK"."ORDERID", "ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDSEQNUM")
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_HUB_OUTPUT_V_INDDMDLINK: dd52a822-e49a-41d3-9a91-5840a0a27a26
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_INDDMDLINK
+          - locationName: E_SC_UTIL_USER
+            nodeName: LOAD_CONTROL_SC_SPO
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }} "ESP_HUB_OUTPUT_V_INDDMDLINK"
+            WHERE "ESP_HUB_OUTPUT_V_INDDMDLINK"."SUPPLYTYPE" = '2'
+            AND "ESP_HUB_OUTPUT_V_INDDMDLINK"."LOADDATETIMESTAMP">(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                                    WHERE PROCEDURE_NAME = 'BV_ESP_PLAN_ORD_FLAGS_INSERT' AND SCENARIO_NAME='{{parameters.SIMULATION_NAME}}')
+             AND "SIMULATION_NAME" = '{{parameters.SIMULATION_NAME}}'
+        name: PLNORDFLAGS_V_INDDMDLINK
+        noLinkRefs: []
+  name: PLNORDFLAGS_V_INDDMDLINK
+  overrideSQL: false
+  schema: ""
+  sqlType: persistentStage
+  type: sql
+  version: 1
+type: Node

@@ -1,0 +1,164 @@
+fileVersion: 1
+id: 7c5f6ca6-b221-4d4b-846e-b8e7fd122935
+name: INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 74cbd078-0016-4305-b143-d73db79960d8
+          stepCounter: 7c5f6ca6-b221-4d4b-846e-b8e7fd122935
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f57fa800-f935-4f6d-b1f8-986d70b83e2e
+                stepCounter: e8364870-65af-4666-9fac-c59d287911ef
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ece66c11-bc00-4046-8fea-39028fb4df49
+          stepCounter: 7c5f6ca6-b221-4d4b-846e-b8e7fd122935
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOT_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 103aca0f-d5df-4403-9682-d66ebba1d3f3
+                stepCounter: e8364870-65af-4666-9fac-c59d287911ef
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1b323fd2-a29a-43cd-ad69-ed07edbd6fe5
+          stepCounter: 7c5f6ca6-b221-4d4b-846e-b8e7fd122935
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: U_SEGMENTATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 40cad7b7-b3b7-45bb-b6b6-14f02f91a005
+                stepCounter: e8364870-65af-4666-9fac-c59d287911ef
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2b8e4b25-33d1-4ba1-938a-669b12f69af3
+          stepCounter: 7c5f6ca6-b221-4d4b-846e-b8e7fd122935
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: U_INDDMD_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 65485372-4a2e-42a9-b953-693dfe780954
+                stepCounter: e8364870-65af-4666-9fac-c59d287911ef
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2c0f2c8b-3226-4f3e-b03f-b822cbfa0650
+          stepCounter: 7c5f6ca6-b221-4d4b-846e-b8e7fd122935
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: U_ATP_CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 651815d2-40bd-4ffb-87b3-666239f6322c
+                stepCounter: e8364870-65af-4666-9fac-c59d287911ef
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1f11ad32-f70e-4a48-ac94-de32f06653ab
+          stepCounter: 7c5f6ca6-b221-4d4b-846e-b8e7fd122935
+        config: {}
+        dataType: VARCHAR(2)
+        defaultValue: ""
+        description: ""
+        name: U_PPLEVEL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "'FG'"
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 767f1c94-7963-4369-994d-d2bee5432735
+          stepCounter: 7c5f6ca6-b221-4d4b-846e-b8e7fd122935
+        config: {}
+        dataType: ""
+        defaultValue: ""
+        description: ""
+        name: SHIPDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: MAX(DATEADD(DAY, -1*EARLYTARGETDUR, TO_DATE(SHIPDATE)))
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1f28a93d-b6d8-4a93-9986-c81b12757f6a
+          stepCounter: 7c5f6ca6-b221-4d4b-846e-b8e7fd122935
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: ORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 913a3875-888b-4694-b198-85b3d3231abb
+                stepCounter: e8364870-65af-4666-9fac-c59d287911ef
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_CUSTORDER
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_CUSTORDER') }} "ESP_HUB_OUTPUT_V_CUSTORDER"
+
+            GROUP BY ALL
+        name: INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER
+        noLinkRefs: []
+  name: INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

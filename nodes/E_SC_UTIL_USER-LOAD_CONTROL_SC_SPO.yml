@@ -1,0 +1,185 @@
+fileVersion: 1
+id: 31049c4a-29ec-4611-9327-86820759a50d
+name: LOAD_CONTROL_SC_SPO
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_UTIL_USER
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 91bdf70c-605b-42c5-81d4-e26f8366be56
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: VARCHAR(255)
+        defaultValue: ""
+        description: Name of the Domain Example:- (Simulation name) Build, SNOP, etc.
+        name: DATA_DOMAIN
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3f228645-2686-41fe-af9c-5b292f705e5f
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: VARCHAR(255)
+        defaultValue: ""
+        description: Name of the snowflake database containing target table.
+        name: TARGET_DATABASE
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3b597c9c-3ee5-4671-ad9f-fc831d90daae
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: VARCHAR(255)
+        defaultValue: ""
+        description: Name of the snowflake schema containing target table.
+        name: TARGET_SCHEMA
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 96c98951-32ad-417b-8fc9-8e5ed86fe56a
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: VARCHAR(255)
+        defaultValue: ""
+        description: Name of the snowflake target table.
+        name: TARGET_TABLE
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: be3a9682-70fa-4d30-b406-42d06c8ebc71
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: VARCHAR(255)
+        defaultValue: ""
+        description: Name of the snowflake procedure.
+        name: PROCEDURE_NAME
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6b5cfe63-3258-4f10-9d68-c5d5ca122447
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: VARCHAR(20)
+        defaultValue: ""
+        description: Load Type. FULL, INCREMENTAL, CHANGE_TRACKING etc.
+        name: LOAD_TYPE
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 69b7dd4b-4177-454d-aa45-ef3802e94262
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: Watermark value for INCREMENTAL load. Ignored for FULL load. last_sync_version for CHANGE_TRACKING
+        name: WATER_MARKER_TIMESTAMP
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7d17bb9f-8605-40d2-b217-7448ffa9975b
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: UTC timestamp when the table was last loaded
+        name: LAST_LOAD_TIMESTAMP_UTC
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 16d10be9-c8f4-4d88-a200-0e329631bbbb
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: NUMBER(38,0)
+        defaultValue: ""
+        description: Enter number of seconds, mintues, hours, days to back for Delta Overlapping
+        name: DELTA_OVERLAP_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: d0ab01b6-4686-45ae-aec6-6bffd743d397
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: Enter seconds, mintues, hours, days to back for Delta Overlapping
+        name: DELTA_OVERLAP_TIME_FORMAT
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 086ef8cb-519c-486a-a652-ab567d99d420
+          stepCounter: 31049c4a-29ec-4611-9327-86820759a50d
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: Enter  Scenario Name
+        name: SCENARIO_NAME
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_UTIL_USER', 'LOAD_CONTROL_SC_SPO') }}
+  name: LOAD_CONTROL_SC_SPO
+  schema: ""
+  sqlType: Source
+  table: LOAD_CONTROL_SC_SPO
+  type: sourceInput
+  version: 1
+type: Node

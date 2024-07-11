@@ -1,0 +1,167 @@
+fileVersion: 1
+id: ebb7128b-9b84-49aa-af3a-43b3aebabfed
+name: FORECAST_DELTA_QTY_J_SPO_PLG
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 921cc711-545d-410b-81a5-6c40eccc2e34
+          stepCounter: ebb7128b-9b84-49aa-af3a-43b3aebabfed
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DT_NEW
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d0207aa9-32d9-4151-9c92-52b16d4a645e
+                stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0d858540-8e1f-4845-aa51-f502790206cb
+          stepCounter: ebb7128b-9b84-49aa-af3a-43b3aebabfed
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 25033111-53d7-43bc-9f82-def296cf0c79
+                stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 105060d9-d1f0-49d7-a148-c3682a985396
+          stepCounter: ebb7128b-9b84-49aa-af3a-43b3aebabfed
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: U_INDDMD_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 85d452ad-557f-4860-8483-2bdd5f08f0a5
+                stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7d738617-b63d-4842-a4c3-5f138b65ff57
+          stepCounter: ebb7128b-9b84-49aa-af3a-43b3aebabfed
+        config: {}
+        dataType: NUMBER(21,3)
+        description: ""
+        hashDetails: null
+        name: QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 44d720be-e30a-40c3-902c-2c6b9bf10b57
+                stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3dd3bdee-e2ee-4b67-8db0-6c6932966a0c
+          stepCounter: ebb7128b-9b84-49aa-af3a-43b3aebabfed
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: PLANNING_QUARTER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6d587abc-c841-4946-85f9-10fb1988ecb9
+                stepCounter: 020f61e5-854b-40ee-abea-f366dbb1c815
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e42671b1-18a6-483e-aa9d-64a1f081da01
+          stepCounter: ebb7128b-9b84-49aa-af3a-43b3aebabfed
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: PLANNING_MONTH
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f5929663-ca48-438d-a5f2-7076f98c92bc
+                stepCounter: 020f61e5-854b-40ee-abea-f366dbb1c815
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 39c210f6-fc59-483d-ac20-d718f36f3617
+          stepCounter: ebb7128b-9b84-49aa-af3a-43b3aebabfed
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: PLANNING_WORK_WEEK
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: eb1adf19-f02a-4351-a3ae-1daf2bc65b25
+                stepCounter: 020f61e5-854b-40ee-abea-f366dbb1c815
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 598e8e12-3b6b-4dc7-a085-c23fd9b07972
+          stepCounter: ebb7128b-9b84-49aa-af3a-43b3aebabfed
+        config: {}
+        dataType: TIMESTAMP
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_DATE_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: TO_TIMESTAMP(CONCAT("SNAPSHOT_DT_NEW", ' ', TO_TIME(SUBSTRING("SNAPSHOT_TIME", 1, 2) || ':' || SUBSTRING("SNAPSHOT_TIME", 3, 2) || ':' || SUBSTRING("SNAPSHOT_TIME", 5, 2))), 'YYYY-MM-DD HH24:MI:SS')
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          D_ENTERPRISE_DATE: 9ea06748-6b37-4057-8ac9-12ac515f2aa2
+          FORECAST_DELTA_QTY_J_SPO: df953620-2d40-43b9-bbf0-540f072b7bdc
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_MASTER_DATA_MD
+            nodeName: D_ENTERPRISE_DATE
+          - locationName: E_SC_TEMP
+            nodeName: FORECAST_DELTA_QTY_J_SPO
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'FORECAST_DELTA_QTY_J_SPO') }} "FORECAST_DELTA_QTY_J_SPO"
+            LEFT OUTER JOIN {{ ref('E_MASTER_DATA_MD', 'D_ENTERPRISE_DATE') }} "D_ENTERPRISE_DATE"
+            ON "FORECAST_DELTA_QTY_J_SPO"."NEEDDATE_NEW"=DATE("D_ENTERPRISE_DATE"."FULL_DATE")
+        name: FORECAST_DELTA_QTY_J_SPO_PLG
+        noLinkRefs: []
+  name: FORECAST_DELTA_QTY_J_SPO_PLG
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

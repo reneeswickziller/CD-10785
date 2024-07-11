@@ -1,0 +1,421 @@
+fileVersion: 1
+id: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+name: SPA_INTRANSIT
+operation:
+  config:
+    insertStrategy: UNION ALL
+    postSQL: |-
+      DELETE FROM {{ ref('E_SC_TEMP', 'SPA_INTRANSIT') }} 
+      WHERE SCENARIO_NAME ='{{parameters.SCENARIO_NAME}}'
+      and "LOADDATETIMESTAMP" <=(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                 WHERE PROCEDURE_NAME = 'ESP_SUPPLY_PLAN_ANALYTICS_INSERT' AND SCENARIO_NAME='{{parameters.SCENARIO_NAME}}') ;                                                      
+    preSQL: |-
+      DELETE FROM {{ ref('E_SC_TEMP', 'SPA_INTRANSIT')}} 
+      WHERE SCENARIO_NAME ='{{parameters.SCENARIO_NAME}}'
+      and (SCENARIO_DATE) IN (SELECT SNAPSHOTDATE FROM
+       {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_PLANARRIV') }} 
+       WHERE  SCENARIO_NAME ='{{parameters.SCENARIO_NAME}}'
+       and LOADDATETIMESTAMP >(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                              WHERE PROCEDURE_NAME = 'ESP_SUPPLY_PLAN_ANALYTICS_INSERT' AND SCENARIO_NAME='{{parameters.SCENARIO_NAME}}')
+      group by all                                                         
+      )
+      ;
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 371c7dd0-ed12-44d0-b8ca-c1fae6fe8f47
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: END_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: CASE WHEN "ESP_HUB_OUTPUT_V_INDDMDLINK"."SUPPLYAVAILDATE" <= "ESP_HUB_OUTPUT_V_INDDMDLINK"."PARENTSUPPLYSTARTDATE" THEN "ESP_HUB_OUTPUT_V_INDDMDLINK"."SUPPLYAVAILDATE" ELSE "ESP_HUB_OUTPUT_V_INDDMDLINK"."PARENTSUPPLYSTARTDATE" END
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: ec5b5003-09a9-4baf-96e9-550162d8e742
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: PRODUCTIONMETHOD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9c2ebc45-83c4-4f64-bfbc-3a07fd2bca1e
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PARENTORDERTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c3bedde9-3963-45d1-a42a-4f2975125bc4
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: DATE
+        description: ""
+        name: UNOFFSET_NEEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 283d862b-bf69-4c02-84c9-617422b14f22
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: MARKET_SUB_SEGMENT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c75ceb76-445e-4786-b9b7-c71f880f8f93
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        name: PRIORITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 42834147-511e-4c80-ae4a-3b72f03ec437
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: U_SEGMENTATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 55a68599-1aaa-4f21-baaa-679c7594dfde
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: U_INDDMD_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 592d21eb-34e1-42cd-b8bf-3286615bf0c8
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: DMDTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 82fe262b-601d-406b-980c-c58bcee4cb00
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: EXPLODESW
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 35694038-a484-46d3-aee2-c9fb39e6e739
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: U_ATP_CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7b6e4598-f2e4-4c72-9aed-b4742f5ef36b
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: EXECUTABLE_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c4d164fd-8367-454d-9f6c-50223734eb6b
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: COPRODUCT_PLAN_ORD_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 654a975e-43d1-435f-ae3c-a3d195431d61
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: NPI_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b48d0bd0-1931-420f-92eb-14bbd4fdf9fa
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: DESTINATION_LOCATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 60bef07d-b8f7-42bb-bf05-f67fefdb81ae
+                stepCounter: 5d36ea9e-18c1-4374-8aa0-c3d91701cdad
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 22c9074f-b600-4cbc-bc82-615c731610f2
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SOURCE_LOCATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 758c4af1-f811-4626-a918-aadd2d674e3a
+                stepCounter: 5d36ea9e-18c1-4374-8aa0-c3d91701cdad
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 38de9e56-5412-426d-8afd-056d1e7656c5
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(200)
+        defaultValue: ""
+        description: ""
+        name: DMD_SUPPLY_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: "'INTRANSIT'"
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2a6856f2-37ec-4f1f-a9dd-f178f94258bf
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ec6c30b0-edf5-467e-b351-a08f418bc3b4
+                stepCounter: 5d36ea9e-18c1-4374-8aa0-c3d91701cdad
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5208853b-f956-4506-af42-8b611e69c7aa
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: DATE
+        description: ""
+        name: OUTS_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b22c0cd7-4d35-4c4d-a983-701d5c1caf04
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0184337c-57ac-4523-ab2a-97d30794a6dc
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: DATE
+        description: ""
+        name: STARTS_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b22c0cd7-4d35-4c4d-a983-701d5c1caf04
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 76cfa35d-7e14-4178-ac92-90ff91b88da0
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0682286f-596d-42c2-a9d4-427f5201daef
+                stepCounter: 5d36ea9e-18c1-4374-8aa0-c3d91701cdad
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8fe007ff-c07a-4d45-89eb-090d5214ffc6
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SCENARIO_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c866ca15-afab-4dbf-9ecd-efc235776a40
+                stepCounter: 5d36ea9e-18c1-4374-8aa0-c3d91701cdad
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5d5add63-a926-420a-b2a8-3447943fa5d4
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d88753ee-8c2f-4ada-9426-e3594f8e772a
+                stepCounter: 5d36ea9e-18c1-4374-8aa0-c3d91701cdad
+            transform: CASE WHEN "END_DATE"= CAST("D_ESP_DATE"."FULL_DATE" as date) THEN 0 ELSE SUPPLYPEGQTY END
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5d8703c3-10ab-446f-8c04-928d2bcac84d
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 02b3b603-df12-4a99-a7a4-2d900c18147f
+                stepCounter: 5d36ea9e-18c1-4374-8aa0-c3d91701cdad
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: f8010cd3-3289-47c4-9c4d-3bf861ea2c33
+          stepCounter: 7ff2e0f6-c214-4d84-aeea-597aac5880b7
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: DATA_SOURCE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: "'INTRANSIT'"
+        transform: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_DATE
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_INDDMDLINK
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_PLANARRIV
+          - locationName: E_SC_UTIL_USER
+            nodeName: LOAD_CONTROL_SC_SPO
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_PLANARRIV') }} "ESP_HUB_OUTPUT_V_PLANARRIV"
+
+            LEFT OUTER JOIN(
+            SELECT SNAPSHOTDATE,SIMULATION_NAME,SUPPLYITEM,SUPPLYSEQNUM,SUPPLYLOC,SUPPLYTYPE,SUPPLYAVAILDATE,PARENTSUPPLYSTARTDATE,SUM(SUPPLYPEGQTY) AS SUPPLYPEGQTY
+            FROM{{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }} 
+            WHERE "ESP_HUB_OUTPUT_V_INDDMDLINK"."SIMULATION_NAME"='{{parameters.SCENARIO_NAME}}' 
+            and "ESP_HUB_OUTPUT_V_INDDMDLINK"."LOADDATETIMESTAMP">(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                                    WHERE PROCEDURE_NAME = 'ESP_SUPPLY_PLAN_ANALYTICS_INSERT' AND SCENARIO_NAME='{{parameters.SCENARIO_NAME}}')
+            GROUP BY ALL
+            ) "ESP_HUB_OUTPUT_V_INDDMDLINK"
+            ON "ESP_HUB_OUTPUT_V_PLANARRIV".SNAPSHOTDATE = "ESP_HUB_OUTPUT_V_INDDMDLINK".SNAPSHOTDATE
+            AND "ESP_HUB_OUTPUT_V_PLANARRIV".SIMULATION_NAME  = "ESP_HUB_OUTPUT_V_INDDMDLINK".SIMULATION_NAME
+            AND "ESP_HUB_OUTPUT_V_PLANARRIV".ITEM  = "ESP_HUB_OUTPUT_V_INDDMDLINK".SUPPLYITEM
+            AND "ESP_HUB_OUTPUT_V_PLANARRIV".SEQNUM  = "ESP_HUB_OUTPUT_V_INDDMDLINK".SUPPLYSEQNUM
+            AND "ESP_HUB_OUTPUT_V_PLANARRIV".DEST  = "ESP_HUB_OUTPUT_V_INDDMDLINK".SUPPLYLOC
+            AND  "ESP_HUB_OUTPUT_V_INDDMDLINK".SUPPLYTYPE=1
+
+            INNER JOIN {{ ref('E_SC_MD', 'D_ESP_DATE') }} "D_ESP_DATE"
+            ON "ESP_HUB_OUTPUT_V_PLANARRIV".SCHEDSHIPDATE <= cast("D_ESP_DATE".FULL_DATE as date)
+            AND END_DATE >= cast("D_ESP_DATE".FULL_DATE as date)
+            WHERE "ESP_HUB_OUTPUT_V_PLANARRIV"."SIMULATION_NAME"='{{parameters.SCENARIO_NAME}}' 
+            and "ESP_HUB_OUTPUT_V_PLANARRIV"."LOADDATETIMESTAMP">(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                                    WHERE PROCEDURE_NAME = 'ESP_SUPPLY_PLAN_ANALYTICS_INSERT' AND SCENARIO_NAME='{{parameters.SCENARIO_NAME}}')
+        name: SPA_INTRANSIT
+        noLinkRefs: []
+  name: SPA_INTRANSIT
+  overrideSQL: false
+  schema: ""
+  sqlType: persistentStage
+  type: sql
+  version: 1
+type: Node

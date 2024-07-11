@@ -1,0 +1,180 @@
+fileVersion: 1
+id: 2f0110ab-862e-46ad-bbad-296ea09f7289
+name: V_AGG_MAST_STKO
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6b1a5220-60ed-45a4-bd74-6d0085e092a0
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(3)
+        description: ""
+        name: MANDT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 30b30800-bb17-404a-93df-2cfff89ce2bb
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ec296f2b-20a9-486b-8ec8-2ae88f334ee4
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: STLTY
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 13528d16-f587-436e-9b6c-3cfc5cf494f0
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fdd6fb8d-6622-4008-b455-9ca81b7cf410
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: STLNR
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9e248889-8f25-41f7-9595-e48a2b896929
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3f3fb4f3-c5a4-4dae-bf60-5e6da032eff0
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        name: STLAL
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b6695ee6-02f3-463d-bfbb-fb03f8392fa2
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 523f9131-decd-4e04-b77c-a19f3cf242ae
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: STKOZ
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4ac4f725-1ba3-48c5-88fb-2c7403e7d36e
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: MAX("V_STKO"."STKOZ")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6daf6e9b-6ae3-4ed3-958c-7bc3dbe4a83a
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: DATUV
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 49dc02fb-f4f2-4aaa-87e8-549f85d5e456
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 33975115-28c3-41a6-9c08-e844e73096a6
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: LKENZ
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fbc5f6b3-5cec-45ef-b178-8afb5058b70d
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 335071b4-d223-40b4-90da-fafee23f8779
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: LOEKZ
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9cdf6c02-8904-4119-8b43-a3f6ec9522c7
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 248f7bbd-98e4-4a7a-93f1-159fc451f145
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        name: STLST
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c2d47d4b-32b5-4e6a-966c-b7a1c42aeb7f
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6185ac29-44bd-42a5-a34c-d2d32ee04b2b
+          stepCounter: 2f0110ab-862e-46ad-bbad-296ea09f7289
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: SLT_OPERATION_FLAG
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ebdda433-d7e2-4f8e-a923-9f8df92941e4
+                stepCounter: 0740f17c-0c05-43df-b1d9-2fabcae691fa
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: R_SAP_ECC
+            nodeName: V_STKO
+        join:
+          joinCondition: |
+            FROM {{ ref('R_SAP_ECC', 'V_STKO') }}
+            WHERE SLT_OPERATION_FLAG != 'D' AND LOEKZ != 'X' AND STLST != '02'
+            AND STLTY = 'M' AND LKENZ = '' AND DATUV <= to_char(current_date, 'YYYYMMDD')
+            group by ALL
+        name: V_AGG_MAST_STKO
+        noLinkRefs: []
+  name: V_AGG_MAST_STKO
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

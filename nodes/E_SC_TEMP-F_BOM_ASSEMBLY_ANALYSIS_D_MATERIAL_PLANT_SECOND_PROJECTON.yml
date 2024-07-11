@@ -1,0 +1,170 @@
+fileVersion: 1
+id: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+name: F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d439c288-d9a9-419a-babc-5efbe67297bb
+          stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        hashDetails: null
+        name: PLANT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b4d6aa82-cdba-46ff-8277-1dcf184f824f
+                stepCounter: 04e46a6f-b547-4bb1-8fe1-cdafe2c7d3cf
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5a1d3169-0b28-49ed-b738-8c717a810609
+          stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+        config: {}
+        dataType: NUMBER(3,0)
+        description: ""
+        name: LEAD_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ce0881cf-15c8-42a6-bb30-97e79886f313
+                stepCounter: 04e46a6f-b547-4bb1-8fe1-cdafe2c7d3cf
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9a33ea56-c838-46a2-b28d-a7291521bb1e
+          stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0de6ed08-6f1f-4817-a61d-b39cabb552d7
+                stepCounter: 04e46a6f-b547-4bb1-8fe1-cdafe2c7d3cf
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 45394ab8-d3e0-42f1-8d4a-cfa727999823
+          stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+        config: {}
+        dataType: NUMBER(13,3)
+        description: ""
+        hashDetails: null
+        name: STANDARD_PRICE_USD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6ef05d3a-2bbe-4f84-9182-e35b4b74f20a
+                stepCounter: 04e46a6f-b547-4bb1-8fe1-cdafe2c7d3cf
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bf090b2a-37d2-465f-a2f5-96d8ee08d0df
+          stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+        config: {}
+        dataType: NUMBER(5,0)
+        description: ""
+        hashDetails: null
+        name: PRICE_UNIT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: bc14be4a-175b-4826-94ff-e4efe5b6013c
+                stepCounter: 04e46a6f-b547-4bb1-8fe1-cdafe2c7d3cf
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: db2ddee4-c577-4db4-b8b0-56f5962c1936
+          stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        hashDetails: null
+        name: MRP_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: dae03039-2529-4821-b9c2-e6075cbfe1e8
+                stepCounter: 04e46a6f-b547-4bb1-8fe1-cdafe2c7d3cf
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5139fc23-36b1-4350-b2e4-5a9f39d72498
+          stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+        config: {}
+        dataType: VARCHAR(3)
+        description: ""
+        hashDetails: null
+        name: UNIT_OF_MEASURE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b788aa9b-ffc7-457f-918f-4b4ea2e81442
+                stepCounter: 04e46a6f-b547-4bb1-8fe1-cdafe2c7d3cf
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 74d3d911-5edc-419c-88da-f0b94e6ac8eb
+          stepCounter: ee1810e4-d02a-4ec6-91ff-8696c588ce0a
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: CC_PLANT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: |-
+              CASE
+                    WHEN "D_MATERIAL_PLANT"."PLANT"='TW07' THEN 'TW_16'
+                    WHEN "D_MATERIAL_PLANT"."PLANT"='MY01' THEN 'SG_10'
+                    WHEN "D_MATERIAL_PLANT"."PLANT"='MY03' THEN 'SG_23'
+                  ELSE
+                      "D_MATERIAL_PLANT"."PLANT"
+              END
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          D_MATERIAL_PLANT: a5763042-beea-44cd-84f8-bd3fe75f225d
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_MASTER_DATA_MD
+            nodeName: D_MATERIAL_PLANT
+        join:
+          joinCondition: FROM {{ ref('E_MASTER_DATA_MD', 'D_MATERIAL_PLANT') }} "D_MATERIAL_PLANT"
+        name: F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON
+        noLinkRefs: []
+  name: F_BOM_ASSEMBLY_ANALYSIS_D_MATERIAL_PLANT_SECOND_PROJECTON
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

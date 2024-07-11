@@ -1,0 +1,1246 @@
+fileVersion: 1
+id: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+name: LOAD_INVENTORY_HEALTH_DATA
+operation:
+  config:
+    SQL_Code: |-
+      DECLARE
+      P_SIMULATION_NAME STRING :='{{parameters.P_INVENTORY_SIMULATION_NAME}}';
+      P_SCENARIO_DATE VARCHAR(20) :='{{parameters.P_INVENTORY_SCENARIO_DATE}}';
+      V_TARGET_OBJECT STRING :=  REPLACE('{{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}','"','');
+      MIN_RNO INT:=0;
+      MAX_RNO INT:=0;
+      V_PROCEDURE_NAME STRING :='ESP_INVENTORY_HEALTH_DATA_INSERT';
+      V_DATA_DOMAIN STRING :='SUPPLY_PLANNING';
+      MAX_LOAD_DATE_TIME TIMESTAMP_NTZ(9) :=CURRENT_TIMESTAMP();
+      MIN_LOAD_DATE_TIME TIMESTAMP_NTZ(9);
+      WATERMARKER_LOAD_DATE_TIME TIMESTAMP_NTZ(9);
+      V_SIMULATION_NAME VARCHAR(200);
+      V_SCENARIO_DATE VARCHAR(20);
+      V_CHECK_FLAG INT ;
+
+      BEGIN
+
+      LET  V_TARGET_TABLE_ARRAY ARRAY := SPLIT(:V_TARGET_OBJECT,'.');
+      LET  V_TARGET_DATABASE STRING := REPLACE(V_TARGET_TABLE_ARRAY[0],'"','');
+      LET  V_TARGET_SCHEMA STRING := REPLACE(V_TARGET_TABLE_ARRAY[1],'"','');
+      LET  V_TARGET_TABLE STRING := REPLACE(V_TARGET_TABLE_ARRAY[2],'"','');
+
+      CREATE TEMPORARY TABLE {{ ref('E_SC_IM', 'TEMP_IHR_RNO_'+'{{parameters.P_INVENTORY_SIMULATION_NAME}}') }}  (RNO NUMBER, SCENARIO_DATE VARCHAR(20), SCENARIO STRING);
+
+      SET MIN_LOAD_DATE_TIME :=  {{ ref('E_SC_UTIL_USER', 'FN_GET_WATER_MARKER_SPO') }}(V_DATA_DOMAIN,V_TARGET_DATABASE,V_TARGET_SCHEMA,V_TARGET_TABLE,V_PROCEDURE_NAME,P_SIMULATION_NAME) ;
+
+      INSERT INTO {{ ref('E_SC_IM', 'TEMP_IHR_RNO_'+'{{parameters.P_INVENTORY_SIMULATION_NAME}}') }}  (RNO, SCENARIO_DATE , SCENARIO)
+      SELECT  ROW_NUMBER () OVER(ORDER BY SNAPSHOTDATE,SIMULATION_NAME) AS RNO,
+              SNAPSHOTDATE,
+              SIMULATION_NAME
+      FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }}
+      WHERE TO_TIMESTAMP(LOADDATETIMESTAMP)   >  :MIN_LOAD_DATE_TIME
+        AND TO_TIMESTAMP(LOADDATETIMESTAMP)   <= :MAX_LOAD_DATE_TIME
+        AND 1 = CASE WHEN :P_SCENARIO_DATE='ALL' THEN 1 
+      		   	   WHEN SNAPSHOTDATE= :P_SCENARIO_DATE THEN 1 ELSE 0 END        
+        AND  (SIMULATION_NAME = :P_SIMULATION_NAME)
+      GROUP BY SNAPSHOTDATE,SIMULATION_NAME ; 
+
+      SELECT MIN(RNO),MAX(RNO) INTO MIN_RNO,MAX_RNO
+      FROM {{ ref('E_SC_IM', 'TEMP_IHR_RNO_'+'{{parameters.P_INVENTORY_SIMULATION_NAME}}') }};
+
+      WHILE (MAX_RNO >= MIN_RNO)
+      DO
+
+       SELECT SCENARIO_DATE,SCENARIO INTO V_SCENARIO_DATE,V_SIMULATION_NAME
+       FROM {{ ref('E_SC_IM', 'TEMP_IHR_RNO_'+'{{parameters.P_INVENTORY_SIMULATION_NAME}}') }}
+       WHERE RNO = :MIN_RNO;
+
+
+      SELECT SUM(CHECK_FLAG) INTO V_CHECK_FLAG  -- TO CHECK IF DATA IS AVAILABLE IN ALL SOURCE TABLES(SANITY CHECKS)
+      FROM 
+      (
+              select TOP 1 1 AS CHECK_FLAG
+              FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SCHEDRCPTS') }}  
+              where snapshot_date=:V_SCENARIO_DATE 
+              AND SIMULATION_NAME =:V_SIMULATION_NAME
+              
+              UNION ALL 
+              select TOP 1 1 AS CHECK_FLAG
+              FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INVENTORY') }}   
+              where snapshotdate=:V_SCENARIO_DATE 
+              AND SIMULATION_NAME =:V_SIMULATION_NAME
+
+              UNION ALL 
+              select TOP 1 1 AS CHECK_FLAG
+              FROM  {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_CUSTORDER') }} 
+              where snapshot_date=:V_SCENARIO_DATE  
+              AND SIMULATION_NAME =:V_SIMULATION_NAME
+
+              UNION ALL 
+              select TOP 1 1 AS CHECK_FLAG
+              FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_FORECAST') }}  
+              where snapshot_date=:V_SCENARIO_DATE 
+              AND SIMULATION_NAME =:V_SIMULATION_NAME
+
+              UNION ALL 
+              select TOP 1 1 AS CHECK_FLAG
+              FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }} 
+              where snapshotdate=:V_SCENARIO_DATE 
+              AND SIMULATION_NAME =:V_SIMULATION_NAME
+      );
+
+      IF (V_CHECK_FLAG = 5 ) -- START SANITY CHECK BLOCK 
+      THEN
+
+       INSERT INTO {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH_HIST') }} 
+      (
+          SCENARIO_DATE,                            
+          SIMULATION_NAME,
+          ORDER_NUM,
+          DEMAND_TIER,
+          DEMAND_PRIORITY,
+          DEMAND_SUBTYPE,
+          DEMAND_ATP_CAT,
+          END_ITEM,
+          SCHEDSEQNUM,
+          END_ITEM_DMDNEEDDATE,
+          SUPPLYAVAILDATE,
+          SUPPLYITEM,
+          SUPPLYLOC,
+          SUPPLY_TYPE_DESC,
+          SUPPLYSEQNUM,
+          ATP_CATEGORY,
+          DATA_SOURCE,
+          MATERIAL_GROUP,
+          MATERIAL_TYPE,
+          SUPPLYPEG_QTY,
+          INVENTORY_QTY,
+          CUM_DATEDIFF,
+          IDEAL_DEPENDENT_DEMAND_DATE,
+          DAYS_OF_INVENTORY_BUCKET,
+          INVENTORY_BUCKET,
+          PARENTSUPPLYSEQNUM,
+          PARENTSUPPLYSTARTDATE,
+          PARENTSUPPLYSCHEDDATE,
+          DMDNEEDDATE,
+          DMDTYPE,
+          SECOND_TRAVERSAL,
+          UNHEALTHY_CUM_DATEDIFF,
+          UNHEALTHY_NEXT_SUPPLYAVAILDATE,
+          RNO_DEPENDENT_DEMAND_DATE,
+          RNO_DAYS_OF_INVENTORY_BUCKET,
+          ISACTIVE,
+          U_PPLEVEL,
+          REQUESTDATE,
+          LOAD_DATE_TIME
+      )
+
+
+      SELECT SCENARIO_DATE,                            
+          SIMULATION_NAME,
+          ORDER_NUM,
+          DEMAND_TIER,
+          DEMAND_PRIORITY,
+          DEMAND_SUBTYPE,
+          DEMAND_ATP_CAT,
+          END_ITEM,
+          SCHEDSEQNUM,
+          END_ITEM_DMDNEEDDATE,
+          SUPPLYAVAILDATE,
+          SUPPLYITEM,
+          SUPPLYLOC,
+          SUPPLY_TYPE_DESC,
+          SUPPLYSEQNUM,
+          ATP_CATEGORY,
+          DATA_SOURCE,
+          MATERIAL_GROUP,
+          MATERIAL_TYPE,
+          SUPPLYPEG_QTY,
+          INVENTORY_QTY,
+          CUM_DATEDIFF,
+          IDEAL_DEPENDENT_DEMAND_DATE,
+          DAYS_OF_INVENTORY_BUCKET,
+          INVENTORY_BUCKET,
+          PARENTSUPPLYSEQNUM,
+          PARENTSUPPLYSTARTDATE,
+          PARENTSUPPLYSCHEDDATE,
+          DMDNEEDDATE,
+          DMDTYPE,
+          SECOND_TRAVERSAL,
+          UNHEALTHY_CUM_DATEDIFF,
+          UNHEALTHY_NEXT_SUPPLYAVAILDATE,
+          RNO_DEPENDENT_DEMAND_DATE,
+          RNO_DAYS_OF_INVENTORY_BUCKET,
+          ISACTIVE,
+          U_PPLEVEL,
+          REQUESTDATE,
+          LOAD_DATE_TIME
+      FROM {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }} 
+      WHERE  SCENARIO_DATE= :V_SCENARIO_DATE 
+      AND SIMULATION_NAME = :V_SIMULATION_NAME;
+
+      DELETE
+      FROM {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }} 
+      WHERE  SCENARIO_DATE= :V_SCENARIO_DATE 
+      AND SIMULATION_NAME = :V_SIMULATION_NAME;
+
+      INSERT INTO {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }} 
+      (
+
+      SCENARIO_DATE,
+      SIMULATION_NAME,
+      ORDER_NUM,
+      DEMAND_TIER,
+      DEMAND_SUBTYPE,
+      DEMAND_ATP_CAT,
+      END_ITEM,
+      SCHEDSEQNUM,
+      END_ITEM_DMDNEEDDATE,
+      SUPPLYAVAILDATE,
+      SUPPLYITEM,
+      SUPPLYLOC,
+      SUPPLYSEQNUM,
+      ATP_CATEGORY,
+      MATERIAL_GROUP,
+      MATERIAL_TYPE,
+      SUPPLYPEG_QTY,
+      INVENTORY_QTY,
+      CUM_DATEDIFF,
+      IDEAL_DEPENDENT_DEMAND_DATE,
+      DAYS_OF_INVENTORY_BUCKET,
+      INVENTORY_BUCKET,
+      PARENTSUPPLYSEQNUM,
+      PARENTSUPPLYSTARTDATE,
+      PARENTSUPPLYSCHEDDATE,
+      DMDNEEDDATE,
+      DMDTYPE,
+      SECOND_TRAVERSAL,
+      RNO_DEPENDENT_DEMAND_DATE,
+      RNO_DAYS_OF_INVENTORY_BUCKET,
+      ISACTIVE,
+      U_PPLEVEL,
+      REQUESTDATE,
+      DEMAND_PRIORITY,
+      DATA_SOURCE,
+      SUPPLY_TYPE_DESC
+      )
+
+      SELECT SNAPSHOTDATE,
+      SIMULATION_NAME,
+      ORDER_NUM,
+      DEMAND_TIER,
+      DEMAND_SUBTYPE,
+      DEMAND_ATP_CAT,
+      DMDITEM,
+      SCHEDSEQNUM,
+      DMDNEEDDATE,
+      SUPPLYAVAILDATE,
+      SUPPLYITEM,
+      SUPPLYLOC,
+      SUPPLYSEQNUM,
+      U_ATP_CATEGORY,
+      MATERIAL_GROUP,
+      MATERIAL_TYPE,
+      SUPPLYPEG_QTY,
+      INVENTORY_QTY,
+      IFNULL(CUM_DATEDIFF,0),
+      IDEAL_DEPENDENT_DEMAND_DATE,
+      NULL as DAYS_OF_INVENTORY_BUCKET,
+      IHR_INVENTORY_BUCKET as INVENTORY_BUCKET,
+      PARENTSUPPLYSEQNUM,
+      PARENTSUPPLYSTARTDATE,
+      PARENTSUPPLYSCHEDDATE,
+      DMDNEEDDATE,
+      DMDTYPE,
+      NULL AS SECOND_TRAVERSAL,
+      NULL AS RNO_DEPENDENT_DEMAND_DATE,
+      NULL AS RNO_DAYS_OF_INVENTORY_BUCKET,
+      'N',
+      U_PPLEVEL,
+      SHIPDATE,
+      DEMAND_PRIORITY,
+      'INDDMDLINK view' AS DATA_SOURCE,
+      SUPPLY_TYPE_DESC
+
+      FROM {{ ref('E_SC_TEMP', 'INVENTORY_HEALTH_STG_LOAD') }}
+      WHERE  SNAPSHOTDATE= :V_SCENARIO_DATE
+      AND SIMULATION_NAME = :V_SIMULATION_NAME;
+
+
+
+
+      UPDATE {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }} 
+      SET INVENTORY_QTY=SUPPLYPEG_QTY	
+      WHERE SCENARIO_DATE= :V_SCENARIO_DATE
+      AND SIMULATION_NAME  = :V_SIMULATION_NAME
+      AND INVENTORY_BUCKET IN( 'CONSUMED EXCESS','UNCONSUMED') AND DMDTYPE='12';
+
+
+      UPDATE {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}  I
+      SET CUM_DATEDIFF = T.CUM_DATEDIFF,
+      SECOND_TRAVERSAL = CASE WHEN T.CALCULATED_DIFF>1 THEN TRUE ELSE FALSE END,
+      RNO_DEPENDENT_DEMAND_DATE = T.RNODATE
+      FROM 
+      (
+              WITH CTE AS (
+              SELECT PARENT_NODEID,CHILD_NODEID,SUPPLYLOC,SUPPLYTYPE , DATEDIFF(day,SCHEDSTARTDATE, SUPPLYAVAILDATE) AS PARENTDATEDIFF,SUPPLYITEM,SCHEDSTARTDATE,ORDERID,DMDSEQNUM,SCHEDSEQNUM,SNAPSHOTDATE,SIMULATION_NAME
+              FROM(
+                      SELECT SUPPLYSEQNUM
+                           ,PARENTSUPPLYSEQNUM
+                          ,SUPPLYSEQNUM||'_'||SUPPLYLOC||'_'||SCHEDSEQNUM as CHILD_NODEID
+                          ,PARENTSUPPLYSEQNUM||'_'||PARENTLOC||'_'||SCHEDSEQNUM AS PARENT_NODEID
+                          ,SCHEDSTARTDATE
+                          ,SUPPLYAVAILDATE
+                          ,RELATEDSEQNUM
+                          ,SUPPLYLOC
+                          ,PARENTLOC
+                          ,RANK() OVER 
+                          (PARTITION BY SNAPSHOTDATE,SIMULATION_NAME,SCHEDSEQNUM,ORDERID,DMDSEQNUM,SUPPLYSEQNUM,SUPPLYLOC 
+                            ORDER BY RELATEDSEQNUM ASC ) AS RNO
+                          ,SUPPLYTYPE
+                          ,SUPPLYITEM
+                          ,ORDERID
+                          ,DMDSEQNUM
+                          ,SCHEDSEQNUM
+                          ,SIMULATION_NAME
+                          ,SNAPSHOTDATE
+                      FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }}
+                      WHERE SNAPSHOTDATE = :V_SCENARIO_DATE 
+                       and SIMULATION_NAME  = :V_SIMULATION_NAME
+                  )
+                  WHERE RNO=1
+              ),
+              
+              CTE_CHILD AS
+              (
+              
+              SELECT SUPPLYSEQNUM||'_'||SUPPLYLOC||'_'||SCHEDSEQNUM AS CHILD_ID
+              FROM {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}
+      		WHERE SCENARIO_DATE=:V_SCENARIO_DATE
+              AND SIMULATION_NAME  = :V_SIMULATION_NAME
+              AND INVENTORY_BUCKET IS NULL
+              GROUP BY SUPPLYSEQNUM||'_'||SUPPLYLOC||'_'||SCHEDSEQNUM
+              
+              ),
+              
+              CTE_TREE AS (
+              SELECT LEVEL,connect_by_root CHILD_NODEID as top_parent,
+              * FROM CTE
+              START WITH CHILD_NODEID IN (SELECT CHILD_ID  from CTE_CHILD )
+              CONNECT BY 
+                      CHILD_NODEID = PRIOR PARENT_NODEID 
+                      and SCHEDSEQNUM = prior SCHEDSEQNUM
+                      and ORDERID = prior ORDERID 
+                      and DMDSEQNUM= prior DMDSEQNUM
+                      and SNAPSHOTDATE = prior SNAPSHOTDATE
+                      and SIMULATION_NAME = prior SIMULATION_NAME
+              )
+              
+              
+              ,
+              CTE_2 AS
+              (
+              SELECT  CHILD_NODEID,
+                      PARENT_NODEID,
+                      PARENTDATEDIFF,
+                      SUPPLYTYPE,
+                      SUPPLYITEM,
+                      SCHEDSTARTDATE,
+                  ROW_NUMBER() OVER 
+                      (partition by SNAPSHOTDATE,SIMULATION_NAME,top_parent,SCHEDSEQNUM,ORDERID,DMDSEQNUM ORDER BY LEVEL DESC ) AS LEVEL,       
+                      SCHEDSEQNUM,
+                      ORDERID,
+                      DMDSEQNUM,
+                      top_parent,
+                  FIRST_VALUE(PARENT_NODEID) OVER
+                  (partition by SNAPSHOTDATE,SIMULATION_NAME, top_parent,SCHEDSEQNUM,ORDERID,DMDSEQNUM ORDER BY LEVEL ASC) AS TOP_PARENT_NODEID
+                  ,SNAPSHOTDATE,SIMULATION_NAME
+              FROM CTE_TREE
+              
+              
+              ),
+              CTE_3  AS(
+              SELECT CHILD_NODEID,
+              PARENT_NODEID,
+              PARENTDATEDIFF,
+                     CASE WHEN SUPPLYTYPE IN (6,7) THEN 1 ELSE 0 END AS CHECK_FLAG,
+                     LEVEL AS HIERARCHY_LEVEL,
+                     SCHEDSTARTDATE,
+              	   CASE WHEN SUPPLYITEM <> FIRST_VALUE(SUPPLYITEM) 
+                     OVER(partition by SNAPSHOTDATE,SIMULATION_NAME, top_parent,SCHEDSEQNUM,ORDERID,DMDSEQNUM ORDER BY LEVEL DESC) THEN LEVEL          ELSE 0 END AS NEXT_LEVEL,
+                      SCHEDSEQNUM,
+                      ORDERID,
+                      DMDSEQNUM,
+                      top_parent,
+                      TOP_PARENT_NODEID
+                      ,SNAPSHOTDATE,SIMULATION_NAME
+              FROM CTE_2
+              ORDER BY HIERARCHY_LEVEL DESC
+              ),
+              
+              CTE_4 AS (
+              
+              SELECT PARENTDATEDIFF,CHECK_FLAG, SNAPSHOTDATE,SIMULATION_NAME ,
+              CASE WHEN MAX(NEXT_LEVEL)
+              OVER (partition by SNAPSHOTDATE,SIMULATION_NAME, top_parent,SCHEDSEQNUM,ORDERID,DMDSEQNUM ORDER BY CURRENT_TIMESTAMP)=HIERARCHY_LEVEL THEN TO_VARCHAR(SCHEDSTARTDATE) ELSE '' END AS RNO_DMD_DATE,NEXT_LEVEL,HIERARCHY_LEVEL,SCHEDSTARTDATE,SCHEDSEQNUM,ORDERID, DMDSEQNUM,top_parent  ,PARENT_NODEID,TOP_PARENT_NODEID
+              FROM CTE_3
+              ),
+              
+              
+              FINAL_RESULT AS 
+              (
+              SELECT 
+              IFNULL(CAST(SUM(PARENTDATEDIFF) AS VARCHAR(10)),'0')||'$$'||IFNULL(CAST(SUM(CHECK_FLAG) AS VARCHAR(10)),'0')||'$$'||IFNULL(MAX(RNO_DMD_DATE),'')  AS DAYS,SCHEDSEQNUM,ORDERID, DMDSEQNUM,top_parent ,TOP_PARENT_NODEID,
+              SNAPSHOTDATE,SIMULATION_NAME 
+              FROM CTE_4
+              group by SCHEDSEQNUM,ORDERID, DMDSEQNUM,top_parent,TOP_PARENT_NODEID,SNAPSHOTDATE,SIMULATION_NAME 
+              )
+              
+              SELECT SNAPSHOTDATE,SIMULATION_NAME,
+              SPLIT_PART(top_parent, '_', 1) as  SUPPLYSEQNUM ,
+              SPLIT_PART(top_parent, '_', 2) as  SUPPLYLOC ,
+              SPLIT_PART(top_parent, '_', 3) as  SCHEDSEQNUM ,
+              SPLIT_PART(TOP_PARENT_NODEID, '_', 1) as  PARENTSUPPLYSEQNUM ,
+              SPLIT_PART(TOP_PARENT_NODEID, '_', 2) as  PARENTLOC ,
+              ORDERID, DMDSEQNUM,top_parent,TOP_PARENT_NODEID,
+              SPLIT_PART(DAYS, '$$', 1) as  CUM_DATEDIFF ,
+              SPLIT_PART(DAYS, '$$', 2) as CALCULATED_DIFF,
+              NULLIF(SPLIT_PART(DAYS, '$$', 3),'') as  RNODATE,
+              CASE WHEN DMDSEQNUM=0 THEN ORDERID ELSE DMDSEQNUM END AS ORDER_NUM 
+              
+              FROM FINAL_RESULT
+              
+
+
+      )T
+      WHERE T.SNAPSHOTDATE=I.SCENARIO_DATE 
+      AND T.SIMULATION_NAME=I.SIMULATION_NAME 
+      AND T.SUPPLYSEQNUM=I.SUPPLYSEQNUM 
+      AND T.SUPPLYLOC=I.SUPPLYLOC 
+      AND T.ORDER_NUM=I.ORDER_NUM 
+      AND T.SCHEDSEQNUM=I.SCHEDSEQNUM
+      AND INVENTORY_BUCKET IS NULL ;
+
+
+      UPDATE {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }} 
+      SET CUM_DATEDIFF=0
+      WHERE SCENARIO_DATE= :V_SCENARIO_DATE
+      AND SIMULATION_NAME  = :V_SIMULATION_NAME
+      AND CUM_DATEDIFF IS NULL ;
+
+      UPDATE  {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}  I
+      SET IDEAL_DEPENDENT_DEMAND_DATE= DATEADD(DAY, (-1 * IFNULL(CUM_DATEDIFF,0)), REQUESTDATE),   
+          DAYS_OF_INVENTORY_BUCKET = DATEDIFF( DAY, SUPPLYAVAILDATE, DATEADD(DAY, (-1 * IFNULL(CUM_DATEDIFF,0)), REQUESTDATE)),     
+          RNO_DAYS_OF_INVENTORY_BUCKET =DATEDIFF( DAY,SUPPLYAVAILDATE,IFNULL(RNO_DEPENDENT_DEMAND_DATE,SUPPLYAVAILDATE)) 
+      WHERE  SCENARIO_DATE= :V_SCENARIO_DATE
+          AND SIMULATION_NAME  = :V_SIMULATION_NAME
+          AND INVENTORY_BUCKET IS NULL ;
+
+
+      UPDATE  {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}  I
+      SET INVENTORY_BUCKET= CASE  WHEN DAYS_OF_INVENTORY_BUCKET <=28 THEN 'HEALTHY'
+      				            WHEN DAYS_OF_INVENTORY_BUCKET BETWEEN 29 AND 56 THEN 'NEUTRAL'
+      				            WHEN DAYS_OF_INVENTORY_BUCKET >56 THEN 'UNHEALTHY'
+             					 END 
+      WHERE  SCENARIO_DATE=:V_SCENARIO_DATE
+      AND SIMULATION_NAME  = :V_SIMULATION_NAME
+          AND INVENTORY_BUCKET IS NULL ;
+
+      UPDATE  {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}  
+      SET  SECOND_TRAVERSAL = FALSE
+      WHERE 	INVENTORY_BUCKET<>	'UNHEALTHY'	
+       AND   SCENARIO_DATE=:V_SCENARIO_DATE 
+       AND SIMULATION_NAME  = :V_SIMULATION_NAME;	
+
+
+       UPDATE  {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}  I
+      SET UNHEALTHY_CUM_DATEDIFF = T.UNHEALTHY_CUM_DATEDIFF,
+      UNHEALTHY_NEXT_SUPPLYAVAILDATE = T.UNHEALTHY_NEXT_SUPPLYAVAILDATE
+      FROM 
+      (
+          WITH CTE AS (
+              SELECT PARENT_NODEID,CHILD_NODEID,SUPPLYLOC,SUPPLYTYPE ,
+                DATEDIFF(day,SCHEDSTARTDATE, SUPPLYAVAILDATE) AS PARENTDATEDIFF                   
+                 ,SUPPLYITEM,SCHEDSTARTDATE,ORDERID,DMDSEQNUM,SCHEDSEQNUM,SNAPSHOTDATE,SIMULATION_NAME,SUPPLYAVAILDATE
+              FROM(
+                      SELECT SUPPLYSEQNUM
+                           ,PARENTSUPPLYSEQNUM
+                          ,SUPPLYSEQNUM||'_'||SUPPLYLOC||'_'||SCHEDSEQNUM as CHILD_NODEID
+                          ,PARENTSUPPLYSEQNUM||'_'||PARENTLOC||'_'||SCHEDSEQNUM AS PARENT_NODEID
+                          ,SCHEDSTARTDATE
+                          ,SUPPLYAVAILDATE
+                          ,RELATEDSEQNUM
+                          ,SUPPLYLOC
+                          ,PARENTLOC
+                          ,RANK() OVER 
+                          (PARTITION BY SNAPSHOTDATE,SIMULATION_NAME,SCHEDSEQNUM,ORDERID,DMDSEQNUM, SUPPLYSEQNUM ,SUPPLYLOC 
+                          ORDER BY RELATEDSEQNUM ASC ) AS RNO
+                          ,SUPPLYTYPE
+                          ,SUPPLYITEM
+                          ,ORDERID
+                          ,DMDSEQNUM
+                          ,SCHEDSEQNUM
+                          ,SNAPSHOTDATE,SIMULATION_NAME
+                      FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }}
+                      WHERE SNAPSHOTDATE = :V_SCENARIO_DATE
+                       and SIMULATION_NAME  = :V_SIMULATION_NAME 
+                     
+                        )
+                  WHERE RNO=1
+              ),
+              
+              CTE_CHILD AS
+              (
+              
+              
+              SELECT SUPPLYSEQNUM||'_'||SUPPLYLOC||'_'||SCHEDSEQNUM AS CHILD_ID
+              FROM  {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}
+              WHERE INVENTORY_BUCKET = 'UNHEALTHY' AND SECOND_TRAVERSAL = TRUE
+               AND SCENARIO_DATE=   :V_SCENARIO_DATE 
+      		 AND SIMULATION_NAME  = :V_SIMULATION_NAME
+      		GROUP BY SUPPLYSEQNUM||'_'||SUPPLYLOC||'_'||SCHEDSEQNUM
+             
+              		
+              
+              ),
+              
+              CTE_TREE AS (
+                  SELECT LEVEL,connect_by_root CHILD_NODEID as top_parent,
+                  * FROM CTE
+                  START WITH CHILD_NODEID IN (SELECT CHILD_ID  from CTE_CHILD )
+                  CONNECT BY 
+                          CHILD_NODEID = PRIOR PARENT_NODEID 
+                          and SCHEDSEQNUM = prior SCHEDSEQNUM
+                          and ORDERID = prior ORDERID 
+                          and DMDSEQNUM= prior DMDSEQNUM
+              )
+              
+              
+              ,
+              CTE_2 AS
+              (
+              SELECT  CHILD_NODEID,
+                      PARENT_NODEID,
+                      PARENTDATEDIFF,
+                      SUPPLYTYPE,
+                      SUPPLYITEM,
+                      SCHEDSTARTDATE,
+                      ROW_NUMBER() OVER 
+                      (partition by SNAPSHOTDATE,SIMULATION_NAME, top_parent,SCHEDSEQNUM,ORDERID,DMDSEQNUM 
+                      ORDER BY LEVEL DESC ) AS LEVEL,
+                      SCHEDSEQNUM,
+                      ORDERID,
+                      DMDSEQNUM,
+                      top_parent,
+                       FIRST_VALUE(PARENT_NODEID) 
+                     OVER(partition by top_parent,SCHEDSEQNUM,ORDERID,DMDSEQNUM ORDER BY LEVEL ASC) AS TOP_PARENT_NODEID,
+                     SUPPLYAVAILDATE,
+                     SNAPSHOTDATE,SIMULATION_NAME
+              FROM CTE_TREE
+              
+              
+              ),
+              CTE_3  AS(
+              SELECT LEVEL AS HIERARCHY_LEVEL,
+                  CHILD_NODEID,
+                  PARENT_NODEID,
+                  PARENTDATEDIFF,
+                  DENSE_RANK()
+                  OVER(partition by SNAPSHOTDATE,SIMULATION_NAME, top_parent,SCHEDSEQNUM,ORDERID,DMDSEQNUM  
+                  ORDER BY LEVEL DESC) AS DRNO,
+                  SCHEDSTARTDATE,
+                  SCHEDSEQNUM,
+                  ORDERID,
+                  DMDSEQNUM,
+                  top_parent,
+                  SNAPSHOTDATE,SIMULATION_NAME,SUPPLYAVAILDATE,
+                  TOP_PARENT_NODEID,
+                  SUPPLYTYPE
+              FROM CTE_2
+              
+              ORDER BY HIERARCHY_LEVEL DESC
+              )
+              ,
+              CTE_4  AS(
+              select ROW_NUMBER()
+                  OVER(partition by SNAPSHOTDATE,SIMULATION_NAME, top_parent,SCHEDSEQNUM,ORDERID,DMDSEQNUM  
+                  ORDER BY HIERARCHY_LEVEL DESC) AS RNO,
+                  HIERARCHY_LEVEL,SUPPLYAVAILDATE ,top_parent,SNAPSHOTDATE,SIMULATION_NAME,ORDERID,DMDSEQNUM,TOP_PARENT_NODEID
+              from CTE_3
+              WHERE SUPPLYTYPE IN (6,7)
+              AND DRNO>1
+              
+              )
+              
+             
+              
+              select a.SNAPSHOTDATE,a.SIMULATION_NAME,
+              SPLIT_PART(a.top_parent, '_', 1) as  SUPPLYSEQNUM ,
+              SPLIT_PART(a.top_parent, '_', 2) as  SUPPLYLOC ,
+              SPLIT_PART(a.top_parent, '_', 3) as  SCHEDSEQNUM ,
+              SPLIT_PART(a.TOP_PARENT_NODEID, '_', 1) as  PARENTSUPPLYSEQNUM ,
+              SPLIT_PART(a.TOP_PARENT_NODEID, '_', 2) as  PARENTLOC ,
+              SUM(CASE WHEN a.LEVEL>b.HIERARCHY_LEVEL THEN a.PARENTDATEDIFF ELSE 0 END) as  UNHEALTHY_CUM_DATEDIFF,
+              MAX(b.SUPPLYAVAILDATE) AS UNHEALTHY_NEXT_SUPPLYAVAILDATE,a.ORDERID,a.DMDSEQNUM,
+              CASE WHEN a.DMDSEQNUM=0 THEN a.ORDERID ELSE a.DMDSEQNUM END AS ORDER_NUM 
+              from CTE_2 a inner join CTE_4 b on a.top_parent=b.top_parent and a.SNAPSHOTDATE=b.SNAPSHOTDATE
+              and a.SIMULATION_NAME=b.SIMULATION_NAME
+              and a.ORDERID=b.ORDERID and b.DMDSEQNUM=b.DMDSEQNUM
+              where RNO=1
+              group by a.SNAPSHOTDATE,a.SIMULATION_NAME,a.top_parent,a.ORDERID,a.DMDSEQNUM,a.TOP_PARENT_NODEID
+              
+
+
+      )T
+      WHERE T.SNAPSHOTDATE=I.SCENARIO_DATE 
+      AND T.SIMULATION_NAME=I.SIMULATION_NAME 
+      AND T.SUPPLYSEQNUM=I.SUPPLYSEQNUM 
+      AND T.SUPPLYLOC=I.SUPPLYLOC 
+      AND T.ORDER_NUM=I.ORDER_NUM 
+      AND T.SCHEDSEQNUM=I.SCHEDSEQNUM
+      AND I.INVENTORY_BUCKET = 'UNHEALTHY'
+      AND I.SECOND_TRAVERSAL = TRUE ;
+
+
+      UPDATE {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}
+      SET 
+      	RNO_DEPENDENT_DEMAND_DATE=IDEAL_DEPENDENT_DEMAND_DATE,
+      	RNO_DAYS_OF_INVENTORY_BUCKET=DAYS_OF_INVENTORY_BUCKET
+      WHERE  SCENARIO_DATE= :V_SCENARIO_DATE
+      	  AND SIMULATION_NAME  = :V_SIMULATION_NAME
+            AND RNO_DEPENDENT_DEMAND_DATE IS NULL;
+
+
+      INSERT INTO   {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }} 
+      (
+           SCENARIO_DATE
+      	,SIMULATION_NAME
+      	,ORDER_NUM
+      	,DEMAND_TIER
+      	,DEMAND_PRIORITY
+      	,DEMAND_SUBTYPE
+      	,DEMAND_ATP_CAT
+      	,END_ITEM
+      	,SCHEDSEQNUM
+      	,END_ITEM_DMDNEEDDATE
+      	,SUPPLYAVAILDATE
+      	,SUPPLYITEM
+      	,SUPPLYLOC
+      	,SUPPLY_TYPE_DESC
+      	,SUPPLYSEQNUM
+      	,ATP_CATEGORY
+      	,DATA_SOURCE
+      	,SUPPLYPEG_QTY
+      	,INVENTORY_QTY
+      	,CUM_DATEDIFF
+      	,IDEAL_DEPENDENT_DEMAND_DATE
+      	,DAYS_OF_INVENTORY_BUCKET
+      	,INVENTORY_BUCKET
+      	,LOAD_DATE_TIME
+      	,MATERIAL_GROUP
+          ,MATERIAL_TYPE
+      	,DMDTYPE
+      	,ISACTIVE
+      	,U_PPLEVEL
+
+      )
+
+      SELECT INVSCHED."SNAPSHOT_DATE"
+            ,INVSCHED.SIMULATION_NAME AS SIMULATION_NAME 
+            ,'' AS ORDER_NUM
+            ,NULL AS "DEMAND_TIER"
+            ,NULL AS "DEMAND_PRIORITY"
+            ,NULL AS "DEMAND_SUBTYPE"
+            ,NULL AS "DEMAND_ATP_CAT"
+            ,'' AS "END_ITEM"
+            ,NULL AS  SCHEDSEQNUM
+            ,'1970-01-01' AS  END_ITEM_DMDNEEDDATE
+            ,INVSCHED."SNAPSHOT_DATE" AS SUPPLYAVAILDATE
+            ,INVSCHED."ITEM" AS SUPPLYITEM
+            ,INVSCHED."LOC" AS SUPPLYLOC          
+            ,SOURCE --INVSCHED.SOURCE     
+            ,INVSCHED.SEQNUM AS SUPPLYSEQNUM 
+            ,INVSCHED.U_ATP_CATEGORY
+            ,'' AS DATA_SOURCE       
+            ,0 AS SUPPLYPEG_QTY
+            ,IFNULL(INVSCHED.QTY,0)-IFNULL(CONSUMEDQTY,0)  AS UNCONSUMEDQTY
+            ,NULL AS CUM_DATEDIFF
+            ,'1970-01-01' AS IDEAL_DEPENDENT_DEMAND_DATE
+            ,NULL AS DAYS_OF_INVENTORY_BUCKET
+            ,CASE WHEN LENGTH(CONSUMEDINVSCHED."SUPPLYSEQNUM")>0 THEN 'PARTIALLY UNCONSUMED' ELSE  'UNCONSUMED'  END AS INVENTORY_BUCKET
+            ,CURRENT_TIMESTAMP
+            ,MC_S.MATERIAL_GROUP
+            ,MC_S.MATERIAL_TYPE
+            ,NULL AS DMDTYPE
+            ,'N' AS ISACTIVE
+           , ''  as U_PPLEVEL 
+      FROM {{ ref('E_SC_TEMP', 'INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED') }} AS INVSCHED 
+      INNER JOIN {{ ref('E_SC_MD', 'D_ESP_MATERIAL_CHARACTERISTICS') }}  MC_S ON INVSCHED."ITEM"=MC_S.PRODUCT_NUMBER
+      LEFT JOIN (
+      			SELECT SET1."SCENARIO_DATE"
+      				,SET1."SIMULATION_NAME"
+      				,SET1."SUPPLYITEM"
+      				,SET1."SUPPLYLOC"
+      				,SET1."SUPPLYSEQNUM"
+      				,SUM("SUPPLYPEG_QTY") AS CONSUMEDQTY
+      				
+      			FROM  {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }}  AS SET1
+      			WHERE SCENARIO_DATE= :V_SCENARIO_DATE 
+                  AND SET1.SIMULATION_NAME  = :V_SIMULATION_NAME
+      			GROUP BY SET1."SCENARIO_DATE"
+      				,SET1."SIMULATION_NAME"
+      				,SET1."SUPPLYITEM"
+      				,SET1."SUPPLYLOC"
+      				,SET1."SUPPLYSEQNUM"
+
+      	) AS CONSUMEDINVSCHED ON  INVSCHED."SNAPSHOT_DATE" = CONSUMEDINVSCHED."SCENARIO_DATE"
+                                AND INVSCHED."ITEM" = CONSUMEDINVSCHED."SUPPLYITEM"
+                                AND INVSCHED."LOC" = CONSUMEDINVSCHED."SUPPLYLOC" 
+                                AND INVSCHED."SEQNUM" = CONSUMEDINVSCHED."SUPPLYSEQNUM"
+                                AND INVSCHED."SIMULATION_NAME" = CONSUMEDINVSCHED."SIMULATION_NAME"
+
+
+      WHERE INVSCHED.SNAPSHOT_DATE= :V_SCENARIO_DATE
+        AND INVSCHED.SIMULATION_NAME  = :V_SIMULATION_NAME
+      AND
+          (  
+      	        MC_S."MATERIAL_GROUP" IN ('TFGPN', 'MFGPN', 'MCTO', 'AFGPN', 'BFGPN', 'WFGPN', 'CFGPN','DFGPN')  -- Finished Goods area 
+      	     OR MC_S."MATERIAL_GROUP" IN ('MINT')  -- Module area 
+      	     OR MC_S."MATERIAL_GROUP" IN ('TSTOUT')  -- Test area 
+      	     OR MC_S."MATERIAL_GROUP" IN ('AOUT', 'ARDL')  -- Assembly area 
+      	     OR MC_S."MATERIAL_GROUP" IN ('P01', 'P02')  -- Probe area 
+      	     OR MC_S."MATERIAL_GROUP" LIKE '%FGPN'
+      	     OR MC_S."MATERIAL_GROUP" IN ('TINT')
+      	    
+             )
+      AND ( (IFNULL(INVSCHED.QTY,0)-IFNULL(CONSUMEDQTY,0))>0 or (IFNULL(INVSCHED.QTY,0)-IFNULL(CONSUMEDQTY,0))<-1)  ;
+
+      UPDATE {{ ref('E_SC_IM', 'SPO_INVENTORY_HEALTH') }} 
+      SET ISACTIVE ='Y'
+      WHERE SCENARIO_DATE= :V_SCENARIO_DATE
+       AND SIMULATION_NAME  = :V_SIMULATION_NAME;
+
+      SELECT  MAX(LOADDATETIMESTAMP) INTO WATERMARKER_LOAD_DATE_TIME
+      FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }}
+      WHERE SNAPSHOTDATE=  :V_SCENARIO_DATE and SIMULATION_NAME=:V_SIMULATION_NAME;
+
+      CALL  {{ ref('E_SC_UTIL_USER', 'USP_UPDATE_WATER_MARKER_SPO') }} 
+          (:V_DATA_DOMAIN,:V_TARGET_DATABASE,:V_TARGET_SCHEMA,:V_TARGET_TABLE,:V_PROCEDURE_NAME,:P_SIMULATION_NAME,    :WATERMARKER_LOAD_DATE_TIME);
+
+      END IF; -- END SANITY CHECK BLOCK 
+
+
+      MIN_RNO := :MIN_RNO + 1;
+      END WHILE;
+
+       DROP TABLE {{ ref('E_SC_IM', 'TEMP_IHR_RNO_'+'{{parameters.P_INVENTORY_SIMULATION_NAME}}') }} ;
+       
+
+      EXCEPTION 
+       
+       WHEN OTHER THEN  
+          DROP TABLE {{ ref('E_SC_IM', 'TEMP_IHR_RNO_'+'{{parameters.P_INVENTORY_SIMULATION_NAME}}') }} ;
+            RAISE;
+      END
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fa65ae15-d005-413b-ba59-30e1a18e0a65
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0fb5dcfe-6b0e-417a-9abb-253b9c736afb
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1af5063f-df3e-42fa-84d0-3acf3daf04ea
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e8cf1179-bc84-4b9e-8d99-02a15f703820
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: af1bb294-ea99-4655-8a44-a7b219bbabc5
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: ORDER_NUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 29c471b8-5a2c-4c80-a981-18ed65d1534b
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c7ffceae-e0fd-4989-ad35-77360be46c12
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SCHEDSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b03e68d2-5849-4d10-8374-f64b473902f8
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: edafb6f9-f017-4c48-926b-d65b33c8f827
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PARENTSUPPLYSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 370da068-5606-4486-a617-25b0244cffb0
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5e77f693-9b5c-41c1-802a-546141d5c38e
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: DMDITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d38fb7ce-5d3e-461f-9a79-76e2e8def594
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6559379b-7fc2-4746-82e2-07bd3d9b6d6e
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: DATE
+        description: ""
+        name: PARENTSUPPLYSTARTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f0ae3e0c-7ab6-4661-8253-b9493517aaaf
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e0c1edbb-9078-4f48-9f7f-a2dd1d89ecca
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: DATE
+        description: ""
+        name: PARENTSUPPLYSCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d37e921f-b45d-48fc-b0b5-9efb5a462822
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 63c5281d-d606-4c27-a88f-746ae2d83e6d
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: DATE
+        description: ""
+        name: DMDNEEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6743cdd4-ffb4-454b-9f25-be1800bc0c4a
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3bab30e7-5910-416d-a475-5331bf1665bc
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SUPPLYAVAILDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a83983ed-9b46-4724-b606-0c6fa2de0f80
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: cf6723e3-8d29-48a8-b135-2492511d2979
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: SUPPLYITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: adcdc4f6-9591-42a2-a4ad-1a4fdaafdd71
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9d9e4f7c-772d-425c-99fa-31273bb15c4a
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: SUPPLYLOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6cef2de3-339d-4c9b-9254-fe581a4a2241
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0062bb82-3c84-4ac6-a638-b134c793c203
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SUPPLYSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9b8ab4d0-7439-4b10-9e35-749927e5f5a4
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7de679c7-0883-4311-be99-3467168da498
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: SUPPLYPEG_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 86c91fd0-1d17-489b-9d29-e095034f3e64
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 132b086d-e3c6-4309-b6ce-df27a8e2c480
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: NUMBER(33,3)
+        description: ""
+        name: INVENTORY_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e773cf4f-7ee8-4301-9f40-8e16b8d1044d
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e982d9f2-e2bc-42c5-8f9c-c3cd000fd9d7
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: U_ATP_CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0e2da7f9-bfd8-4a5f-ad50-c49878aa59f8
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3d754236-f346-4931-b0d8-0d9d487ad1bd
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: DMDSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 203e857f-157f-4ae2-9966-dcdf5e9ee391
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 12b192c9-376a-4506-ac71-af80de254fb8
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: ORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e344660d-d2ab-4680-81fc-a12037246ce3
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7a4ea152-5c07-41d9-be92-0ab95ec1888f
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: INTEGER
+        description: ""
+        name: CUM_DATEDIFF
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 374b4375-763e-466f-9987-6c2f2a3a71f5
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f0d71e2f-8417-45e1-8124-f39fc631eb5a
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: IHR_INVENTORY_BUCKET
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 22355bbf-cf1a-4d06-9feb-0afe588f8020
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 03f5cffb-0376-4185-a872-930b2f73e495
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: DMDTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 019e4e7a-b88a-4bba-b884-af26884ea149
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e5fcbd93-b245-4216-81e2-d65fb6c1deee
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: DEMAND_TIER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3fd25fff-81e8-4d99-9d0e-10be7d2b41db
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 476b8578-5b58-4f96-8fa0-88e0db4e6fe2
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: DEMAND_SUBTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 632fcef5-a48f-4c47-948e-40e517e82567
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bfdf372c-b696-49f2-9a45-69eb3a2d5567
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: DEMAND_ATP_CAT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6f67e399-adfd-4c44-88c5-819078b6daaa
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 22ef403a-6eb6-4ece-ac82-d7ff778f4f53
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: U_PPLEVEL_CF
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8ca23870-e2a9-4337-ab6f-e9449e1d291f
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c4714e41-20bf-4e73-9b3b-40116819035c
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 20bd82c7-974f-4428-b5d0-dbbe7ee7c7e3
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 098ca237-9fe6-4898-aa1c-73941ad96f02
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        name: MATERIAL_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 881fb99f-7d7f-4cb3-b360-acb1b81dea0d
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: cad19d03-c2cb-4b6e-9af9-3f1139f9e214
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: U_PPLEVEL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 51979844-c603-4ee4-9144-06e971de89c9
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fcd83e55-2638-4ae1-a6e8-3d79d2be506d
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SHIPDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5ecbdc8b-6fe5-4458-a8c5-dce9c8a2053b
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fa26f075-d55a-43e8-92eb-27c41ac06b96
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: DATE
+        description: ""
+        name: IDEAL_DEPENDENT_DEMAND_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 73c5d47c-96b1-43e1-a6ad-04cb730163c9
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c3dba770-1c69-4050-8d81-19ef304fd789
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: INT
+        description: ""
+        name: DAYS_OF_INVENTORY_BUCKET
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e59c13e5-c854-484e-8806-01a4bd0c078f
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 31ff1910-1fd9-4a34-b2d9-6be3faef13d7
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: DEMAND_PRIORITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9ac10012-ddad-4809-b598-1a90cbe1d38c
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 53157a0f-eb47-4216-9dfd-c622e0f51251
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: SUPPLYTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 207b4b8f-7ff0-4766-bf0e-31164f380928
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: af468e41-817a-43bf-bd99-74b0051b5852
+          stepCounter: 7ef6150d-8c4d-4ddd-b675-a25652e23fda
+        config: {}
+        dataType: ""
+        description: ""
+        name: SUPPLY_TYPE_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 718dbab4-8c49-4749-820e-0060bc7dd035
+                stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: INVENTORY_HEALTH_STG_LOAD
+        join:
+          joinCondition: FROM {{ ref('E_SC_TEMP', 'INVENTORY_HEALTH_STG_LOAD') }} "INVENTORY_HEALTH_STG_LOAD"
+        name: LOAD_INVENTORY_HEALTH_DATA
+        noLinkRefs: []
+  name: LOAD_INVENTORY_HEALTH_DATA
+  overrideSQL: false
+  schema: ""
+  sqlType: "187"
+  type: sql
+  version: 1
+type: Node

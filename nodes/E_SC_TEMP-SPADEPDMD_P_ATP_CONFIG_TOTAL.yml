@@ -1,0 +1,123 @@
+fileVersion: 1
+id: 91df3b7d-7e7c-49f0-92e4-fdb75ca172bd
+name: SPADEPDMD_P_ATP_CONFIG_TOTAL
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 59df15e2-4e2c-4e4d-add4-5dd5efa9dc2c
+          stepCounter: 91df3b7d-7e7c-49f0-92e4-fdb75ca172bd
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: APPLICATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8a428ca4-e204-4995-85ce-902d4c526854
+                stepCounter: 6de7ed17-875c-4dac-b9c8-6b222f60528c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 59685d11-b6b7-4ab9-9947-b972640b9b30
+          stepCounter: 91df3b7d-7e7c-49f0-92e4-fdb75ca172bd
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: SOURCE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b13f674f-3f8d-4760-a186-f20da7575706
+                stepCounter: 6de7ed17-875c-4dac-b9c8-6b222f60528c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c9a05171-a62a-4779-95c3-30357d4df555
+          stepCounter: 91df3b7d-7e7c-49f0-92e4-fdb75ca172bd
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: DEMAND_SUPPLY_TYPE_L0
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f259c24f-43f8-40aa-8da5-9585118e8efa
+                stepCounter: 6de7ed17-875c-4dac-b9c8-6b222f60528c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ba1f4b1d-f587-4c67-9a4e-7869b008a2a9
+          stepCounter: 91df3b7d-7e7c-49f0-92e4-fdb75ca172bd
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: ATP_CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 793ae2a8-e7ee-4225-b2e9-812fc7d405da
+                stepCounter: 6de7ed17-875c-4dac-b9c8-6b222f60528c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 825497d6-7fdd-41c1-88ee-a028be68efa7
+          stepCounter: 91df3b7d-7e7c-49f0-92e4-fdb75ca172bd
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: DEMAND_SUPPLY_TYPE_L1
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f41edcbb-a783-404b-854f-580bf1aae0e0
+                stepCounter: 6de7ed17-875c-4dac-b9c8-6b222f60528c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b339a9df-b81d-48f4-8ecf-8930cb494c7f
+          stepCounter: 91df3b7d-7e7c-49f0-92e4-fdb75ca172bd
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: DELETION_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 57367d6d-e3e6-465d-956b-83cae7ff7d0d
+                stepCounter: 6de7ed17-875c-4dac-b9c8-6b222f60528c
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: CONFIG_ATP
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'CONFIG_ATP') }} "CONFIG_ATP"
+            WHERE "APPLICATION" = 'SUPPLY_PLAN_ANALYTICS' AND "DELETION_FLAG" <> 'Y'
+            GROUP BY ALL
+        name: SPADEPDMD_P_ATP_CONFIG_TOTAL
+        noLinkRefs: []
+  name: SPADEPDMD_P_ATP_CONFIG_TOTAL
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

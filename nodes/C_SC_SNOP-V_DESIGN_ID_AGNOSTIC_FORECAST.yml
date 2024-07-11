@@ -1,0 +1,66 @@
+fileVersion: 1
+id: a00e78e2-1ecd-4d49-b781-4061540f77d3
+name: V_DESIGN_ID_AGNOSTIC_FORECAST
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: C_SC_SNOP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d498d9ff-701a-4301-b189-cca9eec3e494
+          stepCounter: a00e78e2-1ecd-4d49-b781-4061540f77d3
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: SNAPSHOT_DATETIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fc0279a6-c42c-4c23-a207-38a96a9ba68b
+                stepCounter: 4d23cbfc-a47d-4d45-8e0a-08322e0af9a2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a1e2a2a3-42bb-44de-8516-ef49f85400c8
+          stepCounter: a00e78e2-1ecd-4d49-b781-4061540f77d3
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: TO_DATE("DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS"."SNAPSHOTDATE")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SNOP
+            nodeName: DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SNOP', 'DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS') }} "DIDAGNOSTIC_BV_DEMAND_FORECAST_DID_AGNOSTIC_SPLITS"
+            GROUP BY ALL
+        name: V_DESIGN_ID_AGNOSTIC_FORECAST
+        noLinkRefs: []
+  name: V_DESIGN_ID_AGNOSTIC_FORECAST
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

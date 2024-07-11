@@ -1,0 +1,117 @@
+fileVersion: 1
+id: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+name: SUBCON_PARENT_NODES
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 446ad218-f8c7-46e7-9762-33460a538771
+          stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+        config: {}
+        dataType: varchar(100)
+        description: ""
+        name: PARENT_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 38a56680-42ab-428b-99b5-966cc9c2664a
+                stepCounter: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 267e8840-c697-455c-86cc-379e57dbd15c
+          stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+        config: {}
+        dataType: VARCHAR(500)
+        description: ""
+        name: ALT_NODES
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 636a952a-6ace-4efa-b5fa-627c0f129837
+                stepCounter: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 88fba9cd-fff4-4c94-a355-f23ccd90980a
+          stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+        config: {}
+        dataType: VARCHAR(500)
+        description: ""
+        name: ALT_MATERIAL_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1667e9da-ea33-4f3e-b5ea-86decdf8b4d4
+                stepCounter: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: acd20db7-66dc-4c8c-81bd-1eefc97c9226
+          stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+        config: {}
+        dataType: VARCHAR(500)
+        description: ""
+        name: ALT_VENDOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a008e10e-6eb4-4155-bebe-30979805a904
+                stepCounter: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7dec186e-f729-47ab-b49f-b4365fc2c27e
+          stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: ACT_PARENT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 38a56680-42ab-428b-99b5-966cc9c2664a
+                stepCounter: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+            transform: ""
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          SUBCON_ALT_NODE_MATDESC: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: SUBCON_ALT_NODE_MATDESC
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'SUBCON_ALT_NODE_MATDESC') }} "SUBCON_ALT_NODE_MATDESC",
+            LATERAL FLATTEN(input=>split("SUBCON_ALT_NODE_MATDESC"."ALT_NODES", ',')) As A
+        name: SUBCON_PARENT_NODES
+        noLinkRefs: []
+  name: SUBCON_PARENT_NODES
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

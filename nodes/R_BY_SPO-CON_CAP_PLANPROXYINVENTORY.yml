@@ -1,0 +1,200 @@
+fileVersion: 1
+id: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+name: CON_CAP_PLANPROXYINVENTORY
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: R_BY_SPO
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5485fafd-52cf-4049-a39c-3abf443a47eb
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: SIMULATION_NAME
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6a1072f8-1a7c-4954-9821-e0596c468d42
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: VARCHAR(18)
+        defaultValue: ""
+        description: ""
+        name: ITEM
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 815fd844-4550-43b4-8eb2-eb77ac232480
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: VARCHAR(18)
+        defaultValue: ""
+        description: ""
+        name: ALTITEM
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1e8a307d-3262-4915-94dc-b346fd9a2698
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: LOC
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: ef670f70-bf88-4959-876d-84a431b0bcc1
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: PROXYSTARTDATE
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b1574762-3a96-4db2-a814-d8c0c2687bac
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: PROXYENDDATE
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: ae367d0c-3e5e-4d8d-b2c4-94064ad723fb
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: NUMBER(34,6)
+        defaultValue: ""
+        description: ""
+        name: PRIAMRYITEMQTY
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: c9c3e3be-cd34-42c7-96c4-731a0b9ed61b
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: SEQNUM
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 17784503-4c14-47c3-b0b1-ca43f85b0a07
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: NUMBER(34,6)
+        defaultValue: ""
+        description: ""
+        name: QUANTITY
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b1a04320-4531-46b7-baeb-9e2ffc55a097
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: c01e8405-e539-4701-9bcf-02127589e5d4
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: LOADDATETIMESTAMP
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2d1e8f1b-f7cb-4878-bb57-118f38c17463
+          stepCounter: 96f6d328-11fa-44cd-b005-ecb389d7c9e8
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: SOURCE
+        nullable: false
+        primaryKey: true
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_SUPPLY_CHAIN', 'CON_CAP_PLANPROXYINVENTORY') }}
+  name: CON_CAP_PLANPROXYINVENTORY
+  schema: ""
+  sqlType: Source
+  table: CON_CAP_PLANPROXYINVENTORY
+  type: sourceInput
+  version: 1
+type: Node

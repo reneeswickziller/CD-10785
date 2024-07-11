@@ -1,0 +1,123 @@
+fileVersion: 1
+id: f74319a7-cc4f-4b0f-9abf-252226f80a57
+name: Projection_1_F_ESP_NONHEALTHY_INVENTORY_DETAIL
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0290dc70-a861-4311-9725-3ff621f04530
+          stepCounter: f74319a7-cc4f-4b0f-9abf-252226f80a57
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PRODUCT_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9709bc9d-dd83-4524-aee0-fae9d98de61d
+                stepCounter: 9bf20993-42aa-429f-919a-4c0b755e4c9d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ac09b0bd-d39c-4e2a-86a6-418dad7570b5
+          stepCounter: f74319a7-cc4f-4b0f-9abf-252226f80a57
+        config: {}
+        dataType: VARCHAR(40)
+        description: ""
+        name: PRODUCT_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 77006ea2-68c5-4d45-b492-70c4970f7ab5
+                stepCounter: 9bf20993-42aa-429f-919a-4c0b755e4c9d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 69689ab0-fc24-489b-8f60-e08a225fac43
+          stepCounter: f74319a7-cc4f-4b0f-9abf-252226f80a57
+        config: {}
+        dataType: VARCHAR(128)
+        description: ""
+        name: ENTBOM_TOAD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c596ab8b-369a-4f3a-8481-08d6e5ad9012
+                stepCounter: 9bf20993-42aa-429f-919a-4c0b755e4c9d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 454022e7-c0a3-4e2c-bb92-9ce42cdfe3d6
+          stepCounter: f74319a7-cc4f-4b0f-9abf-252226f80a57
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 24ae9489-3df7-448b-8cf6-79ddee5bc6b0
+                stepCounter: 9bf20993-42aa-429f-919a-4c0b755e4c9d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 57d38923-fdba-48dd-81fa-8e36fb909463
+          stepCounter: f74319a7-cc4f-4b0f-9abf-252226f80a57
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: PROFIT_CENTER_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9853282b-3d48-4a47-9ee9-da890160192c
+                stepCounter: 9bf20993-42aa-429f-919a-4c0b755e4c9d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 46fa6ed8-40ca-4f34-8bbd-68cb1679e853
+          stepCounter: f74319a7-cc4f-4b0f-9abf-252226f80a57
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1914d97c-9166-468b-aaf6-bf99b87e0c8d
+                stepCounter: 9bf20993-42aa-429f-919a-4c0b755e4c9d
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_MATERIAL_CHARACTERISTICS
+        join:
+          joinCondition: FROM {{ ref('E_SC_MD', 'D_ESP_MATERIAL_CHARACTERISTICS') }} "D_ESP_MATERIAL_CHARACTERISTICS"
+        name: Projection_1_F_ESP_NONHEALTHY_INVENTORY_DETAIL
+        noLinkRefs: []
+  name: Projection_1_F_ESP_NONHEALTHY_INVENTORY_DETAIL
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

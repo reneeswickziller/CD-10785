@@ -1,0 +1,132 @@
+fileVersion: 1
+id: c102c80c-62f1-41bb-8ce6-0547af4357d8
+name: STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ef928e70-289f-4870-9576-ebb5211d4407
+          stepCounter: c102c80c-62f1-41bb-8ce6-0547af4357d8
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9f2b598d-e500-4d5f-93dd-2b3158b8f543
+                stepCounter: 62c46911-48bc-4aae-ac81-fd04df8ecff2
+            transform: SUM("ESP_HUB_OUTPUT_V_SCHEDRCPTS"."QTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7e4a6f40-6d9b-4fca-b24c-3152324d66eb
+          stepCounter: c102c80c-62f1-41bb-8ce6-0547af4357d8
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SIMULATION_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7638c001-5267-40a7-820c-d3590a92f94f
+                stepCounter: 62c46911-48bc-4aae-ac81-fd04df8ecff2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b3855563-6e16-400a-88a2-55a3336d2ecb
+          stepCounter: c102c80c-62f1-41bb-8ce6-0547af4357d8
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 93dcc80d-ad28-4a0b-9fde-5460ea43ccad
+                stepCounter: 62c46911-48bc-4aae-ac81-fd04df8ecff2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4792dc1c-37a6-44af-81e4-05b51bda9315
+          stepCounter: c102c80c-62f1-41bb-8ce6-0547af4357d8
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: LOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e48e25b1-c0bc-4917-bcc5-1b66b47b936a
+                stepCounter: 62c46911-48bc-4aae-ac81-fd04df8ecff2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 74cba5cb-5216-446b-a7ea-621a7ce97111
+          stepCounter: c102c80c-62f1-41bb-8ce6-0547af4357d8
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a92a58a1-3c05-4904-a350-ce46a9590493
+                stepCounter: 62c46911-48bc-4aae-ac81-fd04df8ecff2
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b006ad93-6169-4bf2-b9d6-5cf5a360f016
+          stepCounter: c102c80c-62f1-41bb-8ce6-0547af4357d8
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c698365f-eb23-471c-a8f0-69c5ba8c571d
+                stepCounter: 62c46911-48bc-4aae-ac81-fd04df8ecff2
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_SCHEDRCPTS
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SCHEDRCPTS') }} "ESP_HUB_OUTPUT_V_SCHEDRCPTS"
+            WHERE "ESP_HUB_OUTPUT_V_SCHEDRCPTS"."SIMULATION_NAME" IN ('PRODUCTION','BUILD','CON_SI')
+            GROUP BY ALL
+        name: STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR
+        noLinkRefs: []
+  name: STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

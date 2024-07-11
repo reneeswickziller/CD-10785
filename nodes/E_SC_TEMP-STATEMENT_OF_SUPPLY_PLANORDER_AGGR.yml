@@ -1,0 +1,147 @@
+fileVersion: 1
+id: fa9e9e49-1ddf-42ea-8091-57f372537df4
+name: STATEMENT_OF_SUPPLY_PLANORDER_AGGR
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6be27e3c-ca7a-4d02-8269-c09edb27376c
+          stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: QUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 97bd21d5-4c28-415e-9385-29319295f3b6
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: SUM("ESP_HUB_OUTPUT_V_PLANORDER"."QUANTITY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a2c7f3e5-ebc9-4ab0-894c-674ac86676ad
+          stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2c434226-86f6-45fb-96c3-e1c8f93eeb67
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2a4110ef-01a8-4305-b3d2-9a9358588087
+          stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b766e780-3b53-466f-b67f-2269cbea78e2
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7e0b8c4b-4e48-48a9-9cc7-1e53265048eb
+          stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 50ef963a-74d4-450c-9cd7-3f8d084dd9e7
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 26fa7d48-2e10-4f86-b205-c1493974569e
+          stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: LOC
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 10dfb6ba-f531-4c3e-9ca3-c6fca4985860
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 944c5cbd-0cdc-41ba-8472-37c3cb8bfc68
+          stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 372cf661-51b2-40d2-8a57-c869c604ab90
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 68f338b3-b844-4fbc-80ef-469b65b29eea
+          stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 934516ca-5d54-485f-8316-00e18eb1f2fe
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_PLANORDER
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_PLANORDER') }} "ESP_HUB_OUTPUT_V_PLANORDER"
+            WHERE "ESP_HUB_OUTPUT_V_PLANORDER"."SIMULATION_NAME" IN ('PRODUCTION','BUILD','CON_SI')
+            GROUP BY ALL
+        name: STATEMENT_OF_SUPPLY_PLANORDER_AGGR
+        noLinkRefs: []
+  name: STATEMENT_OF_SUPPLY_PLANORDER_AGGR
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

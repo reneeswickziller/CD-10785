@@ -1,0 +1,160 @@
+fileVersion: 1
+id: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+name: INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f230beec-fa61-4d17-8f07-21e48eeca8a6
+          stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+        config: {}
+        dataType: NUMBER(33,3)
+        description: ""
+        hashDetails: null
+        name: QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a91e3579-251b-4bf6-aa9b-b6606905dcb1
+                stepCounter: 6414d9a5-9fcf-4c60-b99c-b622e48f3f9b
+            transform: SUM(QTY)
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 300d50de-9a8d-4b2f-9e54-dad1a15d1a59
+          stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SIMULATION_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3eae99d4-4f50-44f1-9c3e-f0464235483f
+                stepCounter: 6414d9a5-9fcf-4c60-b99c-b622e48f3f9b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 63a20fdd-5f97-4d86-9f96-d60b7c8b0504
+          stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: U_ATP_CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8b05b3ba-37ef-4075-af89-aa250b87bc57
+                stepCounter: 6414d9a5-9fcf-4c60-b99c-b622e48f3f9b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 87d160cf-b227-4bfc-b80c-e147aa521714
+          stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3f1ff1a4-ec87-4df7-a3c4-e36627a8f4a0
+                stepCounter: 6414d9a5-9fcf-4c60-b99c-b622e48f3f9b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: efbfb8d1-a0bf-4ab4-93aa-44ab8f45b4f1
+          stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: LOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fa32f0b6-be1f-4fd3-b6bf-409b673156d4
+                stepCounter: 6414d9a5-9fcf-4c60-b99c-b622e48f3f9b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 51db3943-1da4-4bd4-8082-db1f95649c6e
+          stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f4c8fa8a-6d1f-44b5-8910-9a6194ef6697
+                stepCounter: 6414d9a5-9fcf-4c60-b99c-b622e48f3f9b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a549c007-f7c9-4373-94fa-c14561b51129
+          stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7ee6af61-389e-4ed1-b7a5-0002c532fe96
+                stepCounter: 6414d9a5-9fcf-4c60-b99c-b622e48f3f9b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4de52dc6-e74a-4527-88bb-ab252c91ec10
+          stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+        config: {}
+        dataType: ""
+        description: ""
+        name: SOURCE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: be62fe51-3ba7-4c2f-933c-6a706204d976
+                stepCounter: 6414d9a5-9fcf-4c60-b99c-b622e48f3f9b
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_UNION
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_UNION') }} "INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_UNION"
+            GROUP  BY ALL
+        name: INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED
+        noLinkRefs: []
+  name: INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

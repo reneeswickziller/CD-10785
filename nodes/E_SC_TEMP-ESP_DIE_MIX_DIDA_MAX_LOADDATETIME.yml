@@ -1,0 +1,107 @@
+fileVersion: 1
+id: 05786168-c8d7-4397-8762-a2b9a751f5f1
+name: ESP_DIE_MIX_DIDA_MAX_LOADDATETIME
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: |-
+      delete from {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_MAX_LOADDATETIME')}}
+
+      where  1= CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                 WHEN SCENARIO_NAME='{{parameters.SCENARIO_NAME}}' THEN 1
+                 ELSE 0 END
+
+      and "LOADDATETIMESTAMP" <=(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+
+                                WHERE PROCEDURE_NAME = 'BV_ESP_DIE_MIX_DIDA_INSERT'  and  SCENARIO_NAME='{{parameters.SCENARIO_NAME}}' );
+    preSQL: |-
+      delete from {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_MAX_LOADDATETIME')}}
+
+      where (SCENARIO_DATE,SCENARIO_NAME) IN (SELECT SCENARIO_DATE,SCENARIO_NAME FROM {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD_AGGR') }}
+                                              where 1= CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                                                         WHEN SCENARIO_NAME='{{parameters.SCENARIO_NAME}}' THEN 1
+                                                         ELSE 0 END 
+                                              GROUP BY SCENARIO_DATE,SCENARIO_NAME           
+                                              );
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4b442d6d-4e42-4ce4-8cc3-aa10821cd7ab
+          stepCounter: 05786168-c8d7-4397-8762-a2b9a751f5f1
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5dd01f99-c500-4dba-a359-94243891c77c
+                stepCounter: 9c655f03-adcb-44f3-8112-7f3ef9fafa9e
+            transform: MAX("ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD_AGGR"."LOADDATETIMESTAMP")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 09022ca7-011b-4079-8c0e-6aafd51093c0
+          stepCounter: 05786168-c8d7-4397-8762-a2b9a751f5f1
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SCENARIO_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c8e6b700-6363-493c-b53e-4e3b1fca4354
+                stepCounter: 9c655f03-adcb-44f3-8112-7f3ef9fafa9e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 39b6858a-0fe2-4077-918b-dc747c7b2a64
+          stepCounter: 05786168-c8d7-4397-8762-a2b9a751f5f1
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2b119bce-571b-4ca1-b364-2291c40832d7
+                stepCounter: 9c655f03-adcb-44f3-8112-7f3ef9fafa9e
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD_AGGR: 9c655f03-adcb-44f3-8112-7f3ef9fafa9e
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD_AGGR
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD_AGGR') }} "ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD_AGGR"
+            WHERE 1 = CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                           WHEN "ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD_AGGR"."SCENARIO_NAME"='{{parameters.SCENARIO_NAME}}' THEN 1
+                           ELSE 0 END
+            GROUP BY "SCENARIO_DATE","SCENARIO_NAME"
+        name: ESP_DIE_MIX_DIDA_MAX_LOADDATETIME
+        noLinkRefs: []
+  name: ESP_DIE_MIX_DIDA_MAX_LOADDATETIME
+  overrideSQL: false
+  schema: ""
+  sqlType: persistentStage
+  type: sql
+  version: 1
+type: Node

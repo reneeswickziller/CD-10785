@@ -1,0 +1,149 @@
+{% if node.materializationType == 'table' %}
+	{% if config.preSQL %}			
+		{{ stage('Pre-SQL') }}
+		{{ config.preSQL }}
+        {% endif %}
+    {{ stage('INC') }}
+  
+    DECLARE END_DT   TIMESTAMP_NTZ;
+            START_DT TIMESTAMP_NTZ;
+            V_MIN_VAL INTEGER := 0;
+            V_MAX_VAL INTEGER := 0;
+            CNT INTEGER;
+            WATER_MARKER TIMESTAMP_NTZ;
+         {% for i in columns | selectattr('whereselector', 'defined') | list %}
+        V_{{i.name}} {{i.dataType}}; {{'\n'}}
+        {% endfor %}
+     BEGIN       
+    SELECT CURRENT_TIMESTAMP INTO :END_DT;
+
+    {% for source in sources %}
+
+CREATE OR REPLACE TEMPORARY TABLE {{ref('E_SC_TEMP', node.name+"_{{parameters.SIMULATION_NAME}}"+"_RNO" )}}  AS (             
+            SELECT 
+                 {% for i in columns | selectattr('whereselector','defined') | list  %}
+                {% if not loop.first %}
+                    ,
+                {% endif %}
+                    {{i.name}} {{'\n'}}
+                {% endfor %}
+                , ROW_NUMBER() OVER(ORDER BY 
+                {% for i in columns | selectattr('whereselector','defined') | list  %}
+                {% if not loop.first %}
+                    ,
+                {% endif %}
+                    {{i.name}} 
+                {% endfor %}
+                ) RNO
+               {{ source.join }}
+			   WHERE (
+                {% for col in  columns | selectattr('incatt', 'defined') | list %}
+                {% if not loop.first %}
+                OR
+                {% endif %}
+                "{{ col.name }}" >(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}WHERE PROCEDURE_NAME = '{{config.incconfigfiltervalue}}' AND SCENARIO_NAME='{{parameters.SIMULATION_NAME}}') 
+				AND "{{ col.name }}" <=CURRENT_TIMESTAMP
+                {% endfor %} 
+                ) 
+				AND(
+               {% for i in columns | selectattr('whereselector','defined') | list  %}
+                {% if not loop.first %}
+                    ='{{parameters.SNAPSHOTDATE}}' OR 'ALL'='{{parameters.SNAPSHOTDATE}}') AND (
+                {% endif %}
+                    {{i.name}} 
+                {% endfor %}
+                ='{{parameters.SIMULATION_NAME}}'  
+				)
+			   GROUP BY 
+                {% for i in columns | selectattr('whereselector','defined') | list  %}
+                {% if not loop.first %}
+                    ,
+                {% endif %}
+                    {{i.name}} 
+                {% endfor %}
+            )
+         ;
+	    {% endfor %}     
+	 
+  SELECT MIN(RNO),MAX(RNO) INTO :V_MIN_VAL,:V_MAX_VAL FROM {{ref('E_SC_TEMP', node.name+"_{{parameters.SIMULATION_NAME}}"+"_RNO" )}};
+
+            WHILE(:V_MIN_VAL <= :V_MAX_VAL)
+            DO
+                SELECT 
+                {% for i in columns | selectattr('whereselector','defined') | list  %}
+                {% if not loop.first %}
+                    ,
+                {% endif %}
+                    {{i.name}} {{'\n'}}
+                {% endfor %} 
+                INTO
+                {% for i in columns | selectattr('whereselector','defined') | list %}
+                {% if not loop.first %}
+                    ,
+                {% endif %}
+                     :V_{{i.name}} 
+                {% endfor %}
+                FROM {{ref('E_SC_TEMP', node.name+"_{{parameters.SIMULATION_NAME}}"+"_RNO" )}}
+                
+                WHERE RNO=: V_MIN_VAL;
+                
+               {% for source in sources %}
+                SELECT COUNT(*) INTO  :CNT FROM
+                    {{ref_no_link(node.location.name, node.name) }} 
+                    WHERE 
+                    {% for i in columns | selectattr('whereselector','defined') | list  %}
+                        {% if not loop.first %}
+                         AND
+                        {% endif %}
+                        {{i.name}} = :V_{{i.name}} {{'\n'}}
+                    {% endfor %} 
+                    ;
+                {% endfor %} 
+                 
+
+                    
+                {% for source in sources %}
+                    INSERT INTO {{ref_no_link(node.location.name, node.name) }}
+                    (
+                        {% for col in source.columns %}
+                            {% if not loop.first %}
+                            ,
+                            {% endif %}
+                            {{col.name}}
+                        {% endfor %}
+                    )
+                    SELECT
+                        {% for col in source.columns %}
+                            {% if not loop.first %}
+                            ,
+                            {% endif %}
+                            {{ get_source_transform(col) }} AS "{{ col.name }}"
+                        {% endfor %}
+                    {{ source.join }} 
+                    WHERE 
+                    {% for i in columns | selectattr('whereselector','defined') | list  %}
+                        {% if not loop.first %}
+                         AND
+                        {% endif %}
+                        {{i.name}} = :V_{{i.name}} {{'\n'}}
+                    {% endfor %} 
+                    ;
+                {% endfor %}
+                V_MIN_VAL := :V_MIN_VAL + 1;
+            END WHILE;
+
+     SELECT MAX({% for col in  columns | selectattr('incatt', 'defined') | list %}
+                {% if not loop.first %}
+                OR
+                {% endif %}
+                "{{ col.name }}"
+                {% endfor %} ) INTO  :WATER_MARKER FROM {{ref_no_link(node.location.name, node.name) }} WHERE SCENARIO_NAME = '{{parameters.SIMULATION_NAME}}';
+
+     UPDATE {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+        SET WATER_MARKER_TIMESTAMP =  :WATER_MARKER 
+        WHERE PROCEDURE_NAME = '{{ config.incconfigfiltervalue}}'
+        AND SCENARIO_NAME='{{parameters.SIMULATION_NAME}}';
+
+        DROP TABLE {{ref('E_SC_TEMP', node.name+"_{{parameters.SIMULATION_NAME}}"+"_RNO" )}} ; 
+{% endif %}		
+END;

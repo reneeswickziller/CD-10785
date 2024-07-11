@@ -1,0 +1,172 @@
+fileVersion: 1
+id: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+name: BV_ESP_DEMAND_SPLIT_CPG
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: |
+      DELETE FROM {{ ref('E_SC_SP', 'BV_ESP_DEMAND_SPLIT_CPG') }}
+      WHERE SCENARIO_DATE NOT IN (
+                    SELECT SCENARIO_DATE FROM (
+                    SELECT SCENARIO_DATE, ROW_NUMBER () OVER(ORDER BY SCENARIO_DATE DESC) AS RNO
+                    FROM  {{ ref('E_SC_SP', 'BV_ESP_DEMAND_SPLIT_CPG') }} GROUP BY SCENARIO_DATE)
+                    WHERE RNO <= 10
+                  );
+       
+    preSQL: |-
+      DELETE FROM  {{ ref('E_SC_SP', 'BV_ESP_DEMAND_SPLIT_CPG') }}
+      WHERE SCENARIO_DATE = (SELECT  SCENARIO_DATE
+      FROM  {{ ref('E_SC_TEMP', 'DMD_SPLIT_CPG_LOAD_VIEW') }} GROUP BY ALL);
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_SP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8817119e-7eb2-4b2a-97e5-e1a8de572e3d
+          stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8ce39aa8-4b45-4ed9-9233-3698292824a4
+                stepCounter: 658c1f78-4136-48de-8152-b74cd80b1306
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d9c3dd3e-db14-42ba-ad01-1cda6dd2303f
+          stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ENTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5972622d-e2b3-4db1-84c4-560aeccb1efc
+                stepCounter: 658c1f78-4136-48de-8152-b74cd80b1306
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 658bfd4f-a256-4dc5-a5b9-f0cccaa48523
+          stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MPN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a304b5f5-8504-4a90-bf8a-20c24f9dcadd
+                stepCounter: 658c1f78-4136-48de-8152-b74cd80b1306
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c5da4173-336d-4815-8716-13eb439a4c2f
+          stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: LOCATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8f959ea7-3cb8-4ca2-a3ea-2e761456238d
+                stepCounter: 658c1f78-4136-48de-8152-b74cd80b1306
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a5569d65-5116-4bf6-8d50-eacac19e4750
+          stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+        config: {}
+        dataType: NUMBER(3,2)
+        description: ""
+        hashDetails: null
+        name: FACTOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4fb2a1b3-a1ec-49d9-9206-30fc09a1dc66
+                stepCounter: 658c1f78-4136-48de-8152-b74cd80b1306
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ac29bbc3-8623-4682-bbe2-c5f91116301b
+          stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: MPN_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8dec54a9-8382-4dad-a5fd-719600dc763f
+                stepCounter: 658c1f78-4136-48de-8152-b74cd80b1306
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b920b16c-1ba6-4ec6-a3be-3802caa09d64
+          stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: VALIDFROM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 63266330-51cc-4f69-a351-f4b19d107daf
+                stepCounter: 658c1f78-4136-48de-8152-b74cd80b1306
+            transform: TO_DATE("DMD_SPLIT_CPG_LOAD_VIEW"."VALIDFROM")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 169aa77d-b418-4816-af28-87cba45d89e4
+          stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: VALIDTO
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 50d80db9-8bdc-4dfa-b61e-21f982f366f5
+                stepCounter: 658c1f78-4136-48de-8152-b74cd80b1306
+            transform: TO_DATE("DMD_SPLIT_CPG_LOAD_VIEW"."VALIDTO")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: DMD_SPLIT_CPG_LOAD_VIEW
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'DMD_SPLIT_CPG_LOAD_VIEW') }} "DMD_SPLIT_CPG_LOAD_VIEW"
+            GROUP BY ALL
+        name: BV_ESP_DEMAND_SPLIT_CPG
+        noLinkRefs: []
+  name: BV_ESP_DEMAND_SPLIT_CPG
+  overrideSQL: false
+  schema: ""
+  sqlType: persistentStage
+  type: sql
+  version: 1
+type: Node

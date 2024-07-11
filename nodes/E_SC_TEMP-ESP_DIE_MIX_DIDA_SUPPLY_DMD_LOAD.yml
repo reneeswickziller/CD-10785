@@ -1,0 +1,408 @@
+fileVersion: 1
+id: 2c328239-d103-466b-a4c7-61c286676cb8
+name: ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD
+operation:
+  config:
+    insertStrategy: UNION ALL
+    postSQL: |-
+
+      delete from {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD')}}
+
+      where 1=  CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                 WHEN SCENARIO_NAME='{{parameters.SCENARIO_NAME}}' THEN 1
+                 ELSE 0 END
+
+      and "LOADDATETIMESTAMP" <=(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+
+                                WHERE PROCEDURE_NAME = 'BV_ESP_DIE_MIX_DIDA_INSERT'  and  SCENARIO_NAME='{{parameters.SCENARIO_NAME}}' );
+    preSQL: |-
+      delete from {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD')}}
+
+      where (SCENARIO_DATE,SCENARIO_NAME) IN (SELECT SCENARIO_DATE,SCENARIO_NAME FROM {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_SUPPLY') }}
+                                              where 1= CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                                                         WHEN SCENARIO_NAME='{{parameters.SCENARIO_NAME}}' THEN 1
+                                                         ELSE 0 END 
+                                              GROUP BY SCENARIO_DATE,SCENARIO_NAME           
+                                              );
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: true
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b543854e-9555-49c6-9921-9497415166c1
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0f0557de-0c3a-4b89-adef-0b179d91f333
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 0f0557de-0c3a-4b89-adef-0b179d91f333
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 862d04e6-897e-4c0f-afee-20d42ef0bd21
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 48804a39-d1f8-4a17-bdb7-c2fbf355b83a
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(18)
+        defaultValue: ""
+        description: ""
+        name: SUPPLY_FGPN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: ""
+          - columnReferences:
+              - columnCounter: c1400cbf-8edc-4c09-b00f-5afda367e4c6
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e793d74b-c1f4-42ef-9821-020ccb118532
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: DMD_FGPN
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8d8dfa9a-1296-4b6b-9ba1-ee867f27f130
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 8d8dfa9a-1296-4b6b-9ba1-ee867f27f130
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: f3b4a1f2-674c-47c7-b2fa-f67670ae5b5d
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: dcd0d95c-e088-4578-904d-92ff3e2ccecb
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SCENARIO_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6d18380f-5f7e-459f-9ca9-71a70aa543f5
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 6d18380f-5f7e-459f-9ca9-71a70aa543f5
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 77c0bba0-cdc5-4898-9480-60f9d0889879
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a43a6467-548e-4a09-90eb-610f9c1f3ec6
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 70f957b7-d840-4aef-a60b-bfbab2e8a70d
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 70f957b7-d840-4aef-a60b-bfbab2e8a70d
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: d85bca68-c270-4c3f-aa47-b434fc6c71ea
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 654e24d3-7bad-4f50-8ad2-39852cff2206
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: NUMBER(34,6)
+        defaultValue: ""
+        description: ""
+        name: DID_DMDQTY_MTH
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7e7e0617-10a6-4f0c-a507-129b614cad66
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: "\"ESP_DIE_MIX_DIDA_SUPPLY\".\"DMDPEGQTY\""
+          - columnReferences:
+              - columnCounter: 7e7e0617-10a6-4f0c-a507-129b614cad66
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: "\"ESP_DIE_MIX_DIDA_SUPPLY\".\"DMDPEGQTY\""
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: ""
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f34ff3a8-7960-4631-bcee-176564d4c7ca
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: DMD_MPN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4b386143-07e6-4785-827d-a20cf2ff127c
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 4b386143-07e6-4785-827d-a20cf2ff127c
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 69de5dc9-e427-4b03-9d81-3f170fe3cb9b
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 368ba366-7310-40ff-a1f9-ca3e33067a37
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: DMD_PCG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ce9bced2-edf9-4bf0-8fcc-bd5d4ca60826
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: ce9bced2-edf9-4bf0-8fcc-bd5d4ca60826
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: b2b8b218-16f4-447f-a28f-47b7d0d9dabd
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 19b98c20-6002-48ba-b113-eac1108763de
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(128)
+        description: ""
+        hashDetails: null
+        name: ENTBOM_TOAD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3af45f26-06bd-45be-acde-5cfaafc90828
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 3af45f26-06bd-45be-acde-5cfaafc90828
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 6f75944d-c8c7-4bb6-afff-af046a668fab
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7ce4b183-818e-4544-b36f-7f8209d34f3c
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: SUPPLY_DID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3590b726-8139-4763-ae4d-539c95494bfc
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 3590b726-8139-4763-ae4d-539c95494bfc
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 00769268-5614-44df-9652-4c0812304138
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 86d59ba7-c935-4d9d-bdae-cd297c8e0ac5
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: SUPPLY_PCG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 35ed5cb4-b40f-4cee-ba2f-33f269c4c44f
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 35ed5cb4-b40f-4cee-ba2f-33f269c4c44f
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 35915b18-bdcb-4cc7-b74b-5aa21ce44273
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 045979c8-2dd2-4a9c-94d6-e9955575cbbb
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: FISCAL_MONTH_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0ab0fc21-5b91-4d5a-a426-c3b1b9fb6b8e
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 0ab0fc21-5b91-4d5a-a426-c3b1b9fb6b8e
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: e00d255e-2ea6-44f6-859a-03e2adb729bb
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 37e66e3f-ed3d-4d7a-b80d-86b89674166e
+          stepCounter: 2c328239-d103-466b-a4c7-61c286676cb8
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: FISCAL_PERIOD_SORT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6e698847-acae-49d7-ab1f-f2ffd6919ea6
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: 6e698847-acae-49d7-ab1f-f2ffd6919ea6
+                stepCounter: f64fcc7c-994c-41df-8bcf-30af5b53200a
+            transform: ""
+          - columnReferences:
+              - columnCounter: e41a8fdd-061b-41c1-956a-fd1b35839965
+                stepCounter: ae236576-b871-4359-83c6-5c51bcd4b323
+            transform: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_DIE_MIX_DIDA_SUPPLY: f64fcc7c-994c-41df-8bcf-30af5b53200a
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: ESP_DIE_MIX_DIDA_SUPPLY
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_SUPPLY') }} "ESP_DIE_MIX_DIDA_SUPPLY"
+            WHERE  1 = CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                           WHEN "ESP_DIE_MIX_DIDA_SUPPLY"."SCENARIO_NAME"='{{parameters.SCENARIO_NAME}}' THEN 1
+                           ELSE 0 END
+            AND "ESP_DIE_MIX_DIDA_SUPPLY"."DMDTYPE"='12'
+        name: DMD_12
+        noLinkRefs: []
+      - aliases:
+          ESP_DIE_MIX_DIDA_SUPPLY: f64fcc7c-994c-41df-8bcf-30af5b53200a
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: ESP_DIE_MIX_DIDA_SUPPLY
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_SUPPLY') }} "ESP_DIE_MIX_DIDA_SUPPLY"
+            WHERE 1 = CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                           WHEN "ESP_DIE_MIX_DIDA_SUPPLY"."SCENARIO_NAME"='{{parameters.SCENARIO_NAME}}' THEN 1
+                           ELSE 0 END
+            AND "ESP_DIE_MIX_DIDA_SUPPLY"."DMDTYPE" IN ('1','2')
+            AND "ESP_DIE_MIX_DIDA_SUPPLY"."DMD_FGPN"="ESP_DIE_MIX_DIDA_SUPPLY"."PARENTITEM"
+            AND "ESP_DIE_MIX_DIDA_SUPPLY"."DMD_FGPN"!= "ESP_DIE_MIX_DIDA_SUPPLY"."SUPPLY_FGPN"
+        name: DMD_1_2
+        noLinkRefs: []
+      - aliases:
+          ESP_DIE_MIX_DIDA_DMD_EXCEPTION: ae236576-b871-4359-83c6-5c51bcd4b323
+          ESP_DIE_MIX_DIDA_SUPPLY_DMD_1_2: bb957539-6a57-4ec1-8574-6ab73681fefa
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: ESP_DIE_MIX_DIDA_DMD_EXCEPTION
+          - locationName: E_SC_TEMP
+            nodeName: ESP_DIE_MIX_DIDA_SUPPLY_DMD_1_2
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_DMD_EXCEPTION') }} "ESP_DIE_MIX_DIDA_DMD_EXCEPTION"
+            LEFT OUTER JOIN {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_SUPPLY_DMD_1_2') }} "ESP_DIE_MIX_DIDA_SUPPLY_DMD_1_2"
+            ON "ESP_DIE_MIX_DIDA_DMD_EXCEPTION"."SCENARIO_DATE" = "ESP_DIE_MIX_DIDA_SUPPLY_DMD_1_2"."SCENARIO_DATE"
+            AND "ESP_DIE_MIX_DIDA_DMD_EXCEPTION"."SCENARIO_NAME"= "ESP_DIE_MIX_DIDA_SUPPLY_DMD_1_2"."SCENARIO_NAME"
+            AND "ESP_DIE_MIX_DIDA_DMD_EXCEPTION"."DMD_FGPN" = "ESP_DIE_MIX_DIDA_SUPPLY_DMD_1_2"."DMD_FGPN"
+            WHERE 1 = CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                           WHEN "ESP_DIE_MIX_DIDA_DMD_EXCEPTION"."SCENARIO_NAME"='{{parameters.SCENARIO_NAME}}' THEN 1
+                           ELSE 0 END
+            AND "ESP_DIE_MIX_DIDA_SUPPLY_DMD_1_2"."DMD_FGPN" IS NULL
+        name: EXCEPTION
+        noLinkRefs: []
+  name: ESP_DIE_MIX_DIDA_SUPPLY_DMD_LOAD
+  overrideSQL: false
+  schema: ""
+  sqlType: persistentStage
+  type: sql
+  version: 1
+type: Node

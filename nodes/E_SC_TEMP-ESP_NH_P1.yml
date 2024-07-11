@@ -1,0 +1,81 @@
+fileVersion: 1
+id: ededb3d1-e404-4398-9012-198608e6c18e
+name: ESP_NH_P1
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 866541f2-8df3-4e08-9892-e17865ac9063
+          stepCounter: ededb3d1-e404-4398-9012-198608e6c18e
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0b027e42-c2e8-4fb3-a8d1-feae98852944
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6cc0f18a-db31-4b46-a1b6-3fbc6d7b6d40
+          stepCounter: ededb3d1-e404-4398-9012-198608e6c18e
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d7a64006-97fd-4347-b3ef-6a6c16945c4f
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 611224c4-784e-4a29-b48f-d2bc0d50bc6a
+          stepCounter: ededb3d1-e404-4398-9012-198608e6c18e
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PRODUCT_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: cb4bc15b-f74b-4ab7-8233-ffae7497890b
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_MATERIAL_CHARACTERISTICS
+        join:
+          joinCondition: FROM {{ ref('E_SC_MD', 'D_ESP_MATERIAL_CHARACTERISTICS') }} "D_ESP_MATERIAL_CHARACTERISTICS"
+        name: ESP_NH_P1
+        noLinkRefs: []
+  name: ESP_NH_P1
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

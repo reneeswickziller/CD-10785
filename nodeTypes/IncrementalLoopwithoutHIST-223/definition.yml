@@ -1,0 +1,65 @@
+fileVersion: 1
+id: "223"
+isDisabled: false
+metadata:
+  defaultStorageLocation: null
+  error: null
+  nodeMetadataSpec: |-
+    capitalized: CN_INCREMENTAL_LOOP
+    short: CNIncLoop
+    tagColor: '#D9A438'
+    plural: Incremental Loop
+
+    config:
+    - groupName: Options
+      items:
+      - type: materializationSelector
+        isRequired: true
+        default: table
+        options:
+        - table
+
+      - type: multisourceToggle
+        enableIf: "{% if node.materializationType == 'table' %} true {% else %} false {% endif %}"
+
+      - type: overrideSQLToggle
+        enableIf: "{% if node.materializationType == 'view' %} true {% else %} false {% endif %}"
+
+      - type: columnSelector
+        displayName: 'Incremental Attribute(s)'
+        attributeName: 'incatt'
+        isRequired: false
+        enableIf: 'true' 
+
+      - type: textBox                  
+        displayName: 'Incremental Config Filter Value'
+        attributeName: 'incconfigfiltervalue'
+        syntax: 'string'
+        isRequired: false
+        enableIf: 'true'
+
+      
+      - displayName: Enable Tests
+        attributeName: testsEnabled
+        type: toggleButton
+        default: true
+
+      - type: columnSelector
+        displayName: 'Where Selector'
+        attributeName: 'whereselector'
+        isRequired: false             
+        enableIf: 'true'  
+
+      - displayName: Pre-SQL
+        attributeName: preSQL
+        type: textBox
+        syntax: sql
+        isRequired: false
+
+      - displayName: Post-SQL
+        attributeName: postSQL
+        type: textBox
+        syntax: sql
+        isRequired: false
+name: Incremental Loop without HIST
+type: NodeType

@@ -1,0 +1,188 @@
+fileVersion: 1
+id: a1cbb1ef-34b3-4c2a-a878-edcc24f48c1a
+name: LOAD_F_RAW_MAT_HLTH_LT_PRICE_MEASURES
+operation:
+  config:
+    SQL_Code: |2-
+          
+      BEGIN        
+      --TRUNCATE IF EXISTS {{ ref('E_SC_MP', 'F_RAW_MAT_HLTH_LT_PRICE_MEASURES') }} ;
+
+      create or replace TABLE {{ ref('E_SC_MP', 'F_RAW_MAT_HLTH_LT_PRICE_MEASURES') }}(
+      	MATERIAL_NUMBER VARCHAR(36),
+      	UNIT_PRICE NUMBER(10,4),
+      	LEAD_TIME NUMBER(18,0),
+      	FOURWEEK NUMBER(38,0),
+      	MRP_TYPE VARCHAR(255),
+      	BU_RESERVE_QTY FLOAT
+      );          
+              
+      /* To calculate Unit Price from MM60 HANA */        
+
+      INSERT INTO {{ ref('E_SC_MP', 'F_RAW_MAT_HLTH_LT_PRICE_MEASURES') }} 
+      WITH UnitPrice AS (        
+      select *,        
+       case when ("'SG05'" <> 0 and "'SG05'" is not null)         
+         then cast("'SG05'" as float)        
+         when ("'SG05'" = 0 or "'SG05'" is null)          
+         then cast((IFNULL("'SG35'",0)+IFNULL("'SG37'",0)+IFNULL("'SG38'",0))as float)/case when ((case when "'SG35'" >= 0 then 1 else 0 end)+        
+         (case when "'SG37'" >= 0 then 1 else 0 end)+(case when "'SG38'" >= 0 then 1 else 0 end))=0 then 1 else         
+          ((case when "'SG35'" >= 0 then 1 else 0 end)+(case when "'SG37'" >= 0 then 1 else 0 end)+(case when "'SG38'" >= 0 then 1 else 0 end)) end        
+         when COALESCE("'SG05'","'SG35'","'SG37'","'SG38'") is NULL or  COALESCE("'SG05'","'SG35'","'SG37'","'SG38'") = 0         
+         then 0        
+        else 0        
+       end         
+       as PRICE_UNIT_D        
+               
+      from        
+      (        
+      select MATERIAL_NUMBER, PLANT, UNIT_PRICE from {{ ref('E_SC_MP', 'D_RAW_MAT_HLTH_PRICE_MEASURES') }}       
+              
+      )src        
+      pivot        
+      (        
+      MAX(UNIT_PRICE) for PLANT IN ('SG05','SG35','SG37','SG38')        
+      )pvt        
+      ),        
+      --select * from #cte1        
+      --WHERE MATERIAL_NUMBER='550-501708' --AND "'SG05'" = 0 and "'SG35'" > 0        
+              
+              
+      /* To calculate Lead Time from MM60 HANA */        
+              
+              
+      LeadTime AS (        
+      select *,        
+       IFNULL(case when ("'SG05'" <> 0 and "'SG05'" is not null)         
+         then cast("'SG05'" as float)        
+         when ("'SG05'" = 0 or "'SG05'" is null)          
+         then MATERIAL_LEADTIME        
+         --then cast((IFNULL("'SG35'",0)+IFNULL("'SG37'",0)+IFNULL("'SG38'",0))as float)        
+         --/case when ((case when "'SG35'" >= 0 then 1 else 0 end)+(case when "'SG37'" >= 0 then 1 else 0 end)+        
+         --(case when "'SG38'" >= 0 then 1 else 0 end))=0 then 1 else  ((case when "'SG35'" >= 0 then 1 else 0 end)+        
+         --(case when "'SG37'" >= 0 then 1 else 0 end)+(case when "'SG38'" >= 0 then 1 else 0 end))         
+                 
+         when COALESCE("'SG05'","'SG35'","'SG37'","'SG38'") is NULL or  COALESCE("'SG05'","'SG35'","'SG37'","'SG38'") = 0         
+         then 0        
+        else 0        
+       end ,0)        
+       as LEAD_TIME_D        
+               
+      from        
+      (        
+      --select MATERIAL_NUMBER, PLANT, LEAD_TIME  from  "'BUSINESS_REPORTING'"."'rptg_sc'"."'D_RAW_MAT_HLTH_PRICE_MEASURES'"         
+      SELECT ZA.MATERIAL_NUMBER,PLANT,ZA.LEAD_TIME,PERCENTILE_CONT(0.5)         
+      WITHIN GROUP (ORDER BY ZA.LEAD_TIME)        
+      OVER (PARTITION BY ZA.MATERIAL_NUMBER) as MATERIAL_LEADTIME  /* Taking Median of lead time */        
+      from          
+              
+       {{ ref('E_SC_MP', 'D_RAW_MAT_HLTH_PRICE_MEASURES') }} ZA         
+      )src        
+      pivot        
+      (        
+      MAX(LEAD_TIME) for PLANT IN ('SG05','SG35','SG37','SG38')        
+      )pvt        
+      ),       
+      --SELECT * FROM #cte2        
+      --WHERE MATERIAL_NUMBER='550-501708' --AND "'SG05'" = 0 and "'SG35'" > 0       
+            
+            
+             
+            
+      /* To calculate MRP Type only for Combined plant Mat Health Dashboard (not for Material Health Plant wise)*/        
+            
+      MRPType AS (      
+       select *,        
+       COALESCE("'SG05'","'SG35'","'SG37'","'SG38'")        
+               
+       as MRP_TYPE_D        
+            
+            
+      from        
+      (        
+      select MATERIAL_NUMBER, PLANT, MAX(MRP_TYPE)MRP_TYPE from  {{ ref('E_SC_MP', 'D_RAW_MAT_HLTH_PRICE_MEASURES') }}       
+            
+      group by  MATERIAL_NUMBER, PLANT      
+              
+      )src        
+      pivot        
+      (        
+      MAX(MRP_TYPE) for PLANT IN ('SG05','SG35','SG37','SG38')        
+      )pvt        
+      )     
+       
+       /*
+       BU Reserve Qty no longer required     
+       --/* To Calculate BU Reserve Qty for Combined Plant KPI report       
+            
+      BURESERVEQTY AS (      
+       select *,        
+       COALESCE('SG05','SG35','SG37','SG38')        
+               
+       as BU_RESERVE_QTY_D        
+            
+            
+      from        
+      (        
+      select MATERIAL_NUMBER, PLANT, MAX(BU_RESERVE_QTY)BU_RESERVE_QTY from  "'BUSINESS_REPORTING'"."'rptg_sc'"."'F_RAW_MAT_HLTH_RESERVE_MEASURES'"       
+            
+      group by  MATERIAL_NUMBER, PLANT      
+              
+      )src        
+      pivot        
+      (        
+      MAX(BU_RESERVE_QTY) for PLANT IN ('SG05','SG35','SG37','SG38')        
+      )pvt        
+      ),  
+      */    
+              
+              
+      /* Fact Table insertion to be used in BOM Report and KPI Dashboard */        
+              
+             
+      SELECT * FROM (        
+              
+      select A.MATERIAL_NUMBER,PRICE_UNIT_D,      
+      --CASE WHEN B.LEAD_TIME_D  > 52   THEN '52' ELSE B.LEAD_TIME_D END AS LEAD_TIME_D ,  
+       B.LEAD_TIME_D,  
+      4 as FourWeek,C.MRP_TYPE_D,NULL AS BU_RESERVE_QTY  from UnitPrice A        
+      LEFT JOIN LeadTime B ON A.MATERIAL_NUMBER=B.MATERIAL_NUMBER         
+      LEFT JOIN MRPType C ON A.MATERIAL_NUMBER=C.MATERIAL_NUMBER       
+      --LEFT JOIN ##BURESERVEQTY D ON A.MATERIAL_NUMBER=D.MATERIAL_NUMBER      -- NO LONGER REQUIRED
+          
+      --WHERE A.MATERIAL_NUMBER='550-501708'        
+      )a;
+
+
+      END
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: sql
+  metadata:
+    appliedNodeTests: []
+    columns: []
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          LOAD_D_RAW_MAT_HLTH_PRICE_MEASURES_2: fedc5a29-eac3-4eda-8d20-1dbc8cf440ec
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: LOAD_D_RAW_MAT_HLTH_PRICE_MEASURES_2
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'LOAD_D_RAW_MAT_HLTH_PRICE_MEASURES_2') }} "LOAD_D_RAW_MAT_HLTH_PRICE_MEASURES_2"
+        name: LOAD_F_RAW_MAT_HLTH_LT_PRICE_MEASURES
+        noLinkRefs: []
+  name: LOAD_F_RAW_MAT_HLTH_LT_PRICE_MEASURES
+  overrideSQL: false
+  schema: ""
+  sqlType: "187"
+  type: sql
+  version: 1
+type: Node

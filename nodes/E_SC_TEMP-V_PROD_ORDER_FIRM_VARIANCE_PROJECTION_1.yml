@@ -1,0 +1,69 @@
+fileVersion: 1
+id: f9cd8119-b662-4491-b14c-f4cfcb4b9f4f
+name: V_PROD_ORDER_FIRM_VARIANCE_PROJECTION_1
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: beb2d0ed-ee61-4e8c-a33e-33a2987c7fcb
+          stepCounter: f9cd8119-b662-4491-b14c-f4cfcb4b9f4f
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: FULL_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d26b56d3-7429-4a64-a326-ec6acdf884f9
+                stepCounter: e6e99990-bc20-42a0-9c85-2383b46c334e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c96f2e9f-4337-4d81-8557-733770c63825
+          stepCounter: f9cd8119-b662-4491-b14c-f4cfcb4b9f4f
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        hashDetails: null
+        name: WORK_WEEK
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 44b1baf8-0268-4b78-a7e0-042af2877e53
+                stepCounter: e6e99990-bc20-42a0-9c85-2383b46c334e
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_MASTER_DATA_MD
+            nodeName: V_D_ENTERPRISE_DATE
+        join:
+          joinCondition: FROM {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }} "V_D_ENTERPRISE_DATE"
+        name: V_PROD_ORDER_FIRM_VARIANCE_PROJECTION_1
+        noLinkRefs: []
+  name: V_PROD_ORDER_FIRM_VARIANCE_PROJECTION_1
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

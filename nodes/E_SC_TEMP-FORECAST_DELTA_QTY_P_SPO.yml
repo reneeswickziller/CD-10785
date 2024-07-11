@@ -1,0 +1,155 @@
+fileVersion: 1
+id: e425ab60-4341-40dc-9a8c-5eb4766ed768
+name: FORECAST_DELTA_QTY_P_SPO
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b90c0968-84bf-4ce5-a38a-7cbb477e6087
+          stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DT_NEW
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9222e9df-1391-4da4-95e3-38be8c2e86ab
+                stepCounter: cccf1b21-4cb7-4c99-9f42-f1ff428cccfc
+            transform: DATE("ESP_HUB_INPUT_V_ESP_FORECAST"."SNAPSHOT_DT",'YYYYMMDD')
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e1014704-5838-4105-8379-abf87736a7e5
+          stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f9981501-e593-4a8c-94ab-b63e6bf198a5
+                stepCounter: cccf1b21-4cb7-4c99-9f42-f1ff428cccfc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 04c2cfee-bc06-4d32-b46e-644a1a38a73c
+          stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: U_INDDMD_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2b65155f-57fe-4f11-b1c3-a122e8bd4c3b
+                stepCounter: cccf1b21-4cb7-4c99-9f42-f1ff428cccfc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f72dcc60-3ef6-413a-bd54-2ebf8517c2e3
+          stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+        config: {}
+        dataType: DATE
+        description: ""
+        name: NEEDDATE_NEW
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 296d962b-021d-466c-bcf4-4018948b06be
+                stepCounter: cccf1b21-4cb7-4c99-9f42-f1ff428cccfc
+            transform: SUBSTR("ESP_HUB_INPUT_V_ESP_FORECAST"."NEEDDATE",7) || SUBSTR("ESP_HUB_INPUT_V_ESP_FORECAST"."NEEDDATE",1,2) || SUBSTR("ESP_HUB_INPUT_V_ESP_FORECAST"."NEEDDATE",4,2)
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 49f9b0a3-874d-45fc-9eea-11e39c516920
+          stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+        config: {}
+        dataType: NUMBER(21,3)
+        description: ""
+        name: QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e77d4117-fb61-4681-9eb7-a8ae6a31c899
+                stepCounter: cccf1b21-4cb7-4c99-9f42-f1ff428cccfc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 02218ea8-2fcd-451c-9d52-c90c4ed3929a
+          stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        name: SNAPSHOT_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 57069633-bd76-49f9-bab3-32b91de0a329
+                stepCounter: cccf1b21-4cb7-4c99-9f42-f1ff428cccfc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9b408f94-ef8e-4871-b65a-4f1d2bb4a292
+          stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: NEEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 296d962b-021d-466c-bcf4-4018948b06be
+                stepCounter: cccf1b21-4cb7-4c99-9f42-f1ff428cccfc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3c61695c-3366-4554-ad73-12dcb5b2bbe4
+          stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: SNAPSHOT_DT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9222e9df-1391-4da4-95e3-38be8c2e86ab
+                stepCounter: cccf1b21-4cb7-4c99-9f42-f1ff428cccfc
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_HUB_INPUT_V_ESP_FORECAST: cccf1b21-4cb7-4c99-9f42-f1ff428cccfc
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_INPUT_V_ESP_FORECAST
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_INPUT_V_ESP_FORECAST') }} "ESP_HUB_INPUT_V_ESP_FORECAST"
+            WHERE "ESP_HUB_INPUT_V_ESP_FORECAST"."U_INDDMD_TYPE"!='SS' 
+        name: FORECAST_DELTA_QTY_P_SPO
+        noLinkRefs: []
+  name: FORECAST_DELTA_QTY_P_SPO
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

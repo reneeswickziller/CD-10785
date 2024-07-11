@@ -1,0 +1,87 @@
+fileVersion: 1
+id: 5714c334-7a2f-455d-82ea-18429383a383
+name: SUPPLY_RESPONSE_PART_UOM_CONVERSION
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 68c222cc-eb51-4956-bcfb-495c4b78f94d
+          stepCounter: 5714c334-7a2f-455d-82ea-18429383a383
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 57f6b687-5698-42dd-9702-9c0a4171ff54
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6a2bb5a6-abcd-44fb-93b8-7e5d437e41dd
+          stepCounter: 5714c334-7a2f-455d-82ea-18429383a383
+        config: {}
+        dataType: VARCHAR(32)
+        description: ""
+        hashDetails: null
+        name: UNIT_OF_MEASURE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 67e668b0-4eb7-4a2f-8377-a2e8a413599b
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 19dc29d4-e3e2-4a78-ac90-d2a9ba839dc4
+          stepCounter: 5714c334-7a2f-455d-82ea-18429383a383
+        config: {}
+        dataType: FLOAT
+        description: ""
+        hashDetails: null
+        name: FACTOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 638f5f72-451a-4866-920a-f4321603d9c9
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: MAX("D_ECC_PART_UOM_CONVERSION"."FACTOR")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ECC_PART_UOM_CONVERSION
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_MD', 'D_ECC_PART_UOM_CONVERSION') }} "D_ECC_PART_UOM_CONVERSION"
+            WHERE "D_ECC_PART_UOM_CONVERSION"."UNIT_OF_MEASURE" !='Units'
+            GROUP BY ALL
+        name: SUPPLY_RESPONSE_PART_UOM_CONVERSION
+        noLinkRefs: []
+  name: SUPPLY_RESPONSE_PART_UOM_CONVERSION
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

@@ -1,0 +1,228 @@
+fileVersion: 1
+id: c528569c-79c5-4a06-a5ea-512555d1c8dd
+name: V_ESP_PLAN_ORD_FLAGS
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_SP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a9cf1097-4b6b-4180-91f2-2effbca68c56
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 680037ec-95ea-4c1c-990f-aa50c7c2b22b
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bad03660-844f-4333-83b8-da5775d25e8a
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0c46c5ad-676c-49ca-aa3d-269701317ba3
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e2593a2f-50dc-4976-814b-bd9266fefcf8
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: DATE
+        description: ""
+        name: STARTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6f5178ee-0428-49e7-9c3d-9c8732b69599
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b64bbf9e-510f-42e3-9bc9-1bc509705bae
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PRODUCTIONMETHOD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0b04225d-8a19-413f-9a87-681d9f498f9e
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d156d0c8-c2fb-42b3-b54f-adec18af3a9e
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SEQNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ec9880d6-aa83-479b-97fb-ea8815382efc
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3a405df7-311e-4c14-8ca3-a63509a9adc1
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: LOC
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7d5e27b3-642e-4eed-8337-ee926cb02be5
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f43a4e16-1b80-4307-b13e-594a8a1f82aa
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 063d6d6b-ddaa-4062-b7ea-fc8d27827b58
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9cd5c8d9-cd5f-4e33-9dbc-772b5bc08d7a
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5ad5ff9e-e98a-4c7c-9c2c-cc133e57a1a6
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 412d4bca-87cb-4ef7-8b6d-61c3aa6290aa
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: QUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7d5fdaf7-c31c-4bd5-b7fa-e31777cfb945
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: SUM("BV_ESP_PLAN_ORD_FLAGS_MAIN"."QUANTITY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3b3a8e54-9420-4f33-a61b-c7944c4f6029
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: NPI_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ac164945-7fc8-494d-9484-6eedd5c68048
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c91dc6d7-9aeb-4f4e-979a-9624cbf3ee24
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: COPRODUCT_PLAN_ORD_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6751081c-2128-4d8e-981e-70d740d57df9
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 13779cee-a10f-4942-b84c-5c6472fade94
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: EXECUTABLE_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8a93d747-1ef8-450f-8883-9b5f7078bd11
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: fd4bac80-d1dc-4aeb-b700-19d69bbbf2fa
+          stepCounter: c528569c-79c5-4a06-a5ea-512555d1c8dd
+        config: {}
+        dataType: ""
+        defaultValue: ""
+        description: ""
+        name: LOAD_DATE_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 99eb66c2-4bc6-4031-a435-c00e00c67ce1
+                stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+            transform: ""
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: BV_ESP_PLAN_ORD_FLAGS_MAIN
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'BV_ESP_PLAN_ORD_FLAGS_MAIN') }} "BV_ESP_PLAN_ORD_FLAGS_MAIN"
+            GROUP BY ALL
+        name: V_ESP_PLAN_ORD_FLAGS
+        noLinkRefs: []
+  name: V_ESP_PLAN_ORD_FLAGS
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

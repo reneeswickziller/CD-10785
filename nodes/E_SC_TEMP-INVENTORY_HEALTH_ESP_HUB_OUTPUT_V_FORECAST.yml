@@ -1,0 +1,162 @@
+fileVersion: 1
+id: 75600495-e9ab-4685-bfe1-c115dfb3c42a
+name: INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c6a4ba5c-f6ad-4d69-924b-2ab1c0e3aaf4
+          stepCounter: 75600495-e9ab-4685-bfe1-c115dfb3c42a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4ec83031-9f95-4a0b-a7e8-bf99c5a37a90
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 43f5feaf-1004-4eb3-8392-03b1ffeda162
+          stepCounter: 75600495-e9ab-4685-bfe1-c115dfb3c42a
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOT_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a275f6d3-595e-4d18-a4cb-3da0846a3a34
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: dcd0dc4e-8a02-4945-aa1c-532580e0d42b
+          stepCounter: 75600495-e9ab-4685-bfe1-c115dfb3c42a
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        name: SEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 30cb0e26-30f8-4a93-b680-f4e798c7e5eb
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2416d245-811d-443a-a61e-8d774065d41f
+          stepCounter: 75600495-e9ab-4685-bfe1-c115dfb3c42a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: U_SEGMENTATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: da467b6f-44c0-4a9b-a018-c06f2bd71abc
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 93788f1d-cdb1-45f2-9a55-4089de9f96d1
+          stepCounter: 75600495-e9ab-4685-bfe1-c115dfb3c42a
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: U_INDDMD_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 359f9a13-f464-4352-a33f-f2317c5677cd
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c69659df-ad44-47d0-bb38-e49b08adc572
+          stepCounter: 75600495-e9ab-4685-bfe1-c115dfb3c42a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: U_ATP_CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a6e3b588-7cae-4025-b6cd-ec5275051f11
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 308e9d31-5406-4ddc-97d5-2f098d894c12
+          stepCounter: 75600495-e9ab-4685-bfe1-c115dfb3c42a
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: U_PPLEVEL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c3961ded-5374-4445-a797-54a173af46a2
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: |-
+            {{ stage('Override Create SQL') }}
+            	CREATE OR REPLACE VIEW {{ ref('E_SC_TEMP', 'STG_INVENTORY_ESP_HUB_OUTPUT_V_FORECAST')}} AS (
+            		SELECT 
+             QTY AS QTY,
+             SNAPSHOTDATE1 AS SNAPSHOTDATE1,
+             LOAD_DATE_TIME AS LOAD_DATE_TIME,
+             SNAPSHOT_DATE_TIME AS SNAPSHOT_DATE_TIME,
+             U_SUB_SEGMENT AS U_SUB_SEGMENT,
+             U_SEGMENTATION AS U_SEGMENTATION,
+             U_ATP_CATEGORY AS U_ATP_CATEGORY,
+             U_INDDMD_TYPE AS U_INDDMD_TYPE,
+             U_CUSTOMER AS U_CUSTOMER,
+             SEQNUM AS SEQNUM,
+             PRIORITY AS PRIORITY,
+             NEEDDATE AS NEEDDATE,
+             DUR AS DUR,
+             LOC AS LOC,
+             ITEM AS ITEM,
+             SIMULATION_NAME AS SIMULATION_NAME,
+             SNAPSHOT_DATE AS SNAPSHOT_DATE,
+             U_PPLEVEL AS U_PPLEVEL
+             FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_FORECAST') }}
+            	)
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_FORECAST
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_FORECAST') }} "ESP_HUB_OUTPUT_V_FORECAST"
+            GROUP BY ALL
+        name: INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST
+        noLinkRefs: []
+  name: INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

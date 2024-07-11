@@ -1,0 +1,179 @@
+fileVersion: 1
+id: 5d5efe14-1f55-493f-b279-1bc24b92372e
+name: V_ESP_HUB_OUTPUT_V_INDDMDVIEW
+operation:
+  config:
+    insertStrategy: UNION
+    postSQL: |
+      delete from {{ ref('E_SC_TEMP', 'V_ESP_HUB_OUTPUT_V_INDDMDVIEW')}}
+
+      where  1= CASE WHEN '{{parameters.SIMULATION_NAME}}'='ALL' THEN 1
+                 WHEN SCENARIO='{{parameters.SIMULATION_NAME}}' THEN 1
+                 ELSE 0 END
+
+      and "LOADDATETIMESTAMP" <=(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+
+                                WHERE PROCEDURE_NAME = 'BV_SP_DMDRES_NEEDDATE_INSERT'  and  SCENARIO_NAME='{{parameters.SIMULATION_NAME}}' );
+    preSQL: |-
+      delete from {{ ref('E_SC_TEMP', 'V_ESP_HUB_OUTPUT_V_INDDMDVIEW')}}
+
+      where (SNAPSHOTDATE,SCENARIO) IN (SELECT SNAPSHOTDATE,SIMULATION_NAME FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDVIEW') }}
+                                              where 1=CASE WHEN '{{parameters.SIMULATION_NAME}}'='ALL' THEN 1
+                                                         WHEN SIMULATION_NAME='{{parameters.SIMULATION_NAME}}' THEN 1
+                                                         ELSE 0 END 
+                                              GROUP BY SNAPSHOTDATE,SIMULATION_NAME           
+                                              );
+
+                               
+    selectDistinct: true
+    testsEnabled: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d1cb2d4f-e845-429d-9ab2-8991ddd990a3
+          stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a5e905fc-d030-4ab3-b23d-b5f928960241
+                stepCounter: fd99e077-9ab3-4e16-865a-210fb0d0fb05
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7f9bc804-075d-4778-8930-24104e7ec981
+          stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SCENARIO
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 89be418f-a720-4120-84a2-58f92616dfec
+                stepCounter: fd99e077-9ab3-4e16-865a-210fb0d0fb05
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 086ed15e-4dd5-47f6-9d14-838283848d08
+          stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: ORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 505049dc-3c0a-4794-9348-27cf4a2e503e
+                stepCounter: fd99e077-9ab3-4e16-865a-210fb0d0fb05
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4d871a96-2c86-441c-8a6e-42a8d55ac8cb
+          stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: LOCATION
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 63fa561f-8213-49f8-91d3-712255d491b2
+                stepCounter: fd99e077-9ab3-4e16-865a-210fb0d0fb05
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8a9b695d-8b1d-490b-9e56-3554222d8d4f
+          stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e1d7eed3-31bb-4b6f-b3e0-f7bc34d94e0e
+                stepCounter: fd99e077-9ab3-4e16-865a-210fb0d0fb05
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b127a3c1-7e36-4470-90e3-ba1ab089ba44
+          stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: TIMELYQUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a66fcaf7-22fb-4cc2-a7e9-9232fd40b9d9
+                stepCounter: fd99e077-9ab3-4e16-865a-210fb0d0fb05
+            transform: SUM("ESP_HUB_OUTPUT_V_INDDMDVIEW"."SCHEDQTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9d24050f-d6c0-417e-ba47-668241362c92
+          stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3863dda5-71d6-4db6-be36-0fb21c63fe6d
+                stepCounter: fd99e077-9ab3-4e16-865a-210fb0d0fb05
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_CUSTORDER
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_INDDMDVIEW
+          - locationName: E_SC_UTIL_USER
+            nodeName: LOAD_CONTROL_SC_SPO
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDVIEW') }} "ESP_HUB_OUTPUT_V_INDDMDVIEW" 
+            LEFT JOIN (SELECT DISTINCT
+            "ORDERID", "ITEM","LOC","SIMULATION_NAME","SNAPSHOT_DATE","U_UNOFFSET_SHIP_DATE"  FROM {{ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_CUSTORDER') }} B) "ESP_HUB_OUTPUT_V_CUSTORDER"
+            ON "ESP_HUB_OUTPUT_V_INDDMDVIEW"."EXTORDERID" = "ESP_HUB_OUTPUT_V_CUSTORDER".ORDERID
+            AND "ESP_HUB_OUTPUT_V_INDDMDVIEW"."ITEM" = "ESP_HUB_OUTPUT_V_CUSTORDER".ITEM
+            AND "ESP_HUB_OUTPUT_V_INDDMDVIEW"."LOC" = "ESP_HUB_OUTPUT_V_CUSTORDER".LOC
+            AND "ESP_HUB_OUTPUT_V_INDDMDVIEW"."SIMULATION_NAME" = "ESP_HUB_OUTPUT_V_CUSTORDER".SIMULATION_NAME
+            AND "ESP_HUB_OUTPUT_V_INDDMDVIEW"."SNAPSHOTDATE" = "ESP_HUB_OUTPUT_V_CUSTORDER".SNAPSHOT_DATE
+            WHERE
+            "ESP_HUB_OUTPUT_V_INDDMDVIEW"."DMDTYPE" = '1' AND
+            "ESP_HUB_OUTPUT_V_INDDMDVIEW"."SIMULATION_NAME" <> 'WHATIF' AND
+            "ESP_HUB_OUTPUT_V_INDDMDVIEW"."SCHEDDATE" <= "ESP_HUB_OUTPUT_V_INDDMDVIEW"."NEEDDATE" 
+            AND 1 = CASE WHEN '{{parameters.SIMULATION_NAME}}'='ALL' THEN 1
+                           WHEN "ESP_HUB_OUTPUT_V_INDDMDVIEW"."SIMULATION_NAME"='{{parameters.SIMULATION_NAME}}' THEN 1
+                           ELSE 0 END
+            and "ESP_HUB_OUTPUT_V_INDDMDVIEW"."LOADDATETIMESTAMP">(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                                    WHERE PROCEDURE_NAME = 'BV_SP_DMDRES_NEEDDATE_INSERT' AND SCENARIO_NAME='{{parameters.SIMULATION_NAME}}')
+            GROUP BY 
+            ALL
+        name: V_ESP_HUB_OUTPUT_V_INDDMDVIEW
+        noLinkRefs: []
+  name: V_ESP_HUB_OUTPUT_V_INDDMDVIEW
+  overrideSQL: false
+  schema: ""
+  sqlType: persistentStage
+  type: sql
+  version: 1
+type: Node

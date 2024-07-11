@@ -1,0 +1,56 @@
+fileVersion: 1
+id: d1f94a68-4b9b-4fea-a29d-f02a786e606b
+name: SUBCON_V_BOM_ASSEMBLY_ANALYSIS
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: cb7d7421-b2ee-4380-b96e-9b67573bab36
+          stepCounter: d1f94a68-4b9b-4fea-a29d-f02a786e606b
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: MATERIAL_PART_NUMBER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: bc01e349-280d-4953-9042-b3023122064f
+                stepCounter: ef43b85f-3c6e-49d5-bcb7-d29380a44c06
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          F_BOM_ASSEMBLY_ANALYSIS: c7badfa7-f4de-4c43-a583-b0224fa1b890
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MP
+            nodeName: F_BOM_ASSEMBLY_ANALYSIS
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_MP', 'F_BOM_ASSEMBLY_ANALYSIS') }} "F_BOM_ASSEMBLY_ANALYSIS"
+            where "F_BOM_ASSEMBLY_ANALYSIS"."SITE" like 'EM%' 
+        name: SUBCON_V_BOM_ASSEMBLY_ANALYSIS
+        noLinkRefs: []
+  name: SUBCON_V_BOM_ASSEMBLY_ANALYSIS
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

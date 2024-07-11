@@ -1,0 +1,132 @@
+fileVersion: 1
+id: 81d9ac85-871f-4844-992b-f80bd5b29520
+name: ESP_NH_A1_FILTER
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 314d5e93-4f5b-4a46-9c1a-fc2d19ecf52a
+          stepCounter: 81d9ac85-871f-4844-992b-f80bd5b29520
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6f72c6c0-64be-47f6-aad1-7ecc54bd5611
+                stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7cb63d8f-3711-45b6-9f61-68c36f8640b4
+          stepCounter: 81d9ac85-871f-4844-992b-f80bd5b29520
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ANCHOR
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9e116214-c10f-4e97-95b8-284b501e6648
+                stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 93592498-8299-4da6-9e19-16b7e06d35c6
+          stepCounter: 81d9ac85-871f-4844-992b-f80bd5b29520
+        config: {}
+        dataType: VARCHAR(25)
+        description: ""
+        hashDetails: null
+        name: CON_ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e3cc013e-6c61-4bda-887e-43691460c536
+                stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3544e047-76f0-42e8-8170-e9d0102a682b
+          stepCounter: 81d9ac85-871f-4844-992b-f80bd5b29520
+        config: {}
+        dataType: VARCHAR(15)
+        description: ""
+        hashDetails: null
+        name: CON_LOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5391387f-6592-4738-9103-449050ca34ff
+                stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7eb7041d-dade-469e-b8c9-1b05e76ab4fe
+          stepCounter: 81d9ac85-871f-4844-992b-f80bd5b29520
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: ANCHOR_ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3d4d659d-63bf-4d8f-bcf0-f4a59c516709
+                stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 29a17ae2-ae1c-4fde-af88-786f59ca1662
+          stepCounter: 81d9ac85-871f-4844-992b-f80bd5b29520
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: ANCHOR_LOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a5c1956a-bae2-47d8-af32-1561a2c1f6da
+                stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_NH_A1: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: ESP_NH_A1
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'ESP_NH_A1') }} "ESP_NH_A1"
+            where "ANCHOR_LOC" IN ('VM99','VM98','8*')
+        name: ESP_NH_A1_FILTER
+        noLinkRefs: []
+  name: ESP_NH_A1_FILTER
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

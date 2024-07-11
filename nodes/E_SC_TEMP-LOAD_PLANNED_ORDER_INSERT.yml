@@ -1,0 +1,389 @@
+fileVersion: 1
+id: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+name: LOAD_PLANNED_ORDER_INSERT
+operation:
+  config:
+    SQL_Code: |-
+
+      DECLARE 
+      	 SNPSHOT_DT :={{parameters.SNPSHOT_DT}};
+           MEASURE_NAME :='{{parameters.MEASURE_NAME}}';
+           CURR_EXECUTION_STATUS :='{{parameters.CURR_EXECUTION_STATUS}}';
+           WORK_WEEK_DAY_OF_WORK_WEEK_NUMBER INT;	
+      	 SNAPSHOT_DT DATE;
+      	 CURR_DT DATE;
+      	 MAX_DATE BIGINT;
+      	 PREV_EXECUTION_STATUS NVARCHAR(1);
+      	 EXECUTION_FLAG INT DEFAULT 1;
+      	 V_MAX_SNAPSHOT_DATE DATE;
+           
+      BEGIN
+
+      	SELECT CURRENT_TIMESTAMP INTO CURR_DT;
+      	
+      	IF (:SNPSHOT_DT IS NULL)
+      	THEN
+      	SELECT 0 INTO SNPSHOT_DT;
+      	END IF;
+          
+      	IF (:SNPSHOT_DT <> 0 )
+      	THEN
+      	SELECT  CAST( WORK_WEEK_END_DATE AS DATE) INTO SNAPSHOT_DT
+      	FROM {{ ref('E_MASTER_DATA_MD', 'D_ENTERPRISE_DATE') }}
+          WHERE CAST(FULL_DATE as DATE)  = CAST(:SNPSHOT_DT as DATE);
+      	END IF;
+         
+      	IF (:SNPSHOT_DT = 0)
+      	THEN
+      	SELECT  CAST( WORK_WEEK_END_DATE AS DATE) INTO SNAPSHOT_DT
+      	FROM {{ ref('E_MASTER_DATA_MD', 'D_ENTERPRISE_DATE') }}
+          WHERE CAST(FULL_DATE as DATE) = CURRENT_DATE;
+      	END IF;
+
+
+      with TEMP as
+          ( 
+          SELECT DISTINCT IFNULL(IS_MANUAL,'N') AS STATUS FROM {{ ref('E_SC_SP', 'P_PLANNED_ORDER') }} 
+          WHERE SNAPSHOT_DATE =  :SNAPSHOT_DT --''2024-02-22'' --
+          AND MEASURE_NAME = :MEASURE_NAME --''IFL_PLAN''--
+      	UNION ALL
+      	SELECT 'X' AS STATUS 
+          )
+
+      	SELECT STATUS INTO PREV_EXECUTION_STATUS FROM TEMP LIMIT 1;
+
+          
+      		
+      	--Disable the kill and fill function when run automatically after extraction manually had been opened
+      	IF (:PREV_EXECUTION_STATUS = 'Y' AND :CURR_EXECUTION_STATUS ='N') THEN
+      	    select 0 into EXECUTION_FLAG ;			
+      	END IF;
+          
+      	
+      	IF (:EXECUTION_FLAG <> 0) THEN		
+      		DELETE FROM {{ ref('E_SC_SP', 'P_PLANNED_ORDER') }}
+      		WHERE SNAPSHOT_DATE = :SNAPSHOT_DT
+      		AND MEASURE_NAME = :MEASURE_NAME;
+      	
+      		INSERT INTO {{ ref('E_SC_SP', 'P_PLANNED_ORDER') }}
+      		(
+      			SNAPSHOT_DATE, 
+      			PLANNED_ORDER_NUMBER,
+      			MEASURE_NAME, 
+      			DESIGN_ID, 
+      			ENTBOM_IND, 
+      			MATERIAL_NUMBER, 
+      			PLANNING_PLANT, 
+      			PRODUCTION_PLANT,
+      			ORDER_START_DATE, 
+      			ORDER_END_DATE, 
+      			ORDER_TYPE,
+      			PRODUCTION_VERSION, 
+      			TOTAL_PLANNED_ORDER_QTY, 
+      			FIRMING_INDICATOR, 
+      			SLT_LOAD_DATE_TIME,
+      			LOAD_DATE_TIME,
+      			PLANNING_SCENARIO,
+      			CONVERSION_INDICATOR,
+      			IS_MANUAL
+      		)
+      		SELECT	:SNAPSHOT_DT, 
+      				PO.PLNUM,
+      				:MEASURE_NAME,
+      				CASE WHEN PO."DESIGN_ID" IS NULL THEN '' ELSE PO."DESIGN_ID" END,
+      				CASE WHEN PO."ZZENTBOM_IND" IS NULL THEN ''	ELSE PO."ZZENTBOM_IND"	END,
+      				PO.MATNR,
+      				PO.PLWRK,
+      				PO.PWWRK,		
+      				PO.PSTTR,
+      				PO.PEDTR,
+      				PO.PAART,
+      				PO.VERID,
+      				CASE WHEN PO.GSMNG IS NULL THEN 0 ELSE PO.GSMNG	END,
+      				PO.AUFFX,
+      				CASE WHEN PO.SLT_UPDATE_TIMESTAMP = 0 THEN TO_TIMESTAMP('0001-01-01 00:00:00')
+      					 WHEN PO.SLT_UPDATE_TIMESTAMP IS NULL THEN TO_TIMESTAMP('0001-01-01 00:00:00')
+      					 ELSE TO_TIMESTAMP(PO.SLT_UPDATE_TIMESTAMP)
+      				END,
+      				current_date,
+      				PO.PLSCN,
+      				PO.UMSKZ,
+      				'N'--:CURR_EXECUTION_STATUS			
+      		FROM {{ ref('E_SC_TEMP', 'V_PLANNED_ORDER_LOAD_VIEW') }} AS PO ;
+      		
+
+      SELECT ADD_MONTHS(MAX("SNAPSHOT_DATE"),-5) INTO V_MAX_SNAPSHOT_DATE FROM  {{ ref('E_SC_SP', 'P_PLANNED_ORDER') }};
+       
+      DELETE FROM  {{ ref('E_SC_SP', 'P_PLANNED_ORDER') }}
+      WHERE "SNAPSHOT_DATE" < :V_MAX_SNAPSHOT_DATE;
+
+      END IF;
+
+      END;
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 830d688b-98b6-4a81-8f3d-d5aba01e48bb
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: PLNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 50067dfe-7d20-4b35-b81c-7844ba04d848
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4e245528-2657-4574-868c-26780e6cc629
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        name: PWWRK
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c6c6da32-8016-400c-91aa-7361d6c08ba4
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8a3c72a0-59d3-4516-8b92-748fd6a8296e
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: SLT_OPERATION_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 37fd7c04-cabb-4d5b-9805-ebb0ddf7afcd
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c81ee721-cff8-4479-921b-a3e8c657cdd1
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: UMSKZ
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 95746e7d-6b59-4652-947b-8784ec66f8b0
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b7443872-e874-49bf-af70-c39388fc0150
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: PSTTR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1fe415da-e385-49c5-a2d4-8e3f0b5e0ab5
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 149d5673-f448-432c-b3c4-84dd6a95a955
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: AUFFX
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ccd1ac29-009c-40d8-a932-c5880bc5f4d2
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1cc74cc1-0a38-45a6-8a3d-db1713350c48
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(3)
+        description: ""
+        name: PLSCN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fc33e303-edf4-4e09-b2fa-28e4c8bba925
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e24ab17e-3e45-4a1b-a6f5-e93bbc9c6527
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        name: VERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4648668d-3b69-4044-bcb0-aa7028e8018b
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a4a99fd5-fddc-4473-ba2a-6e135db1db23
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: NUMBER(15,0)
+        description: ""
+        name: PSTMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0527f0f2-f941-4999-b8d4-f5a50b8945cb
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0834de03-0116-47fe-a8c0-dcfe5b84571e
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: ZZENTBOM_IND
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4eb7f675-192e-4abd-85e5-f38e37fc4aab
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: abb2cbe3-428b-4c96-8736-d51cb9d8ed85
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        name: PAART
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b31ff7ed-4581-49e2-879c-71c7a0fec52e
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 58c1b689-6994-4a2c-8b9e-f2c0ba8ff698
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        name: SLT_UPDATE_TIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fc260847-87b3-484d-8315-bb23340ef607
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c68fcba7-e68b-477a-9866-ab88e982a51f
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        name: PLWRK
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: aa055ae5-9e45-4fd7-a353-a84779d039c8
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1120245e-0451-420b-944d-8b134a88fffa
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: NUMBER(13,3)
+        description: ""
+        name: GSMNG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5f472831-18a4-4035-9da2-e6c28178efc6
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c31c433d-e4a6-46c8-a8ed-9e6fa7c655ec
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d7abbb2b-241b-4f65-8a2a-ad11e3c53ffb
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 77bacbcc-060f-4d14-8026-abcc06595656
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: PEDTR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 19404656-e168-48e3-b331-a15d4930a1ba
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a7617064-0e67-47b2-890e-ec308738694e
+          stepCounter: 5761da6e-2e4c-4d62-a00b-e860ccbe9bb5
+        config: {}
+        dataType: NUMBER(18,0)
+        description: ""
+        name: MATNR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 700b22a1-950e-4d02-925f-99c90bc773de
+                stepCounter: 3bfaaa4b-fa4f-4363-af23-f0fcaf0a29fa
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: V_PLANNED_ORDER_LOAD_VIEW
+        join:
+          joinCondition: FROM {{ ref('E_SC_TEMP', 'V_PLANNED_ORDER_LOAD_VIEW') }} "V_PLANNED_ORDER_LOAD_VIEW"
+        name: LOAD_PLANNED_ORDER_INSERT
+        noLinkRefs: []
+  name: LOAD_PLANNED_ORDER_INSERT
+  overrideSQL: false
+  schema: ""
+  sqlType: "187"
+  type: sql
+  version: 1
+type: Node

@@ -1,0 +1,200 @@
+fileVersion: 1
+id: 09a4e981-8600-473d-9537-b37f1718ba1e
+name: ESP_HUB_OUTPUT_V_PURCHORDERS
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_SP
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b2a36e3d-f27d-49af-9c1c-c7c3cbd81144
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: NUMBER(25,3)
+        defaultValue: ""
+        description: ""
+        name: QTY
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 050fc3af-4375-4fe8-9c46-c84e89a508ea
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: VARCHAR(16777216)
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOTDATE1
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: a9913a49-1801-4825-a86e-3dc23983e5e5
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: SIMULATION_NAME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: af4db025-00ca-4b05-b481-20f793dee9cd
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: LOAD_DATE_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: a125e3a4-7995-496a-9734-67ab9bef4339
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_DATE_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8358070e-52e2-4674-a517-79a824f0c396
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: PO_TYPE
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 01342896-e91b-4406-8572-3e9c05bd1097
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: LINENUM
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: d7d18f6a-1209-4f34-bf19-1215e8802651
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: ORDERNUM
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: ee57894f-93f9-43db-951f-91788375451d
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: DUEDATE
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 58a7e657-5cf7-417e-991e-0e5050bed410
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: LOC
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8e98e594-fae6-4bd6-8f79-5b7eda95cf02
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: ITEM
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3768c67b-e205-4e3a-9d4e-5e357ace3129
+          stepCounter: 09a4e981-8600-473d-9537-b37f1718ba1e
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_DATE
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_PURCHORDERS') }}
+  name: ESP_HUB_OUTPUT_V_PURCHORDERS
+  schema: ""
+  sqlType: Source
+  table: ESP_HUB_OUTPUT_V_PURCHORDERS
+  type: sourceInput
+  version: 1
+type: Node

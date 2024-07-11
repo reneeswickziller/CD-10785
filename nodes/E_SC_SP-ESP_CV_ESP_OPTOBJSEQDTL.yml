@@ -1,0 +1,80 @@
+fileVersion: 1
+id: 21e0a3e2-b2cf-450a-b1cc-4652cb393210
+name: ESP_CV_ESP_OPTOBJSEQDTL
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_SP
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b9dbf6e6-1c3c-4b39-bf38-fe55119069f1
+          stepCounter: 21e0a3e2-b2cf-450a-b1cc-4652cb393210
+        config: {}
+        dataType: NUMBER(25,0)
+        defaultValue: ""
+        description: ""
+        name: OPTIONSETID
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 63fc378f-ee51-4bf6-84aa-b9687cea82fe
+          stepCounter: 21e0a3e2-b2cf-450a-b1cc-4652cb393210
+        config: {}
+        dataType: NUMBER(25,0)
+        defaultValue: ""
+        description: ""
+        name: SEQNUM
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: f34a78bf-616e-4736-a0be-1c2e330281c1
+          stepCounter: 21e0a3e2-b2cf-450a-b1cc-4652cb393210
+        config: {}
+        dataType: NUMBER(25,0)
+        defaultValue: ""
+        description: ""
+        name: QUALIFIER
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8ba1d0b8-9858-4bf5-976e-685915efd4c4
+          stepCounter: 21e0a3e2-b2cf-450a-b1cc-4652cb393210
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: VALUE
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_SP', 'ESP_CV_ESP_OPTOBJSEQDTL') }}
+  name: ESP_CV_ESP_OPTOBJSEQDTL
+  schema: ""
+  sqlType: Source
+  table: ESP_CV_ESP_OPTOBJSEQDTL
+  type: sourceInput
+  version: 1
+type: Node

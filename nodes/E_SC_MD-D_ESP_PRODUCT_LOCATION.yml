@@ -1,0 +1,200 @@
+fileVersion: 1
+id: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+name: D_ESP_PRODUCT_LOCATION
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_MD
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: d75d023d-8a2d-4880-a3cc-7e0658477c40
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: VARCHAR(101)
+        defaultValue: ""
+        description: ""
+        name: PRODUCT_LOCATION
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b03ae9c4-5695-42c9-b50b-c72da8fd031b
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: VARCHAR(13)
+        defaultValue: ""
+        description: ""
+        name: AREA
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 06af1149-8d23-47be-a92c-029443a75de2
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: MATERIAL
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 31fe2483-5563-4c0c-a536-83b68dca13cf
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: LOCATION
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: cc94b706-ae87-4cb0-a9db-cbe7c8babbe7
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: VARCHAR(9)
+        defaultValue: ""
+        description: ""
+        name: MATERIAL_GROUP
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: d7c641a1-28eb-4625-97d8-bb2bf343bd5e
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: VARCHAR(2)
+        defaultValue: ""
+        description: ""
+        name: LOT_SIZE
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: ad23e180-87c6-4ac9-bcfc-96cac8adb3b7
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: VARCHAR(2)
+        defaultValue: ""
+        description: ""
+        name: MRP_TYPE
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9cd08525-725a-486e-ab02-608d446b4e76
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: VARCHAR(1)
+        defaultValue: ""
+        description: ""
+        name: DELETE_FLAG
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: f900faae-323d-4e9e-9a4a-683e661eea96
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: VARCHAR(1)
+        defaultValue: ""
+        description: ""
+        name: ESP_FLAG
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: d96f1972-e7eb-44c0-9154-b9bd8ec9cce6
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_DATE_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 094e2153-ccef-4ba3-8adc-f8d542a92efb
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: LOAD_DATE_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7c9101de-8dcb-4fbd-8929-d702ed33eef4
+          stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+        config: {}
+        dataType: NUMBER(3,0)
+        defaultValue: ""
+        description: ""
+        name: LEAD_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_MD', 'D_ESP_PRODUCT_LOCATION') }}
+  name: D_ESP_PRODUCT_LOCATION
+  schema: ""
+  sqlType: Source
+  table: D_ESP_PRODUCT_LOCATION
+  type: sourceInput
+  version: 1
+type: Node

@@ -1,0 +1,416 @@
+fileVersion: 1
+id: d0991144-1155-493d-9f7c-d190a43909e3
+name: F_BOM_ASSEMBLY_ANALYSIS_JOINING_BV_AND_DIMENSION_AND_MATERIAL
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c19648d0-ef24-42ef-9cbb-89e315abb3d5
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: MPN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 67f75d6b-42f1-4feb-b88b-1b5caffca385
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 37689d01-67bc-4328-bd78-d57ed7d0f943
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: MPN_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c6fbc9b8-7f51-43a5-8bcb-fbeedd62c3ac
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1cac5b9c-f8d8-492f-ada5-2314724b18f1
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: AOUT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 06521200-6c61-43f0-8da3-352de3cc85bf
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f2ced3ca-ca4a-4938-9094-fdc6b9e6a869
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: AOUT_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 618ee569-9641-490a-8259-70c59a4ff228
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 34ce82e7-338b-470d-b2f1-2a1c6ad69e16
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: APID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f1777662-a253-4c3d-a36d-ea1accce0112
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 49133232-da67-4fef-8ca3-97d6c499caac
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(150)
+        description: ""
+        hashDetails: null
+        name: APID_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1a52a098-b609-41ef-9550-bfd35bf6c2c4
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7367201e-e716-451b-bc2d-ded977657861
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 09108c3f-bdfb-4b71-b3c0-acc8d74cff70
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f7f18a6d-5ddc-44ee-972b-e64283a1ccf7
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_NUMBER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a8872e5a-2532-4eb2-bae5-67362753c213
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 13383398-0207-4550-a7c7-2b231106c040
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: de59a896-6f16-4e52-bb22-b11eb798aef3
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 770cd706-3785-4076-b618-70700ee12f27
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SITE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8f3b0222-82a5-4dfe-82d6-d400ebccc7b7
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ff6d85b3-57e4-4030-aa4f-8ef1ce26ff38
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: NUMBER(24,4)
+        description: ""
+        hashDetails: null
+        name: USAGE_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b170f3dd-bd03-433f-9739-3216245098e4
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 84baed84-a1c9-4565-abdc-0f5ce577ed7c
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(20)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_GROUP_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a8c921be-a2f4-42c6-8950-0a78bfdded6e
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e260e291-b077-4d32-8cff-184c7682baec
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: TFGPN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8ca83fbe-98a9-4fe6-97f9-9942affc0779
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 51a587dd-85c6-4155-b562-340592e0726f
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: TFGPN_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3b876cb4-a9ca-45b6-a300-03c79c354300
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 44870d68-13f3-40c0-a1e7-585f1efb3e9b
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_GROUP_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6322c492-aca0-4b53-bd59-53aa943981bd
+                stepCounter: 63b3c432-2df8-4aac-9190-4c4cd4156976
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 81480264-3168-4d40-ba17-d601d67018f7
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: PARENT_MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c8907b7e-3c5a-4742-b30c-01cb5b16cbab
+                stepCounter: 56d41436-4049-4710-8234-29fceb1d9bc1
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0b6b88e0-ee9d-45cb-851d-c3352f16765c
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: DID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 75bd659c-879b-4c9e-9249-fd5c5ae33c8c
+                stepCounter: 56d41436-4049-4710-8234-29fceb1d9bc1
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3d1c0f69-8937-4870-bc82-44df38bc5e04
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: PROJECT_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c4723314-836f-451e-9c72-3fec4a2fbf7e
+                stepCounter: 56d41436-4049-4710-8234-29fceb1d9bc1
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 10e325d1-1bb3-43c9-ada1-a80b68d40b0a
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: CHAR_NAME1
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7164e2d6-229a-4e08-9df2-75e7de3248d7
+                stepCounter: 56d41436-4049-4710-8234-29fceb1d9bc1
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5947f321-7188-4bd5-9bfc-dab0a63f9e6b
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: CHAR_NAME2
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b1f26694-3aca-4923-ab48-69c2e8e75546
+                stepCounter: 56d41436-4049-4710-8234-29fceb1d9bc1
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 66a8e8d4-29e8-44f5-84ce-95e7a232b7c5
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: CHAR_NAME3
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: abdaab10-7668-487c-8b2d-9d4bbec94a94
+                stepCounter: 56d41436-4049-4710-8234-29fceb1d9bc1
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 82ca114e-db80-419b-936c-c58770a830aa
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: CHAR_NAME4
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 05fd76f3-052a-416e-8864-41253e9f13a8
+                stepCounter: 56d41436-4049-4710-8234-29fceb1d9bc1
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 34748854-7cb9-42db-9857-44869755f372
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: LEAD_COUNT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 38f0e771-0641-44c2-a71a-d23785fc6c50
+                stepCounter: 56d41436-4049-4710-8234-29fceb1d9bc1
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 09126e8e-e703-4ec4-8487-66558ead10d4
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: DIE_IN_PACKAGE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f9abd880-58fc-4a66-8f4c-16456d723a35
+                stepCounter: 56d41436-4049-4710-8234-29fceb1d9bc1
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1c62aa3f-4d3a-4292-956e-2fee6153f4cc
+          stepCounter: d0991144-1155-493d-9f7c-d190a43909e3
+        config: {}
+        dataType: VARCHAR(1000)
+        defaultValue: ""
+        description: ""
+        name: PACKAGE_LENGTH_WIDTH_HEIGHT_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: CONCAT("F_BOM_ASSEMBLY_ANALYSIS_AGGREGATING_DERIVED_COLUMNS"."CHAR_NAME1",'-',"F_BOM_ASSEMBLY_ANALYSIS_AGGREGATING_DERIVED_COLUMNS"."CHAR_NAME2",'-',"F_BOM_ASSEMBLY_ANALYSIS_AGGREGATING_DERIVED_COLUMNS"."CHAR_NAME3",'-',"F_BOM_ASSEMBLY_ANALYSIS_AGGREGATING_DERIVED_COLUMNS"."CHAR_NAME4")
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          F_BOM_ASSEMBLY_ANALYSIS_AGGREGATING_DERIVED_COLUMNS: 56d41436-4049-4710-8234-29fceb1d9bc1
+          F_BOM_ASSEMBLY_ANALYSIS_JOINING_BV_AND_DIMENSION: 63b3c432-2df8-4aac-9190-4c4cd4156976
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: F_BOM_ASSEMBLY_ANALYSIS_AGGREGATING_DERIVED_COLUMNS
+          - locationName: E_SC_TEMP
+            nodeName: F_BOM_ASSEMBLY_ANALYSIS_JOINING_BV_AND_DIMENSION
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'F_BOM_ASSEMBLY_ANALYSIS_JOINING_BV_AND_DIMENSION') }} "F_BOM_ASSEMBLY_ANALYSIS_JOINING_BV_AND_DIMENSION"
+            LEFT OUTER JOIN {{ ref('E_SC_TEMP', 'F_BOM_ASSEMBLY_ANALYSIS_AGGREGATING_DERIVED_COLUMNS') }} "F_BOM_ASSEMBLY_ANALYSIS_AGGREGATING_DERIVED_COLUMNS"
+            ON "F_BOM_ASSEMBLY_ANALYSIS_JOINING_BV_AND_DIMENSION"."AOUT" = "F_BOM_ASSEMBLY_ANALYSIS_AGGREGATING_DERIVED_COLUMNS"."MATERIAL_NUMBER"
+        name: F_BOM_ASSEMBLY_ANALYSIS_JOINING_BV_AND_DIMENSION_AND_MATERIAL
+        noLinkRefs: []
+  name: F_BOM_ASSEMBLY_ANALYSIS_JOINING_BV_AND_DIMENSION_AND_MATERIAL
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

@@ -1,0 +1,117 @@
+fileVersion: 1
+id: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+name: ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 23be7614-b918-4664-b60b-e1ce7b8c4402
+          stepCounter: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 44309732-3502-4d36-9dd4-a466fe1eefb7
+                stepCounter: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9164a8d9-1b9c-48b2-9af4-1f91bc0565a5
+          stepCounter: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ANCHOR_ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 27f2b8a0-76a6-4ff7-a57e-a895407c9453
+                stepCounter: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9a3523b0-fec3-4bfd-96a6-3b58c413b1a2
+          stepCounter: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+        config: {}
+        dataType: VARCHAR(20)
+        description: ""
+        hashDetails: null
+        name: BOMTYPE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6182c819-db29-4545-b4b5-1de7798850ab
+                stepCounter: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2b1a77ea-b23a-4ebc-8fe3-2eb4d29f7dd3
+          stepCounter: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+        config: {}
+        dataType: VARCHAR(25)
+        description: ""
+        hashDetails: null
+        name: CON_ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5e19b374-32cc-43e0-ae49-76d52df4d195
+                stepCounter: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bbfb3686-8544-4c2d-b42c-f488b0dad01c
+          stepCounter: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: COMPONENT_MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f60788f5-a3c8-454b-93a6-112178db35b5
+                stepCounter: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          BOM_TRAVERSAL: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: BOM_TRAVERSAL
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_MD', 'BOM_TRAVERSAL') }} "BOM_TRAVERSAL"
+            where "BOMTYPE"!='CO'
+        name: ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ
+        noLinkRefs: []
+  name: ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

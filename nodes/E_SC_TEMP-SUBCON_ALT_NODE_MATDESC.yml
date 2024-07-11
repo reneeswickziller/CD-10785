@@ -1,0 +1,119 @@
+fileVersion: 1
+id: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+name: SUBCON_ALT_NODE_MATDESC
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 38a56680-42ab-428b-99b5-966cc9c2664a
+          stepCounter: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+        config: {}
+        dataType: varchar(100)
+        description: ""
+        name: PARENT_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 712bb529-d427-461d-8b3f-0df0ab04c0a4
+                stepCounter: 59c5c11b-088c-412f-9565-41d0cb007c30
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 636a952a-6ace-4efa-b5fa-627c0f129837
+          stepCounter: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+        config: {}
+        dataType: VARCHAR(500)
+        defaultValue: ""
+        description: ""
+        name: ALT_NODES
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: LISTAGG("SUBCON_HIER_RESULT"."NODE_ID",',') WITHIN GROUP (ORDER BY "SUBCON_HIER_RESULT"."PARENT_ID")
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1667e9da-ea33-4f3e-b5ea-86decdf8b4d4
+          stepCounter: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+        config: {}
+        dataType: VARCHAR(500)
+        defaultValue: ""
+        description: ""
+        name: ALT_MATERIAL_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: LISTAGG("SUBCON_MATERIAL_VENDOR"."MATERIAL_DESCRIPTION",',') WITHIN GROUP (ORDER BY "SUBCON_HIER_RESULT"."PARENT_ID")
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: a008e10e-6eb4-4155-bebe-30979805a904
+          stepCounter: 7928aa83-16f9-4d2b-b443-f7608fb76f09
+        config: {}
+        dataType: VARCHAR(500)
+        defaultValue: ""
+        description: ""
+        name: ALT_VENDOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: LISTAGG("SUBCON_MATERIAL_VENDOR"."VENDOR",',') WITHIN GROUP (ORDER BY "SUBCON_HIER_RESULT"."PARENT_ID")
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          SUBCON_HIER_RESULT: 59c5c11b-088c-412f-9565-41d0cb007c30
+          SUBCON_MATERIAL_VENDOR: 3349e35b-7e82-423c-bba6-b61896a8bb19
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: SUBCON_HIER_RESULT
+          - locationName: E_SC_TEMP
+            nodeName: SUBCON_MATERIAL_VENDOR
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'SUBCON_HIER_RESULT') }} "SUBCON_HIER_RESULT"
+            LEFT OUTER JOIN 
+            {{ ref('E_SC_TEMP', 'SUBCON_MATERIAL_VENDOR') }}  "SUBCON_MATERIAL_VENDOR"
+            ON "SUBCON_HIER_RESULT"."NODE_ID" = "SUBCON_MATERIAL_VENDOR"."MATERIAL_NUMBER"
+            GROUP BY "SUBCON_HIER_RESULT"."PARENT_ID"
+        name: SUBCON_ALT_NODE_MATDESC
+        noLinkRefs: []
+  name: SUBCON_ALT_NODE_MATDESC
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

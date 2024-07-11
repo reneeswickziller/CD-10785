@@ -1,0 +1,278 @@
+fileVersion: 1
+id: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+name: F_BOM_ASSEMBLY_ANALYSIS_DERIVING_COLUMNS_D_MATERIAL
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9ccbe80c-f28b-4872-9243-0b7b5025979b
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 23611c2b-5518-418d-9478-5431cdd840fd
+                stepCounter: 3ad67593-1327-406e-b442-67f04cb15617
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: eca69c88-2f91-4b88-b771-b132d60e7c43
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        hashDetails: null
+        name: PARENT_MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6de13747-8078-4df9-96e8-2062dd89000f
+                stepCounter: 3ad67593-1327-406e-b442-67f04cb15617
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8ac4bfae-33db-4e97-8903-114a1ad564f0
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: CHAR_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3f73243a-da39-4cc6-904b-a88fd60caa12
+                stepCounter: 3ad67593-1327-406e-b442-67f04cb15617
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d342b9a1-1342-4c67-84a8-0101ea543964
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(5000)
+        description: ""
+        hashDetails: null
+        name: CHAR_VALUE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d0eef8c0-b800-4d28-881e-08a49bffdc43
+                stepCounter: 3ad67593-1327-406e-b442-67f04cb15617
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 773d0850-cb27-4f7e-b306-9e0eb318b26b
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        hashDetails: null
+        name: SLT_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 85ebccf7-95c7-4aca-938c-2ae2b347b3c3
+                stepCounter: 3ad67593-1327-406e-b442-67f04cb15617
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2822a1fa-a5ad-45e7-907a-e9c41c681560
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: DID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("D_MATERIAL_CHARACTERISTICS"."CHAR_NAME"='DESIGN_ID',"D_MATERIAL_CHARACTERISTICS"."CHAR_VALUE",'')
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0542e84e-050b-4045-9588-a2bf35840ede
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: PROJECT_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("D_MATERIAL_CHARACTERISTICS"."CHAR_NAME"='MFG_PLANNING_GROUP',"D_MATERIAL_CHARACTERISTICS"."CHAR_VALUE",'')
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 06be0216-ad87-4ee4-8ad8-d5bf7829e0a1
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: CHAR_NAME1
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("D_MATERIAL_CHARACTERISTICS"."CHAR_NAME"='PACKAGE_LENGTH',"D_MATERIAL_CHARACTERISTICS"."CHAR_VALUE",'')
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0163b1f3-7e1b-4737-ae6e-40fecd887258
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: CHAR_NAME2
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("D_MATERIAL_CHARACTERISTICS"."CHAR_NAME"='PACKAGE_WIDTH',"D_MATERIAL_CHARACTERISTICS"."CHAR_VALUE",'')
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b172576f-fac6-48fd-a120-bc9feddf5dfd
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: CHAR_NAME3
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("D_MATERIAL_CHARACTERISTICS"."CHAR_NAME"='PACKAGE_HEIGHT',"D_MATERIAL_CHARACTERISTICS"."CHAR_VALUE",'')
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4cadd744-c2b8-4a1d-baf6-02a8b264045b
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: CHAR_NAME4
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("D_MATERIAL_CHARACTERISTICS"."CHAR_NAME"='PACKAGE_TYPE',"D_MATERIAL_CHARACTERISTICS"."CHAR_VALUE",'')
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1cca555c-8a1d-4062-8191-2a721a10fbd3
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: LEAD_COUNT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("D_MATERIAL_CHARACTERISTICS"."CHAR_NAME"='LEAD_COUNT',"D_MATERIAL_CHARACTERISTICS"."CHAR_VALUE",'')
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 54af26b4-1dc8-4db8-9cd2-a39140d92a90
+          stepCounter: 44f93a19-91db-480e-b3ee-d19c4081dd4a
+        config: {}
+        dataType: VARCHAR(100)
+        defaultValue: ""
+        description: ""
+        name: DIE_IN_PACKAGE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("D_MATERIAL_CHARACTERISTICS"."CHAR_NAME"='DIE_IN_PACKAGE',"D_MATERIAL_CHARACTERISTICS"."CHAR_VALUE",'')
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          D_MATERIAL_CHARACTERISTICS: b8fd291f-c2c5-4fdd-8be8-6dcd5036412d
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_MASTER_DATA_MD
+            nodeName: D_MATERIAL_CHARACTERISTICS
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_MASTER_DATA_MD', 'D_MATERIAL_CHARACTERISTICS') }} "D_MATERIAL_CHARACTERISTICS"
+            where "CHAR_NAME" IN ('DESIGN_ID',
+                  'LEAD_COUNT',
+                  'DIE_IN_PACKAGE',
+                  'MFG_PLANNING_GROUP',
+                  'PACKAGE_LENGTH',
+                  'PACKAGE_WIDTH',
+                  'PACKAGE_HEIGHT',
+                  'PACKAGE_TYPE')
+                AND MATERIAL_GROUP = 'AOUT'
+                AND SLT_FLAG='I' 
+        name: F_BOM_ASSEMBLY_ANALYSIS_DERIVING_COLUMNS_D_MATERIAL
+        noLinkRefs: []
+  name: F_BOM_ASSEMBLY_ANALYSIS_DERIVING_COLUMNS_D_MATERIAL
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

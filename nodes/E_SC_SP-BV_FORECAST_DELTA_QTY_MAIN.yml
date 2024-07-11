@@ -1,0 +1,177 @@
+fileVersion: 1
+id: 6da5972c-6d4e-4b19-8512-3d675e93904f
+name: BV_FORECAST_DELTA_QTY_MAIN
+operation:
+  config:
+    incconfigfiltervalue: BV_FORECAST_DELTA_QTY_INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_SP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 173fa9a8-276e-4c40-8b73-071e8482ec78
+          stepCounter: 6da5972c-6d4e-4b19-8512-3d675e93904f
+        config:
+          whereselector: true
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 11723e7f-0d4a-487b-9039-72d88864092e
+                stepCounter: ae99a32f-45d7-4da1-bc18-8ae82411d475
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f4fd2c2d-8f97-413d-953a-e7fcd4c44741
+          stepCounter: 6da5972c-6d4e-4b19-8512-3d675e93904f
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: U_INDDMD_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f00d0e07-47a2-490b-b953-fb44e6084f8a
+                stepCounter: ae99a32f-45d7-4da1-bc18-8ae82411d475
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: dc60ed63-27b7-4506-8a1a-d38bd9dabee7
+          stepCounter: 6da5972c-6d4e-4b19-8512-3d675e93904f
+        config: {}
+        dataType: NUMBER(21,3)
+        description: ""
+        hashDetails: null
+        name: SPO_SUM_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 392e17fd-94b7-4084-982a-6787a9582b8e
+                stepCounter: ae99a32f-45d7-4da1-bc18-8ae82411d475
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a8445762-865c-4683-96d8-1f2078d34784
+          stepCounter: 6da5972c-6d4e-4b19-8512-3d675e93904f
+        config:
+          incatt: true
+        dataType: TIMESTAMP
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DATE_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5162d924-ec03-450c-9f77-8660e9bfaf5f
+                stepCounter: ae99a32f-45d7-4da1-bc18-8ae82411d475
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 92b6a929-3bb8-48cd-9a36-ae246c1dc0f5
+          stepCounter: 6da5972c-6d4e-4b19-8512-3d675e93904f
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        hashDetails: null
+        name: PLANNING_QUARTER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: eab37d51-203e-4381-9fdf-cfbfc8e990e4
+                stepCounter: ae99a32f-45d7-4da1-bc18-8ae82411d475
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 00e50c9f-9c91-4731-a1d3-3c0e5f21c98f
+          stepCounter: 6da5972c-6d4e-4b19-8512-3d675e93904f
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        hashDetails: null
+        name: PLANNING_MONTH
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b95c9874-cac2-4e37-87ac-6d1d6436023f
+                stepCounter: ae99a32f-45d7-4da1-bc18-8ae82411d475
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9ab3de32-d49c-4b53-a943-8957a1f96603
+          stepCounter: 6da5972c-6d4e-4b19-8512-3d675e93904f
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        hashDetails: null
+        name: PLANNING_WORK_WEEK
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a5c98031-ce21-49a8-b351-6e53fa6883dc
+                stepCounter: ae99a32f-45d7-4da1-bc18-8ae82411d475
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 30448f5f-489c-4202-bd5a-dcca6c1d827c
+          stepCounter: 6da5972c-6d4e-4b19-8512-3d675e93904f
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e0ae4f7f-6a25-4be3-af94-1e3cfb9850bf
+                stepCounter: ae99a32f-45d7-4da1-bc18-8ae82411d475
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d2dde196-1189-4616-9a87-acce2cdba8fe
+          stepCounter: 6da5972c-6d4e-4b19-8512-3d675e93904f
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        hashDetails: null
+        name: RR_SUM_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c1920f12-0572-4b25-ae3c-618d55da5d78
+                stepCounter: ae99a32f-45d7-4da1-bc18-8ae82411d475
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          FORECAST_DELTA_QTY_LOAD: ae99a32f-45d7-4da1-bc18-8ae82411d475
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: FORECAST_DELTA_QTY_LOAD
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'FORECAST_DELTA_QTY_LOAD') }} "FORECAST_DELTA_QTY_LOAD"
+        name: BV_FORECAST_DELTA_QTY_MAIN
+        noLinkRefs: []
+  name: BV_FORECAST_DELTA_QTY_MAIN
+  overrideSQL: false
+  schema: ""
+  sqlType: "296"
+  type: sql
+  version: 1
+type: Node

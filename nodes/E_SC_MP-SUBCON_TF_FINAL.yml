@@ -1,0 +1,131 @@
+fileVersion: 1
+id: eeac9064-bab6-4f29-b15e-89299e882255
+name: SUBCON_TF_FINAL
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_MP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 40a8d88a-36ef-4708-86c9-646aafd5bc2b
+          stepCounter: eeac9064-bab6-4f29-b15e-89299e882255
+        config: {}
+        dataType: varchar(100)
+        description: ""
+        name: PARENT_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 446ad218-f8c7-46e7-9762-33460a538771
+                stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2736b999-83dd-41f6-960a-9de620e4fbb8
+          stepCounter: eeac9064-bab6-4f29-b15e-89299e882255
+        config: {}
+        dataType: VARCHAR(500)
+        description: ""
+        name: ALT_NODES
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 267e8840-c697-455c-86cc-379e57dbd15c
+                stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0c0e14f0-c77f-4872-a335-6f65a33c0187
+          stepCounter: eeac9064-bab6-4f29-b15e-89299e882255
+        config: {}
+        dataType: VARCHAR(500)
+        description: ""
+        name: ALT_MATERIAL_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 88fba9cd-fff4-4c94-a355-f23ccd90980a
+                stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 003a6d92-7d73-42bc-8d48-150c870de308
+          stepCounter: eeac9064-bab6-4f29-b15e-89299e882255
+        config: {}
+        dataType: VARCHAR(500)
+        description: ""
+        name: ALT_VENDOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: acd20db7-66dc-4c8c-81bd-1eefc97c9226
+                stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9707835b-3fe5-4d26-ad04-1a1257f8da9e
+          stepCounter: eeac9064-bab6-4f29-b15e-89299e882255
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: ACT_PARENT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7dec186e-f729-47ab-b49f-b4365fc2c27e
+                stepCounter: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a697e6ad-6979-4735-83aa-2ec6da5ff6bf
+          stepCounter: eeac9064-bab6-4f29-b15e-89299e882255
+        config: {}
+        dataType: VARCHAR(40)
+        description: ""
+        name: MATERIAL_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9cb5095a-b02b-466f-af24-7b522e2f6a75
+                stepCounter: 36ce982e-d9b6-4808-bebc-da4514d2746d
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          SUBCON_PARENT_NODES: 50de32c3-7591-46e7-bff5-c23c7788bd5b
+          V_D_MATERIAL: cc74d486-137e-42d7-81ef-57e9d8c272cc
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_MASTER_DATA_MD
+            nodeName: V_D_MATERIAL
+          - locationName: E_SC_TEMP
+            nodeName: SUBCON_PARENT_NODES
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'SUBCON_PARENT_NODES') }} "SUBCON_PARENT_NODES"
+            LEFT OUTER JOIN
+            {{ ref('E_MASTER_DATA_MD', 'V_D_MATERIAL') }} "V_D_MATERIAL"
+            ON "SUBCON_PARENT_NODES"."PARENT_ID" = "V_D_MATERIAL"."MATERIAL_NUMBER"
+        name: SUBCON_TF_FINAL
+        noLinkRefs: []
+  name: SUBCON_TF_FINAL
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

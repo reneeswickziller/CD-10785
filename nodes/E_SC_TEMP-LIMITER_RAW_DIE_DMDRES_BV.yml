@@ -1,0 +1,128 @@
+fileVersion: 1
+id: ab8fdd9a-0c6f-4254-8302-f799d5c66763
+name: LIMITER_RAW_DIE_DMDRES_BV
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c5b6598e-6f7a-4c61-91f6-c07ef87ba4a2
+          stepCounter: ab8fdd9a-0c6f-4254-8302-f799d5c66763
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e17818af-5b3c-4576-82a9-1bf7ad411a0d
+                stepCounter: a3f73d24-3b61-4f42-bc3e-7b42f539a360
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 80c2e6aa-6d68-4e3f-a968-757a6c9e7541
+          stepCounter: ab8fdd9a-0c6f-4254-8302-f799d5c66763
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2cafe84c-8f66-498c-a73b-cbc96d801cfe
+                stepCounter: a3f73d24-3b61-4f42-bc3e-7b42f539a360
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2bbcae20-3598-4614-be4b-5e2287876ede
+          stepCounter: ab8fdd9a-0c6f-4254-8302-f799d5c66763
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 450d65b7-4883-4bfc-87b3-6f27baa19df0
+                stepCounter: a3f73d24-3b61-4f42-bc3e-7b42f539a360
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e6a007a3-1663-42b3-beb6-7bd33a158c1f
+          stepCounter: ab8fdd9a-0c6f-4254-8302-f799d5c66763
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: LOC
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: dc47e1ed-fea2-46ed-95fe-74f5abbd799c
+                stepCounter: a3f73d24-3b61-4f42-bc3e-7b42f539a360
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 71d79cbd-a85e-4542-ab3c-b777349496ca
+          stepCounter: ab8fdd9a-0c6f-4254-8302-f799d5c66763
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 495765d4-f7b9-47aa-89ff-1b0422688143
+                stepCounter: a3f73d24-3b61-4f42-bc3e-7b42f539a360
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0106f6dd-47c4-42d7-8b2f-14eda52b89b5
+          stepCounter: ab8fdd9a-0c6f-4254-8302-f799d5c66763
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: DAYSLATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1076a660-16d8-4170-b703-cf31a00ec1af
+                stepCounter: a3f73d24-3b61-4f42-bc3e-7b42f539a360
+            transform: SUM("BV_DEMAND_RESPONSE"."DAYSLATE")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: BV_DEMAND_RESPONSE
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'BV_DEMAND_RESPONSE') }} "BV_DEMAND_RESPONSE"
+            GROUP BY ALL
+        name: LIMITER_RAW_DIE_DMDRES_BV
+        noLinkRefs: []
+  name: LIMITER_RAW_DIE_DMDRES_BV
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

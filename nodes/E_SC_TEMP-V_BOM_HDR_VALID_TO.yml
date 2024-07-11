@@ -1,0 +1,162 @@
+fileVersion: 1
+id: 0b933b16-7114-479d-8f3b-40ac26c78055
+name: V_BOM_HDR_VALID_TO
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5dbe1b64-d5cf-44b0-90e5-057dc779f45f
+          stepCounter: 0b933b16-7114-479d-8f3b-40ac26c78055
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: BOM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 590ea850-4f82-47c1-8bdb-d715f985c70a
+                stepCounter: 2897b760-33d0-4e88-bad0-78e3386de295
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0e551ea6-efb4-4c3d-82a9-1aecffe165b8
+          stepCounter: 0b933b16-7114-479d-8f3b-40ac26c78055
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        name: BOM_ALT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 631cf48b-f93d-40c5-ba8a-4a5ffeb89bdf
+                stepCounter: 2897b760-33d0-4e88-bad0-78e3386de295
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fcaebebf-afaf-4d85-9009-726b0837bd35
+          stepCounter: 0b933b16-7114-479d-8f3b-40ac26c78055
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: BOM_CATEGORY
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b3c4c0d2-6953-44d4-8828-e10323cd1188
+                stepCounter: 2897b760-33d0-4e88-bad0-78e3386de295
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 14b90c66-ffab-4cc3-9f47-65d09f53f05e
+          stepCounter: 0b933b16-7114-479d-8f3b-40ac26c78055
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: BOM_USAGE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2398f286-f20f-4ff8-88aa-36522bf6ce68
+                stepCounter: 2897b760-33d0-4e88-bad0-78e3386de295
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7c3f83bd-8395-40ca-bcce-98c939855ef6
+          stepCounter: 0b933b16-7114-479d-8f3b-40ac26c78055
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        name: PLANT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3c221601-3d4d-4b81-b26e-110acdc6a599
+                stepCounter: 2897b760-33d0-4e88-bad0-78e3386de295
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 928e99e1-d63e-477e-855c-659b80357ecb
+          stepCounter: 0b933b16-7114-479d-8f3b-40ac26c78055
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: MATERIAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1b717f5d-aac5-4429-bf3d-a25f04593538
+                stepCounter: 2897b760-33d0-4e88-bad0-78e3386de295
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: af3c9348-61ea-43bd-bd98-5a0ac0c8a2a1
+          stepCounter: 0b933b16-7114-479d-8f3b-40ac26c78055
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: VALID_FROM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e0f1848f-e89a-405c-8149-f1da53e6e96f
+                stepCounter: 2897b760-33d0-4e88-bad0-78e3386de295
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6fb507d4-7078-469c-966e-8ae3614e3e59
+          stepCounter: 0b933b16-7114-479d-8f3b-40ac26c78055
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: VALID_TO
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: |-
+              to_char(DATEADD(DAY,-1,
+                                 to_char(to_date((Lead("V_FINAL_MAST_STKO"."VALID_FROM") OVER (partition BY "V_FINAL_MAST_STKO"."BOM","V_FINAL_MAST_STKO"."BOM_ALT","V_FINAL_MAST_STKO"."BOM_CATEGORY","V_FINAL_MAST_STKO"."BOM_USAGE","V_FINAL_MAST_STKO"."PLANT","V_FINAL_MAST_STKO"."MATERIAL"
+                                  ORDER BY "V_FINAL_MAST_STKO"."VALID_FROM")),'YYYYMMDD'),'YYYY-MM-DD')),'YYYYMMDD')
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: V_FINAL_MAST_STKO
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'V_FINAL_MAST_STKO') }} "V_FINAL_MAST_STKO"
+            GROUP BY  BOM,   BOM_ALT,                 BOM_CATEGORY,
+                                BOM_USAGE,
+                                PLANT,
+                                MATERIAL,
+                                VALID_FROM
+                      ORDER BY  VALID_FROM
+        name: V_BOM_HDR_VALID_TO
+        noLinkRefs: []
+  name: V_BOM_HDR_VALID_TO
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

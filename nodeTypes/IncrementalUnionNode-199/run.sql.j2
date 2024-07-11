@@ -1,0 +1,78 @@
+{% set is_type_2 = columns | selectattr("isChangeTracking") | list | length > 0 %}
+{% for test in node.tests if config.testsEnabled %}
+    {% if test.runOrder == 'Before' %}
+    {{ test_stage(test.name, test.continueOnFailure) }}
+    {{ test.templateString }}
+{% endif %}
+{% endfor %}
+{% if node.materializationType == 'table' %}
+	{% if config.preSQL %}			
+		{{ stage('Pre-SQL') }}
+		{{ config.preSQL }}
+        {% endif %}
+    {{ stage('INC') }}
+  
+    
+    DECLARE END_DT   TIMESTAMP_NTZ;
+            START_DT TIMESTAMP_NTZ;
+            MAX_LOAD_SOURCE TIMESTAMP_NTZ;
+            MAX_LOAD_TARGET TIMESTAMP_NTZ;
+    BEGIN       
+    SELECT CURRENT_TIMESTAMP INTO :END_DT;
+    {% for source in sources %}
+    IF ('{{source.name}}'='{{parameters.SCENARIO_NAME}}') THEN
+        --CHECK MAX(SOURCE_LDT) != WATERMARK(MAX(TARGET_LDT)) THEN INSERT & UPDATE WATERMARK= MAX(TARGET_LDT)
+		
+		--SELECT DISTINCT(SIMULATION_NAME) INTO :SIM_NAME {{ source.join }};
+		SELECT MAX(LOADDATETIMESTAMP) INTO :MAX_LOAD_SOURCE {{ source.join }};
+        SELECT WATER_MARKER_TIMESTAMP INTO :START_DT FROM {{ ref('E_SC_UTIL_USER', 'LOAD_CONTROL_SC_SPO') }} 
+		WHERE TARGET_TABLE = '{{ config.incconfigfiltervalue}}' AND SCENARIO_NAME = '{{parameters.SCENARIO_NAME}}';
+        --'{{ START_DT }}','{{MAX_LOAD_SOURCE}}' 
+        --:MAX_LOAD_SOURCE;
+
+        IF (:START_DT < :MAX_LOAD_SOURCE) THEN
+            INSERT INTO {{ ref_no_link(node.location.name, node.name) }}  (
+            SELECT
+            {% for col in source.columns if not col.isSurrogateKey %}
+            {% if col.isSystemVersion %}
+                1 AS "{{ col.name }}"{%- if not loop.last %}, {% endif %}
+            {% elif col.isSystemCurrentFlag %}
+                'Y' AS "{{ col.name }}"{%- if not loop.last %}, {% endif %}
+            {% else %}
+                {{ get_source_transform(col) }} AS "{{ col.name }}"{%- if not loop.last %}, {% endif %}
+            {% endif %}          
+            {% endfor %}
+                {{ source.join }}
+            {% if 'WHERE' in stage('INC') %}
+                AND 
+            {% else %}
+                WHERE  
+            {% endif %}
+                (
+            {% for col in  columns | selectattr('incatt', 'defined') | list %}
+                {% if not loop.first %}
+                    OR
+                {% endif %}
+                "{{ col.name }}" > :START_DT AND "{{ col.name }}" <= :END_DT 
+            {% endfor %} 
+                )
+                AND
+                {% for i in columns | selectattr('whereselector','defined') | list  %}
+                        {% if not loop.first %}
+                         AND
+                        {% endif %}
+                        "{{i.name}}" = '{{parameters.SCENARIO_NAME}}'
+            {% endfor %} 
+            ) ;
+
+			SELECT MAX(LOADDATETIMESTAMP) INTO :MAX_LOAD_TARGET
+			FROM  {{ ref_no_link(node.location.name, node.name) }} WHERE {{ ref_no_link(node.location.name, node.name) }}."SIMULATION_NAME"  = '{{parameters.SCENARIO_NAME}}';
+			
+            UPDATE {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+            SET WATER_MARKER_TIMESTAMP =:MAX_LOAD_TARGET
+            WHERE TARGET_TABLE = '{{ config.incconfigfiltervalue}}' AND SCENARIO_NAME='{{parameters.SCENARIO_NAME}}';
+        END IF;
+        END IF;
+    {% endfor %}     
+{% endif %}
+END;

@@ -1,0 +1,359 @@
+fileVersion: 1
+id: c72ed745-c708-4972-a643-6d17687ddbc3
+name: SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR1
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f57ce256-3c10-497c-ad25-87b22dac1444
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 168d4627-4a15-4b5d-9ad5-e095e7a71043
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8b9a73a3-3ba7-47a9-b49e-3d4f37afb358
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e34045ba-65db-4bb3-8d70-8260c0e59dcd
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a88a005c-72a9-4d18-bd5c-ab4825a980db
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: LOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3432a760-3dc1-4ce1-9757-5ff2cc2d6c7c
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b50d380e-6f9f-409d-b3fd-d1ea1fbf9bfc
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a8ea8f68-2938-442e-a236-0e44f08446f1
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c7325baa-2ea2-404b-8bcd-823c1897dfcd
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: QUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c380ce97-09fa-43ad-a2d7-d941f6ae3be2
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 71da065c-b783-4030-8f9b-c5b954f16bc6
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: U_SUB_SEGMENT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c5cf2995-c999-4ad0-999a-2a28b6add038
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8316c4ad-defa-4f40-a3a3-6326a9c69d1c
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: U_CUSTOMER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 89bb4fdc-979c-4c7e-b6f5-693280e9002c
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3a7cd340-11e2-4bd3-bdc6-7449c786e9c2
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        hashDetails: null
+        name: PRIORITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 780c9aa0-7e5c-4b3b-b1d6-d65e745d1ee5
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 86850e73-4513-4705-b835-e80cbc5f4199
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: U_ATP_CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ef72d630-ac1f-438c-a783-7c37c7f9b5ee
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5a0b06a0-9bc3-48f2-bd88-59cd4953fc6b
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: U_INDDMD_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2c3a01af-b515-4290-bb1f-6043dd4f3ca5
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9365d789-8d1c-4b20-877c-e35b7813c575
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: U_SEGMENTATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f17639e4-45f9-48f0-b810-4c1112c5fad4
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 911ac459-eca5-427c-8842-0f7f16adaabc
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: NUMBER(30,0)
+        description: ""
+        hashDetails: null
+        name: DAYS_LATE_PRODUCTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1cc58e52-dbc3-44d9-a7bc-db5192728b62
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bc1d0e19-69c5-45ee-8fde-1b9d2194c0a3
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: NUMBER(30,0)
+        description: ""
+        hashDetails: null
+        name: DAYS_LATE_CON_SI
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e09cf395-13d2-42aa-9e90-b4cf7f617f4e
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1fb693f0-bf09-4cf8-9893-7fd43fa5488d
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: NUMBER(30,0)
+        description: ""
+        hashDetails: null
+        name: DAYS_LATE_UNCON
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 377b2a1e-21be-4179-9fab-ec9fe46aecea
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 19114701-9967-4161-b244-fe12e3ce016e
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: NUMBER(30,0)
+        description: ""
+        hashDetails: null
+        name: DAYS_LATE_CON_CAP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 291e184d-1cf4-4f70-af2b-dedc3314108d
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e4eb8216-013e-4bc6-b724-fa1da68a4094
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: NUMBER(30,0)
+        description: ""
+        hashDetails: null
+        name: DAYS_LATE_CON_MATL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0e77e9d6-4ac9-4ef4-9bd4-03ca48d083e7
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: aa90b7af-0c77-4fe5-a626-946091d2c07b
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: NUMBER(30,0)
+        description: ""
+        hashDetails: null
+        name: FLAG_DEMAND_FULLY_UNMET
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 52f623e5-dad0-4f60-916f-f2c8bd28da6b
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e7f6283a-a34d-4f3a-8436-4783ecb7705c
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: NUMBER(30,0)
+        description: ""
+        hashDetails: null
+        name: FLAG_NOT_PROCESSED
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: df98792f-f404-4bc9-8475-8ed625786f63
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0ecccc90-6ced-40a7-b693-8d7522358751
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        hashDetails: null
+        name: WORK_WEEK
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 71baf35b-c7bd-4a31-8b45-58f2397e822c
+                stepCounter: 08d47498-9e83-4bf9-83e4-05da5332c472
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: ef0c04d1-3933-4bdb-bca7-c515a67a166b
+          stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+        config: {}
+        dataType: VARCHAR(60)
+        defaultValue: ""
+        description: ""
+        name: ORDER_LEVEL_CONSTRAINT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: |-
+              iff("SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."FLAG_NOT_PROCESSED" = 1,
+              'NOT PROCESSED',
+              iff("SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."FLAG_DEMAND_FULLY_UNMET"=1,
+              'MASTER DATA CONSTRAINT',
+              iff("SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_UNCON" <= 0  AND "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_SI" <= 0 AND "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_CAP" <= 0 AND "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_MATL" <= 0 ,
+              'NO LIMITING CONSTRAINT',
+              iff("SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_UNCON">="SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_SI" AND "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_UNCON">="SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_CAP" AND "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_UNCON" >= "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_MATL",
+              'CYCLE TIME CONSTRAINT',
+              iff("SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_SI">="SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_CAP" AND "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_SI" >= "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_MATL",
+              'DIE CONSTRAINT',
+              iff("SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_CAP" >= "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"."DAYS_LATE_CON_MATL",
+              'CAPACITY CONSTRAINT',
+              'RAW MATERIAL CONSTRAINT'
+              )
+              )
+              )
+              )
+              )
+              )
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR
+        join:
+          joinCondition: FROM {{ ref('E_SC_TEMP', 'SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR') }} "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR"
+        name: SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR1
+        noLinkRefs: []
+  name: SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR1
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

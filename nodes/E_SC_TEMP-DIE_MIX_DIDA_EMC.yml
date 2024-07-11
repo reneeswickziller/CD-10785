@@ -1,0 +1,78 @@
+fileVersion: 1
+id: 9b8bff7b-ee6f-4461-b76d-3480bd51faa4
+name: DIE_MIX_DIDA_EMC
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1ef2567c-429c-4938-8ca5-9602fe463ce3
+          stepCounter: 9b8bff7b-ee6f-4461-b76d-3480bd51faa4
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: PRODUCT_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: cb4bc15b-f74b-4ab7-8233-ffae7497890b
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1ac9a0d9-98a6-4d79-aac3-0519a1a6e67f
+          stepCounter: 9b8bff7b-ee6f-4461-b76d-3480bd51faa4
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d7a64006-97fd-4347-b3ef-6a6c16945c4f
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          D_ESP_MATERIAL_CHARACTERISTICS: b73b1fc3-e8ac-4336-b702-4a660eeb03bc
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_MATERIAL_CHARACTERISTICS
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_MD', 'D_ESP_MATERIAL_CHARACTERISTICS') }} "D_ESP_MATERIAL_CHARACTERISTICS"
+            WHERE "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP" IN ('CFGPN', 'MFGPN', 'RFGPN', 'TFGPN')
+            AND UPPER("D_ESP_MATERIAL_CHARACTERISTICS"."CROSS_DIST_MATERIAL_STATUS") != UPPER('%04%')
+            AND "D_ESP_MATERIAL_CHARACTERISTICS"."NPI_FLAG"= 'N'
+            AND "D_ESP_MATERIAL_CHARACTERISTICS"."DESIGN_ID" IS NOT NULL 
+            AND "D_ESP_MATERIAL_CHARACTERISTICS"."DESIGN_ID" != ''
+            AND SUBSTRING("D_ESP_MATERIAL_CHARACTERISTICS"."PRODUCT_NUMBER" ,1,1) in ('1','2','3','4','5','6','7','8','9')
+            QUALIFY ROW_NUMBER() OVER(PARTITION BY "DESIGN_ID" ORDER BY  "PRODUCT_NUMBER" DESC )=1
+        name: DIE_MIX_DIDA_EMC
+        noLinkRefs: []
+  name: DIE_MIX_DIDA_EMC
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

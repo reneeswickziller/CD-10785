@@ -1,0 +1,130 @@
+fileVersion: 1
+id: 60b51d39-3368-45c8-a8df-ecf1bbb87545
+name: SUPPLY_RESPONSE_ZXREF_UOM_DID
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 23d0d8be-d96d-4ffc-acea-f96f87597c86
+          stepCounter: 60b51d39-3368-45c8-a8df-ecf1bbb87545
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 211a9e3b-ac94-4ced-a6e5-76bd9721dff1
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: efa9726a-d757-4c43-9fef-0e3beb8f587f
+          stepCounter: 60b51d39-3368-45c8-a8df-ecf1bbb87545
+        config: {}
+        dataType: VARCHAR(16)
+        description: ""
+        hashDetails: null
+        name: FAB_DESIGN_HANDLE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 16b02ca4-ccc7-472e-b8b8-6a08fb88fe0a
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 03fe213c-3906-4ec7-ad16-0f25fe983e16
+          stepCounter: 60b51d39-3368-45c8-a8df-ecf1bbb87545
+        config: {}
+        dataType: FLOAT
+        description: ""
+        hashDetails: null
+        name: FACTOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8d5fec92-e125-47e7-8905-20a4b9738d4a
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: max("D_ZXREF_UOM_DID"."FACTOR")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e97017ef-4bd0-482a-ac9b-ef77c60f7eb7
+          stepCounter: 60b51d39-3368-45c8-a8df-ecf1bbb87545
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: FAB_TECHNOLOGY
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5e1bf064-a37b-4a17-b153-f9ac56f20bb5
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2a76413c-d4b2-4878-a6e5-9bf758e2d3b0
+          stepCounter: 60b51d39-3368-45c8-a8df-ecf1bbb87545
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: PROCESS_SERIES
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 11336885-d588-421f-a935-a1a4de2ede16
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d75cf3a2-45c8-4333-be81-9d6b7f702dc9
+          stepCounter: 60b51d39-3368-45c8-a8df-ecf1bbb87545
+        config: {}
+        dataType: VARCHAR(14)
+        description: ""
+        name: UNIT_OF_MEASURE_L1
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 20807f9d-834f-4a86-921e-07bc1415b75e
+                stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: C_SC_MASTER_DATA
+            nodeName: D_ZXREF_UOM_DID
+        join:
+          joinCondition: |-
+            FROM {{ ref('C_SC_MASTER_DATA', 'D_ZXREF_UOM_DID') }} "D_ZXREF_UOM_DID"
+            GROUP BY ALL
+        name: SUPPLY_RESPONSE_ZXREF_UOM_DID
+        noLinkRefs: []
+  name: SUPPLY_RESPONSE_ZXREF_UOM_DID
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

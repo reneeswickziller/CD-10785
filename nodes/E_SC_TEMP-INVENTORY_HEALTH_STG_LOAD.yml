@@ -1,0 +1,639 @@
+fileVersion: 1
+id: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+name: INVENTORY_HEALTH_STG_LOAD
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0fb5dcfe-6b0e-417a-9abb-253b9c736afb
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f097f6e0-e3aa-4fd6-a3bf-1fe3bd47b003
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e8cf1179-bc84-4b9e-8d99-02a15f703820
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 37f63374-388c-4f79-8fed-f015a4132c27
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 29c471b8-5a2c-4c80-a981-18ed65d1534b
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: ORDER_NUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "CASE WHEN \"ESP_HUB_OUTPUT_V_INDDMDLINK\".\"DMDSEQNUM\"=0 THEN \"ESP_HUB_OUTPUT_V_INDDMDLINK\".\"ORDERID\" ELSE \"ESP_HUB_OUTPUT_V_INDDMDLINK\".\"DMDSEQNUM\" END "
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b03e68d2-5849-4d10-8374-f64b473902f8
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SCHEDSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d5aba990-c224-45b1-903a-de3e3707b2dd
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 370da068-5606-4486-a617-25b0244cffb0
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PARENTSUPPLYSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 286f990c-5c52-455c-9bd8-daea74a07490
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d38fb7ce-5d3e-461f-9a79-76e2e8def594
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: DMDITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b763552c-b9a3-40db-a88f-604265afcb5a
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f0ae3e0c-7ab6-4661-8253-b9493517aaaf
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: DATE
+        description: ""
+        name: PARENTSUPPLYSTARTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6e8bf393-a247-42ba-9005-65d3fdadb0cf
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d37e921f-b45d-48fc-b0b5-9efb5a462822
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: DATE
+        description: ""
+        name: PARENTSUPPLYSCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 381ab7b9-e70d-46d8-bcd2-811b16d970d1
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6743cdd4-ffb4-454b-9f25-be1800bc0c4a
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: DATE
+        description: ""
+        name: DMDNEEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: febe5270-00d2-4177-b27c-b92f56549372
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a83983ed-9b46-4724-b606-0c6fa2de0f80
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SUPPLYAVAILDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b6fb05bc-237d-499f-9264-cae0dd40594a
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: adcdc4f6-9591-42a2-a4ad-1a4fdaafdd71
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: SUPPLYITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 26d5a93f-aca1-480b-ad80-3cccc0c67849
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6cef2de3-339d-4c9b-9254-fe581a4a2241
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: SUPPLYLOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2fb7b266-bef6-48e7-9f66-95416c48e701
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9b8ab4d0-7439-4b10-9e35-749927e5f5a4
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SUPPLYSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ec72d13b-bbd8-47e2-820c-29ae5ebbcc6c
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 86c91fd0-1d17-489b-9d29-e095034f3e64
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: SUPPLYPEG_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 087924cc-603c-4243-a35c-be756e38f2f8
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: "SUM(\"ESP_HUB_OUTPUT_V_INDDMDLINK\".\"SUPPLYPEGQTY\") "
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e773cf4f-7ee8-4301-9f40-8e16b8d1044d
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: NUMBER(33,3)
+        description: ""
+        hashDetails: null
+        name: INVENTORY_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f230beec-fa61-4d17-8f07-21e48eeca8a6
+                stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+            transform: MAX("INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED"."QTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0e2da7f9-bfd8-4a5f-ad50-c49878aa59f8
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: "''"
+        description: ""
+        hashDetails: null
+        name: U_ATP_CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 63a20fdd-5f97-4d86-9f96-d60b7c8b0504
+                stepCounter: b2c50476-b2c1-45aa-a3be-1baf39732cdd
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 203e857f-157f-4ae2-9966-dcdf5e9ee391
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: "0"
+        description: ""
+        name: DMDSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 06e6d931-02af-4316-a1ca-450149552b44
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e344660d-d2ab-4680-81fc-a12037246ce3
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: "''"
+        description: ""
+        name: ORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 08b32fbe-8412-4a24-bd26-fdcd9e17c9cb
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 374b4375-763e-466f-9987-6c2f2a3a71f5
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: INTEGER
+        defaultValue: ""
+        description: ""
+        name: CUM_DATEDIFF
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "0"
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 22355bbf-cf1a-4d06-9feb-0afe588f8020
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: IHR_INVENTORY_BUCKET
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: |-
+              CASE WHEN "ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDTYPE" = '12'
+              			THEN CASE 
+              					WHEN    "ESP_HUB_OUTPUT_V_INDDMDLINK"."SUPPLYITEM"= "ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDITEM"
+              						
+              						THEN 'UNCONSUMED' 
+              					ELSE 'CONSUMED EXCESS'
+              					END
+              		ELSE NULL
+              		END
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 019e4e7a-b88a-4bba-b884-af26884ea149
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: DMDTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 865e75dd-a6cc-4445-8aa8-030a3698aeaa
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3fd25fff-81e8-4d99-9d0e-10be7d2b41db
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: DEMAND_TIER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: CASE WHEN "ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDSEQNUM"=0 THEN "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER"."U_SEGMENTATION" ELSE "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST"."U_SEGMENTATION" END
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 632fcef5-a48f-4c47-948e-40e517e82567
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: DEMAND_SUBTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: CASE WHEN "ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDSEQNUM"=0 THEN "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER"."U_INDDMD_TYPE" ELSE "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST"."U_INDDMD_TYPE" END
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6f67e399-adfd-4c44-88c5-819078b6daaa
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: DEMAND_ATP_CAT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: CASE WHEN "ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDSEQNUM"=0 THEN "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER"."U_ATP_CATEGORY" ELSE "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST"."U_ATP_CATEGORY" END
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8ca23870-e2a9-4337-ab6f-e9449e1d291f
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: U_PPLEVEL_CF
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: CASE WHEN "ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDSEQNUM"=0 THEN "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER"."U_PPLEVEL" ELSE "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST"."U_PPLEVEL" END
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 20bd82c7-974f-4428-b5d0-dbbe7ee7c7e3
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0b027e42-c2e8-4fb3-a8d1-feae98852944
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 881fb99f-7d7f-4cb3-b360-acb1b81dea0d
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(4)
+        description: ""
+        name: MATERIAL_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 31b978bb-d50b-4fac-a0f8-ab6c382a8d90
+                stepCounter: b1acad72-c964-40cb-9536-6187b3deeb87
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 51979844-c603-4ee4-9144-06e971de89c9
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: U_PPLEVEL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: " CASE WHEN NULLIF(\"ORDER_NUM\",'') IS NOT NULL THEN \"U_PPLEVEL_CF\" ELSE NULL END"
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5ecbdc8b-6fe5-4458-a8c5-dce9c8a2053b
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: SHIPDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFNULL("INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER"."SHIPDATE","ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDNEEDDATE")
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 73c5d47c-96b1-43e1-a6ad-04cb730163c9
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: IDEAL_DEPENDENT_DEMAND_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "NULL"
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: e59c13e5-c854-484e-8806-01a4bd0c078f
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: INT
+        defaultValue: ""
+        description: ""
+        name: DAYS_OF_INVENTORY_BUCKET
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "NULL"
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9ac10012-ddad-4809-b598-1a90cbe1d38c
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: DEMAND_PRIORITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4cfda23f-46e1-4704-8ab0-5c3fe5968558
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 207b4b8f-7ff0-4766-bf0e-31164f380928
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: SUPPLYTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2b998d5a-0c42-4c4a-a070-98b9ab98abab
+                stepCounter: dd52a822-e49a-41d3-9a91-5840a0a27a26
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 718dbab4-8c49-4749-820e-0060bc7dd035
+          stepCounter: a25c6404-76e9-43e2-bfaf-4520c0bcca6a
+        config: {}
+        dataType: ""
+        defaultValue: ""
+        description: ""
+        name: SUPPLY_TYPE_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: |-
+              	CASE    WHEN    SUPPLYTYPE     = 1  THEN 'Planned Arrival'
+              		    WHEN    SUPPLYTYPE    = 2  THEN 'Planned Order'
+              		    WHEN    SUPPLYTYPE    = 5  THEN 'InTransit In'
+              		    WHEN    SUPPLYTYPE    = 6  THEN 'Scheduled Receipt'
+              		    WHEN    SUPPLYTYPE    = 7  THEN 'Inventory'
+              		    WHEN    SUPPLYTYPE    = 12 THEN 'Plan Purchase'
+              		    WHEN    SUPPLYTYPE    = 14 THEN 'Purchase Order'
+              		    WHEN    SUPPLYTYPE    = 18 THEN 'Superseded Supply'
+                      END 
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_MATERIAL_CHARACTERISTICS
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_INDDMDLINK
+          - locationName: E_SC_TEMP
+            nodeName: INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER
+          - locationName: E_SC_TEMP
+            nodeName: INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST
+          - locationName: E_SC_TEMP
+            nodeName: INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED') }} "INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED"
+            INNER JOIN {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_INDDMDLINK') }} "ESP_HUB_OUTPUT_V_INDDMDLINK"
+            ON "ESP_HUB_OUTPUT_V_INDDMDLINK"."SNAPSHOTDATE"= "INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED"."SNAPSHOT_DATE"
+            AND "ESP_HUB_OUTPUT_V_INDDMDLINK"."SIMULATION_NAME" = "INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED"."SIMULATION_NAME"
+            AND "ESP_HUB_OUTPUT_V_INDDMDLINK"."SUPPLYITEM" = "INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED"."ITEM"
+            AND "ESP_HUB_OUTPUT_V_INDDMDLINK"."SUPPLYLOC" = "INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED"."LOC"
+            AND "ESP_HUB_OUTPUT_V_INDDMDLINK"."SUPPLYSEQNUM" = "INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED"."SEQNUM"
+            INNER JOIN {{ ref('E_SC_MD', 'D_ESP_MATERIAL_CHARACTERISTICS') }} "D_ESP_MATERIAL_CHARACTERISTICS"
+            ON "D_ESP_MATERIAL_CHARACTERISTICS"."PRODUCT_NUMBER" = "INVENTORY_HEALTH_INVENTORY_SCHEDRECEIPTS_CONSOLIDATED"."ITEM"
+            LEFT JOIN {{ ref('E_SC_TEMP', 'INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER') }} "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER"
+            ON "ESP_HUB_OUTPUT_V_INDDMDLINK"."SNAPSHOTDATE"="INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER"."SNAPSHOT_DATE"
+            AND "ESP_HUB_OUTPUT_V_INDDMDLINK"."SIMULATION_NAME" = "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER"."SIMULATION_NAME"
+            AND "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_CUSTORDER"."ORDERID" = "ESP_HUB_OUTPUT_V_INDDMDLINK"."ORDERID"
+            LEFT JOIN {{ ref('E_SC_TEMP', 'INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST') }} "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST"
+            ON "ESP_HUB_OUTPUT_V_INDDMDLINK"."SNAPSHOTDATE"="INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST"."SNAPSHOT_DATE"
+            AND "ESP_HUB_OUTPUT_V_INDDMDLINK"."SIMULATION_NAME" = "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST"."SIMULATION_NAME"
+            AND "ESP_HUB_OUTPUT_V_INDDMDLINK"."DMDSEQNUM" = "INVENTORY_HEALTH_ESP_HUB_OUTPUT_V_FORECAST"."SEQNUM"
+            WHERE  "ESP_HUB_OUTPUT_V_INDDMDLINK"."SUPPLYTYPE" IN (6,7)
+            AND   (  
+            	        "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP"  IN ('TFGPN', 'MFGPN', 'MCTO', 'AFGPN', 'BFGPN', 'WFGPN', 'CFGPN','DFGPN')  
+            	     OR "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP"  IN ('MINT')  -- Module area 
+            	     OR "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP"  IN ('TSTOUT')  -- Test area 
+            	     OR "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP" IN ('AOUT', 'ARDL')  -- Assembly area 
+            	     OR "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP"  IN ('P01', 'P02')  -- Probe area 
+            	     OR "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP" LIKE '%FGPN'
+            	     OR "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP" IN ('TINT')
+            	     OR "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP"  IN ('MODOUT')
+            	     OR "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP"  IN ('SSDOUT','SMIN', 'STIN', 'DRIN')
+            	     OR "D_ESP_MATERIAL_CHARACTERISTICS"."MATERIAL_GROUP"  IN ('APP', 'APP2', 'DOUT','WAFOUT')
+            	    
+                   )
+
+            	   GROUP BY ALL
+        name: INVENTORY_HEALTH_STG_LOAD
+        noLinkRefs: []
+  name: INVENTORY_HEALTH_STG_LOAD
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

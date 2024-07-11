@@ -1,0 +1,156 @@
+fileVersion: 1
+id: 1e2a0bab-c0f2-4fad-bcc3-9401cc9d0447
+name: D_ESP_DEMAND_SPLIT_CPG
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: C_SC_SP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 22605026-d7cd-4442-b6cc-179853b86f45
+          stepCounter: 1e2a0bab-c0f2-4fad-bcc3-9401cc9d0447
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8817119e-7eb2-4b2a-97e5-e1a8de572e3d
+                stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0262d75e-1581-4c48-8c98-3511eb197127
+          stepCounter: 1e2a0bab-c0f2-4fad-bcc3-9401cc9d0447
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ENTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d9c3dd3e-db14-42ba-ad01-1cda6dd2303f
+                stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 59d0b783-e866-44c7-8864-7d142acb7b47
+          stepCounter: 1e2a0bab-c0f2-4fad-bcc3-9401cc9d0447
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MPN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 658bfd4f-a256-4dc5-a5b9-f0cccaa48523
+                stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 74d481fe-ff1f-472f-83a7-eda72819d017
+          stepCounter: 1e2a0bab-c0f2-4fad-bcc3-9401cc9d0447
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: LOCATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c5da4173-336d-4815-8716-13eb439a4c2f
+                stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0bdc68da-a4f1-47f0-b83e-5432c4c8c062
+          stepCounter: 1e2a0bab-c0f2-4fad-bcc3-9401cc9d0447
+        config: {}
+        dataType: NUMBER(3,2)
+        description: ""
+        hashDetails: null
+        name: FACTOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a5569d65-5116-4bf6-8d50-eacac19e4750
+                stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1b257213-0039-4db8-9fe7-ea75c10b828e
+          stepCounter: 1e2a0bab-c0f2-4fad-bcc3-9401cc9d0447
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: MPN_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ac29bbc3-8623-4682-bbe2-c5f91116301b
+                stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 12ffb1d3-ed27-430a-a228-898e7ec57704
+          stepCounter: 1e2a0bab-c0f2-4fad-bcc3-9401cc9d0447
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: VALIDFROM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b920b16c-1ba6-4ec6-a3be-3802caa09d64
+                stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+            transform: TO_DATE("BV_ESP_DEMAND_SPLIT_CPG"."VALIDFROM")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 07017099-9217-43ff-b73b-1cf84971126a
+          stepCounter: 1e2a0bab-c0f2-4fad-bcc3-9401cc9d0447
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: VALIDTO
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 169aa77d-b418-4816-af28-87cba45d89e4
+                stepCounter: 37fe5e51-08b1-4198-a2dc-48a514dce8a3
+            transform: TO_DATE("BV_ESP_DEMAND_SPLIT_CPG"."VALIDTO")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: BV_ESP_DEMAND_SPLIT_CPG
+        join:
+          joinCondition: FROM {{ ref('E_SC_SP', 'BV_ESP_DEMAND_SPLIT_CPG') }} "BV_ESP_DEMAND_SPLIT_CPG"
+        name: D_ESP_DEMAND_SPLIT_CPG
+        noLinkRefs: []
+  name: D_ESP_DEMAND_SPLIT_CPG
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

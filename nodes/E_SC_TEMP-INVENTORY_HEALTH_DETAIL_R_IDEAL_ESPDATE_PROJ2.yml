@@ -1,0 +1,174 @@
+fileVersion: 1
+id: 5c551eec-1ad0-420e-8750-8e13efccc593
+name: INVENTORY_HEALTH_DETAIL_R_IDEAL_ESPDATE_PROJ2
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 470cc65b-133f-4118-85fc-7908784c8242
+          stepCounter: 5c551eec-1ad0-420e-8750-8e13efccc593
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: INVENTORY_FISCAL_MONTH_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 08eac279-03da-45ef-a494-193fb898a173
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: "\"FISCAL_MONTH_NAME\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: cf2433e2-815b-4cd6-8062-ca3d8aaf8450
+          stepCounter: 5c551eec-1ad0-420e-8750-8e13efccc593
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: INVENTORY_FISCAL_PERIOD_SORT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b7e31d92-d21f-426b-98ae-00352764c38e
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: "\"FISCAL_PERIOD_SORT\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f27ea29b-8755-43fe-bb35-6b2f06d6a460
+          stepCounter: 5c551eec-1ad0-420e-8750-8e13efccc593
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        hashDetails: null
+        name: INVENTORY_FISCAL_QUARTER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2111ea35-2e1b-4946-a8e5-a13f5697423f
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: "\"FISCAL_QUARTER\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e6b6a8ab-85ab-4fae-89df-d986325e334f
+          stepCounter: 5c551eec-1ad0-420e-8750-8e13efccc593
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: INVENTORY_FISCAL_QUARTER_SORT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3b5a8b9c-4195-414a-9188-11694623ae32
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: "\"FISCAL_QUARTER_SORT\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 195edfa9-d36d-43f9-88b5-6653bac18971
+          stepCounter: 5c551eec-1ad0-420e-8750-8e13efccc593
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: FULL_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b22c0cd7-4d35-4c4d-a983-701d5c1caf04
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4695a4f4-073c-4c14-bf93-04f9db4b051e
+          stepCounter: 5c551eec-1ad0-420e-8750-8e13efccc593
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        hashDetails: null
+        name: INVENTORY_WW
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 222ab5da-34c3-42e5-a2e4-932e71bb9082
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: "\"WORK_WEEK\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2457fb29-9af7-4c90-a8a5-e88ded83d9da
+          stepCounter: 5c551eec-1ad0-420e-8750-8e13efccc593
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: INVENTORY_WW_BEGIN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5b2f20fe-42ca-49eb-9a66-5687f5c73fef
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: "\"WORK_WEEK_BEGIN_DATE\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ff0a76d8-1e3f-4a03-bf2c-ab19b3da1a94
+          stepCounter: 5c551eec-1ad0-420e-8750-8e13efccc593
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: INVENTORY_WW_END_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b75a5b91-8031-4e65-9b38-bf8bc1e0741f
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: "\"WORK_WEEK_END_DATE\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7927cc00-abe6-4701-a14c-a8cb73023258
+          stepCounter: 5c551eec-1ad0-420e-8750-8e13efccc593
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: INVENTORY_WW_SORT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 44642cfb-f674-4695-8bd5-b65b0670dd5b
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: "\"WORK_WEEK_SORT\""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_DATE
+        join:
+          joinCondition: FROM {{ ref('E_SC_MD', 'D_ESP_DATE') }} "D_ESP_DATE"
+        name: INVENTORY_HEALTH_DETAIL_R_IDEAL_ESPDATE_PROJ2
+        noLinkRefs: []
+  name: INVENTORY_HEALTH_DETAIL_R_IDEAL_ESPDATE_PROJ2
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

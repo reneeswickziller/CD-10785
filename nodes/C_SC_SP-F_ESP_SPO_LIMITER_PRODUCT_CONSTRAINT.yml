@@ -1,0 +1,233 @@
+fileVersion: 1
+id: 263dba47-1cfe-421b-9c46-1848ed02412a
+name: F_ESP_SPO_LIMITER_PRODUCT_CONSTRAINT
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: C_SC_SP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 64b9be5a-e440-4e25-98c4-26848cdea7d8
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f57ce256-3c10-497c-ad25-87b22dac1444
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: dbaf46df-1e9f-41c1-95c8-de28b222efae
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8b9a73a3-3ba7-47a9-b49e-3d4f37afb358
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 62d4ae9d-39cb-439e-9103-ae03630ada52
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: LOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a88a005c-72a9-4d18-bd5c-ab4825a980db
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 98132e09-dff2-4775-84e4-b59a6e8c7ae1
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b50d380e-6f9f-409d-b3fd-d1ea1fbf9bfc
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f1278b11-c01f-4a35-aef4-cff54d73ab5b
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: QUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c7325baa-2ea2-404b-8bcd-823c1897dfcd
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: SUM("SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR1"."QUANTITY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ece2162e-2c00-4f6f-8346-c2f2130c8864
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: U_SUB_SEGMENT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 71da065c-b783-4030-8f9b-c5b954f16bc6
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2fbff190-c802-4cba-b1af-34b01a21f25d
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: U_CUSTOMER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8316c4ad-defa-4f40-a3a3-6326a9c69d1c
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 12d1b034-b5f1-4409-b9ae-1ff569e1e8d8
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: NUMBER(38,0)
+        description: ""
+        hashDetails: null
+        name: PRIORITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3a7cd340-11e2-4bd3-bdc6-7449c786e9c2
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fd96a2d0-66ed-48ad-8469-839b08df72f0
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: U_ATP_CATEGORY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 86850e73-4513-4705-b835-e80cbc5f4199
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2eb9b7f2-5e66-471b-82b3-2290f787a6a1
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: U_INDDMD_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5a0b06a0-9bc3-48f2-bd88-59cd4953fc6b
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ae1782f4-7b90-4bd9-9b04-40a1107b107b
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: U_SEGMENTATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9365d789-8d1c-4b20-877c-e35b7813c575
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 77302dd8-492c-4455-b659-cce1ff75704c
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        hashDetails: null
+        name: WORK_WEEK
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0ecccc90-6ced-40a7-b693-8d7522358751
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 806d01fe-9751-4d62-be7b-072cc7b68d4f
+          stepCounter: 263dba47-1cfe-421b-9c46-1848ed02412a
+        config: {}
+        dataType: VARCHAR(60)
+        description: ""
+        hashDetails: null
+        name: ORDER_LEVEL_CONSTRAINT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ef0c04d1-3933-4bdb-bca7-c515a67a166b
+                stepCounter: c72ed745-c708-4972-a643-6d17687ddbc3
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR1
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR1') }} "SPO_LIMITER_PRODUCT_CONSTRAINT_AGGR1"
+            GROUP BY ALL
+        name: F_ESP_SPO_LIMITER_PRODUCT_CONSTRAINT
+        noLinkRefs: []
+  name: F_ESP_SPO_LIMITER_PRODUCT_CONSTRAINT
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

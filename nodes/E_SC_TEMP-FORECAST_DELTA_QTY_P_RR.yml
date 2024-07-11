@@ -1,0 +1,178 @@
+fileVersion: 1
+id: eaf86438-87b4-48df-acec-47047160515f
+name: FORECAST_DELTA_QTY_P_RR
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fb44843c-42d1-4d82-a004-8b5d770d7c06
+          stepCounter: eaf86438-87b4-48df-acec-47047160515f
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: SNAPSHOT_DT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0c8c7ca1-d9ef-4933-8afc-a5c464888a82
+                stepCounter: eb7ea8cf-1b0e-4f44-b1d5-ba6499429b9e
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4bc76042-8f24-497c-a6a4-b676a0180dec
+          stepCounter: eaf86438-87b4-48df-acec-47047160515f
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_DT_NEW
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: DATE("ESP_HUB_INPUT_V_ESP_RR_FORECAST"."SNAPSHOT_DT")
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b79ea7d3-2dbd-4c98-8f90-1679ae93eb19
+          stepCounter: eaf86438-87b4-48df-acec-47047160515f
+        config: {}
+        dataType: VARCHAR(20)
+        defaultValue: ""
+        description: ""
+        name: KEY_FIGURE_NAME_NEW
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "'Forecast'"
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b1841bf6-c00d-434d-b0dc-c791d5f64037
+          stepCounter: eaf86438-87b4-48df-acec-47047160515f
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: FGPN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: af581a42-6547-4b37-8531-1f7e496519c0
+                stepCounter: eb7ea8cf-1b0e-4f44-b1d5-ba6499429b9e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 89ea8f31-5209-4894-a785-f74ccdd97f99
+          stepCounter: eaf86438-87b4-48df-acec-47047160515f
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: KEY_FIGURE_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 716104f4-ca09-458b-a51f-33c5eaa54b5f
+                stepCounter: eb7ea8cf-1b0e-4f44-b1d5-ba6499429b9e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1b12051a-27f9-4091-a67a-4c8edd96f67f
+          stepCounter: eaf86438-87b4-48df-acec-47047160515f
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: SCENARIO
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 90d4fea8-805f-4811-b510-ed8904e9ac4c
+                stepCounter: eb7ea8cf-1b0e-4f44-b1d5-ba6499429b9e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 503c9aef-8c69-41bf-ae7b-45f57ae0b818
+          stepCounter: eaf86438-87b4-48df-acec-47047160515f
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        name: QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4a381d9c-6cfe-44bc-8ab9-3b1574791f55
+                stepCounter: eb7ea8cf-1b0e-4f44-b1d5-ba6499429b9e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0c42d232-2e84-4c88-bb15-17ec843bf98f
+          stepCounter: eaf86438-87b4-48df-acec-47047160515f
+        config: {}
+        dataType: DATE
+        description: ""
+        name: DEMAND_DUEDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 02eea738-df2b-4dc7-a749-38f44131833d
+                stepCounter: eb7ea8cf-1b0e-4f44-b1d5-ba6499429b9e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 76ae89d7-78bb-4dca-a180-3498f2652cc5
+          stepCounter: eaf86438-87b4-48df-acec-47047160515f
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: SNAPSHOT_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f71bfba7-2ab1-470f-9d6f-90a2e492771e
+                stepCounter: eb7ea8cf-1b0e-4f44-b1d5-ba6499429b9e
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_HUB_INPUT_V_ESP_RR_FORECAST: eb7ea8cf-1b0e-4f44-b1d5-ba6499429b9e
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_INPUT_V_ESP_RR_FORECAST
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_INPUT_V_ESP_RR_FORECAST') }} "ESP_HUB_INPUT_V_ESP_RR_FORECAST"
+            WHERE "ESP_HUB_INPUT_V_ESP_RR_FORECAST"."SCENARIO"='S&OP Candidate' AND "ESP_HUB_INPUT_V_ESP_RR_FORECAST"."KEY_FIGURE_NAME"='Netted Forecast'
+        name: FORECAST_DELTA_QTY_P_RR
+        noLinkRefs: []
+  name: FORECAST_DELTA_QTY_P_RR
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

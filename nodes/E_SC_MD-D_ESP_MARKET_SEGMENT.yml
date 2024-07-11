@@ -1,0 +1,80 @@
+fileVersion: 1
+id: 679832e3-4ed2-4bca-becd-ab148d309a08
+name: D_ESP_MARKET_SEGMENT
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_MD
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: aa692dae-dadd-4640-83c9-aa65a05dea23
+          stepCounter: 679832e3-4ed2-4bca-becd-ab148d309a08
+        config: {}
+        dataType: VARCHAR(250)
+        defaultValue: ""
+        description: ""
+        name: MARKET_SEGMENT
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: c4c60238-eb8c-4405-8210-2525a4488c60
+          stepCounter: 679832e3-4ed2-4bca-becd-ab148d309a08
+        config: {}
+        dataType: VARCHAR(250)
+        defaultValue: ""
+        description: ""
+        name: MARKET_SUBSEGMENT
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: bf141b0a-881b-4f1f-8fa4-61820bcfb3db
+          stepCounter: 679832e3-4ed2-4bca-becd-ab148d309a08
+        config: {}
+        dataType: VARCHAR(16777216)
+        defaultValue: ""
+        description: ""
+        name: BUSINESS_UNIT
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: d9205a40-1f2b-49ae-9b86-0d5d5675958a
+          stepCounter: 679832e3-4ed2-4bca-becd-ab148d309a08
+        config: {}
+        dataType: VARCHAR(1)
+        defaultValue: ""
+        description: ""
+        name: ACTIVE_FLAG
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_MD', 'D_ESP_MARKET_SEGMENT') }}
+  name: D_ESP_MARKET_SEGMENT
+  schema: ""
+  sqlType: Source
+  table: D_ESP_MARKET_SEGMENT
+  type: sourceInput
+  version: 1
+type: Node

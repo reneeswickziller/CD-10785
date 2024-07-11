@@ -1,0 +1,186 @@
+fileVersion: 1
+id: cc3d5b28-be64-49ba-b729-34e87a20f109
+name: DMDRES_LT_TIMELYQUANTITY
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: true
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d62d600c-c025-4f44-83c5-2efdd8108371
+          stepCounter: cc3d5b28-be64-49ba-b729-34e87a20f109
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 37160436-0e10-4027-8f5b-49c0fdb85e6a
+                stepCounter: 42da6e3a-834c-4ec7-9748-7928289f07e3
+            transform: ""
+          - columnReferences:
+              - columnCounter: d1cb2d4f-e845-429d-9ab2-8991ddd990a3
+                stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 82620871-3c8f-47b5-8618-f92f2b3e551a
+          stepCounter: cc3d5b28-be64-49ba-b729-34e87a20f109
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SCENARIO
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 06b41c19-70dc-4db2-a2d9-dc48a577c145
+                stepCounter: 42da6e3a-834c-4ec7-9748-7928289f07e3
+            transform: ""
+          - columnReferences:
+              - columnCounter: 7f9bc804-075d-4778-8930-24104e7ec981
+                stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 84d47208-a7a3-4b87-9b31-84c8100a3261
+          stepCounter: cc3d5b28-be64-49ba-b729-34e87a20f109
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0600e2a9-5306-4a6b-9c30-0909a89905a1
+                stepCounter: 42da6e3a-834c-4ec7-9748-7928289f07e3
+            transform: ""
+          - columnReferences:
+              - columnCounter: 086ed15e-4dd5-47f6-9d14-838283848d08
+                stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: de7a7616-98db-4a9d-acc9-9c7df7bbceaf
+          stepCounter: cc3d5b28-be64-49ba-b729-34e87a20f109
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: LOCATION
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 042731be-a2b3-486f-b7a2-c02ded4c2e0d
+                stepCounter: 42da6e3a-834c-4ec7-9748-7928289f07e3
+            transform: ""
+          - columnReferences:
+              - columnCounter: 4d871a96-2c86-441c-8a6e-42a8d55ac8cb
+                stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: cf5aedb3-d661-4963-b3cb-db3f64567b37
+          stepCounter: cc3d5b28-be64-49ba-b729-34e87a20f109
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 327ca5ec-5767-4901-9d61-dee838c4dae7
+                stepCounter: 42da6e3a-834c-4ec7-9748-7928289f07e3
+            transform: ""
+          - columnReferences:
+              - columnCounter: 8a9b695d-8b1d-490b-9e56-3554222d8d4f
+                stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4d00b1d5-b016-4c40-b928-055bc219f258
+          stepCounter: cc3d5b28-be64-49ba-b729-34e87a20f109
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: TIMELYQUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fc5d3995-b400-4d88-aa22-319e6ffd0888
+                stepCounter: 42da6e3a-834c-4ec7-9748-7928289f07e3
+            transform: ""
+          - columnReferences:
+              - columnCounter: b127a3c1-7e36-4470-90e3-ba1ab089ba44
+                stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0a80ed21-2e68-481a-87a9-8d1a1f51b317
+          stepCounter: cc3d5b28-be64-49ba-b729-34e87a20f109
+        config: {}
+        dataType: ""
+        defaultValue: ""
+        description: ""
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 701554c0-6ebf-4d23-97f3-263f39fc3340
+                stepCounter: 42da6e3a-834c-4ec7-9748-7928289f07e3
+            transform: ""
+          - columnReferences:
+              - columnCounter: 9d24050f-d6c0-417e-ba47-668241362c92
+                stepCounter: 5d5efe14-1f55-493f-b279-1bc24b92372e
+            transform: ""
+        transform: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          V_ESP_HUB_OUTPUT_V_INDDMDVIEW1: 42da6e3a-834c-4ec7-9748-7928289f07e3
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: V_ESP_HUB_OUTPUT_V_INDDMDVIEW1
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'V_ESP_HUB_OUTPUT_V_INDDMDVIEW1') }} "V_ESP_HUB_OUTPUT_V_INDDMDVIEW1"
+        name: V_ESP_HUB_OUTPUT_V_INDDMDVIEW1
+        noLinkRefs: []
+      - aliases:
+          V_ESP_HUB_OUTPUT_V_INDDMDVIEW: 5d5efe14-1f55-493f-b279-1bc24b92372e
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: V_ESP_HUB_OUTPUT_V_INDDMDVIEW
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'V_ESP_HUB_OUTPUT_V_INDDMDVIEW') }} "V_ESP_HUB_OUTPUT_V_INDDMDVIEW"
+        name: NEW_SOURCE
+        noLinkRefs: []
+  name: DMDRES_LT_TIMELYQUANTITY
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

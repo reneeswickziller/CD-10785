@@ -1,0 +1,170 @@
+fileVersion: 1
+id: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+name: D_ZXREF_UOM_DID
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: C_SC_MASTER_DATA
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 211a9e3b-ac94-4ced-a6e5-76bd9721dff1
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: VARCHAR(18)
+        defaultValue: ""
+        description: ""
+        name: MATERIAL
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2c0cd708-b5c5-4de5-9989-3fecf588de4b
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: DATE
+        defaultValue: ""
+        description: ""
+        name: EFFECTIVE_DATE
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 949ca371-3fa9-40ac-8f12-ce3f0a708746
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: VARCHAR(32)
+        defaultValue: ""
+        description: ""
+        name: UNIT_OF_MEASURE
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8d5fec92-e125-47e7-8905-20a4b9738d4a
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: FLOAT
+        defaultValue: ""
+        description: ""
+        name: FACTOR
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2d5eb480-8f94-4973-8511-9f56ef455a7e
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: EXPORT_DATE_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2f39aa02-2915-49e5-ac64-7401250608bb
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: LOAD_DATE_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 16b02ca4-ccc7-472e-b8b8-6a08fb88fe0a
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: VARCHAR(16)
+        defaultValue: ""
+        description: ""
+        name: FAB_DESIGN_HANDLE
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 20807f9d-834f-4a86-921e-07bc1415b75e
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: VARCHAR(14)
+        defaultValue: ""
+        description: ""
+        name: UNIT_OF_MEASURE_L1
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5e1bf064-a37b-4a17-b153-f9ac56f20bb5
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: FAB_TECHNOLOGY
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 11336885-d588-421f-a935-a1a4de2ede16
+          stepCounter: 78571dd2-d312-43ef-a0fd-311bbda10c4a
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: PROCESS_SERIES
+        nullable: false
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('C_SC_MASTER_DATA', 'D_ZXREF_UOM_DID') }}
+  name: D_ZXREF_UOM_DID
+  schema: ""
+  sqlType: Source
+  table: D_ZXREF_UOM_DID
+  type: sourceInput
+  version: 1
+type: Node

@@ -1,0 +1,84 @@
+fileVersion: 1
+id: 4d497cbd-33b3-4d20-a329-db106ab906b9
+name: LIMITER_RAW_DIE_PART_UOM_2
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 94987340-aca8-4e98-9300-fe778ef5516d
+          stepCounter: 4d497cbd-33b3-4d20-a329-db106ab906b9
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: MATERIAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 57f6b687-5698-42dd-9702-9c0a4171ff54
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2d109cca-765c-4fd9-a8a3-d87129958f1d
+          stepCounter: 4d497cbd-33b3-4d20-a329-db106ab906b9
+        config: {}
+        dataType: VARCHAR(32)
+        description: ""
+        hashDetails: null
+        name: UNIT_OF_MEASURE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 67e668b0-4eb7-4a2f-8377-a2e8a413599b
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d721cb00-f51c-42e4-9ce9-b1afad6c6478
+          stepCounter: 4d497cbd-33b3-4d20-a329-db106ab906b9
+        config: {}
+        dataType: FLOAT
+        description: ""
+        hashDetails: null
+        name: FACTOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 638f5f72-451a-4866-920a-f4321603d9c9
+                stepCounter: 1238a9e0-9b9d-4c27-b923-5c2333efb5b8
+            transform: SUM("D_ECC_PART_UOM_CONVERSION"."FACTOR")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ECC_PART_UOM_CONVERSION
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_MD', 'D_ECC_PART_UOM_CONVERSION') }} "D_ECC_PART_UOM_CONVERSION"
+            WHERE "D_ECC_PART_UOM_CONVERSION"."UNIT_OF_MEASURE" != 'Units'
+            GROUP BY ALL
+        name: LIMITER_RAW_DIE_PART_UOM_2
+        noLinkRefs: []
+  name: LIMITER_RAW_DIE_PART_UOM_2
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

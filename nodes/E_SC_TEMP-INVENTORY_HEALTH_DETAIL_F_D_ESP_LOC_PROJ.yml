@@ -1,0 +1,89 @@
+fileVersion: 1
+id: 15a0e1b8-1835-441f-a11c-a70dcafd47b3
+name: INVENTORY_HEALTH_DETAIL_F_D_ESP_LOC_PROJ
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 430623a4-fe81-46c1-afa3-b2ae8e1efef6
+          stepCounter: 15a0e1b8-1835-441f-a11c-a70dcafd47b3
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: LOCATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e5e347de-e490-4675-b4e2-98259d864724
+                stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c6ae73c3-ac11-4b46-99b9-190ed89b2724
+          stepCounter: 15a0e1b8-1835-441f-a11c-a70dcafd47b3
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: PLANT_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 73fc71fb-07d7-4498-893a-0b9f98e1847d
+                stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3f1651b2-465e-464c-a0ac-aa107dbc3dc9
+          stepCounter: 15a0e1b8-1835-441f-a11c-a70dcafd47b3
+        config: {}
+        dataType: VARCHAR
+        defaultValue: ""
+        description: ""
+        name: CC_PLANT_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF( ( "D_ESP_LOCATION"."PLANT_TYPE" IS NOT NULL),"D_ESP_LOCATION"."PLANT_TYPE",'')
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          D_ESP_LOCATION: b6b3402d-5b68-42da-b9a2-4f9449c60cb0
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_LOCATION
+        join:
+          joinCondition: FROM {{ ref('E_SC_MD', 'D_ESP_LOCATION') }} "D_ESP_LOCATION"
+        name: INVENTORY_HEALTH_DETAIL_F_D_ESP_LOC_PROJ
+        noLinkRefs: []
+  name: INVENTORY_HEALTH_DETAIL_F_D_ESP_LOC_PROJ
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

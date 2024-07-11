@@ -1,0 +1,1870 @@
+fileVersion: 1
+id: bd5effe5-dabc-45df-8d0b-bcadd4540373
+name: SUPPLY_RESPONSE_ETL
+operation:
+  config:
+    SQL_Code: |-
+      DECLARE
+      P_SCENARIO_NAME STRING :='{{parameters.SCENARIO_NAME}}';
+      P_SCENARIO_DATE VARCHAR(20) :='{{parameters.SCENARIO_DATE}}';
+      V_TARGET_OBJECT STRING :=  REPLACE('{{ ref('E_SC_SP', 'BV_SUPPLY_RESPONSE_MAIN') }}','"','');
+      RNO_MIN INT:=0;
+      RNO_MAX INT:=0;
+      V_PROCEDURE_NAME STRING :='BV_SUPPLY_RESPONSE_INSERT';
+      V_DATA_DOMAIN STRING :='SUPPLY_PLANNING';
+      MAX_LOAD_DATE_TIME TIMESTAMP_NTZ(9) :=CURRENT_TIMESTAMP();
+      MIN_LOAD_DATE_TIME TIMESTAMP_NTZ(9);
+      WATERMARKER_LOAD_DATE_TIME TIMESTAMP_NTZ(9);
+      V_SCENARIO_NAME VARCHAR(200);
+      V_SCENARIO_DATE VARCHAR(20);
+      ROW_COUNT INT;
+      V_CHECK_FLAG INT ;
+      WATERMARK_TIME TIMESTAMP_NTZ(9);
+
+      BEGIN
+
+      LET  V_TARGET_TABLE_ARRAY ARRAY := SPLIT(:V_TARGET_OBJECT,'.');
+      LET  V_TARGET_DATABASE STRING := REPLACE(V_TARGET_TABLE_ARRAY[0],'"','');
+      LET  V_TARGET_SCHEMA STRING := REPLACE(V_TARGET_TABLE_ARRAY[1],'"','');
+      LET  V_TARGET_TABLE STRING := REPLACE(V_TARGET_TABLE_ARRAY[2],'"','');
+
+      --Get WATERMARK value 	
+      SET MIN_LOAD_DATE_TIME :=  {{ ref('E_SC_UTIL_USER', 'FN_GET_WATER_MARKER_SPO') }}(V_DATA_DOMAIN,V_TARGET_DATABASE,V_TARGET_SCHEMA,V_TARGET_TABLE,V_PROCEDURE_NAME,P_SCENARIO_NAME) ;
+
+
+      --Capturing the required source data into a temporary variable
+      CREATE OR REPLACE TEMPORARY TABLE {{ ref('E_SC_TEMP', 'TEMP_SR_RNO_'+'{{parameters.SCENARIO_NAME}}') }}  AS(
+      SELECT SCENARIO_DATE, SCENARIO_NAME, ROW_NUMBER () OVER(ORDER BY SCENARIO_DATE,SCENARIO_NAME) AS RNO
+      FROM {{ ref('E_SC_SP', 'ESP_INDDMDVIEW_LOAD') }}
+      WHERE TO_TIMESTAMP(LOADDATETIMESTAMP)   >  :MIN_LOAD_DATE_TIME
+        AND TO_TIMESTAMP(LOADDATETIMESTAMP)   <= :MAX_LOAD_DATE_TIME
+        AND 1 = CASE WHEN :P_SCENARIO_DATE='ALL' THEN 1 
+      		   	   WHEN SCENARIO_DATE= :P_SCENARIO_DATE THEN 1 ELSE 0 END        
+        AND  (SCENARIO_NAME = :P_SCENARIO_NAME)
+      GROUP BY SCENARIO_DATE,SCENARIO_NAME
+       ) ; 
+
+
+       /*Get the distinct Snapshot dates that are to be populated*/
+      SELECT MIN(RNO),MAX(RNO) INTO RNO_MIN,RNO_MAX  FROM  {{ ref('E_SC_TEMP', 'TEMP_SR_RNO_'+'{{parameters.SCENARIO_NAME}}') }};	
+
+      WHILE (:RNO_MIN <= :RNO_MAX)
+       DO
+       
+       	SELECT SCENARIO_DATE, SCENARIO_NAME
+       	INTO V_SCENARIO_DATE,V_SCENARIO_NAME
+      	FROM  {{ ref('E_SC_TEMP', 'TEMP_SR_RNO_'+'{{parameters.SCENARIO_NAME}}') }}
+      	WHERE RNO = :RNO_MIN;
+
+      	SELECT COUNT(*)  INTO ROW_COUNT 
+      	FROM  {{ ref('E_SC_SP', 'BV_SUPPLY_RESPONSE_MAIN') }}
+                WHERE SCENARIO_DATE = :V_SCENARIO_DATE AND  SCENARIO_NAME = :V_SCENARIO_NAME;
+
+
+      IF (:ROW_COUNT > 0) 			   
+      THEN 
+
+      /*Update the HIST table with the duplicates*/
+      INSERT INTO {{ ref('E_SC_SP', 'BV_SUPPLY_RESPONSE_HIST') }}
+      SELECT 			
+      	PLANNING_WORKWK,					/*Planning Work Week*/				
+       	ITEM, 								/*Item*/
+       	DMDLOC,								/*Demand Location*/
+       	SCENARIO_DATE, 						/*Scenario Date*/
+       	SCENARIO_NAME ,					    /*Scenario Name*/
+       	DMDTYPE,							/*Demand Type*/
+       	U_ATP_CATEGORY, 					/*ATP Category*/ 
+       	DATETYPE,							/*Date Type*/
+       	U_CUSTOMER, 						/*Customer*/
+       	PLANNING_FISCAL_YR,					/*Planning Fiscal Year*/
+       	PLANNING_FQ,						/*Planning Fiscal Quarter*/
+       	PLANNING_FMON,						/*Planning Fiscal Month*/
+       	PLANNING_WW_BEGIN,					/*Planning Work Week Begin Date*/
+       	PLANNING_WW_END,					/*Planning Work Week End Date*/ 
+       	DMDNEEDQTY,							/*Demand Quantity*/
+       	SUPPLYPEGQTY,						/*Supply Peg Quantity*/	
+       	CUMULATIVE_DMDNEEDQTY,				/*Cumulative Demand Need Quantity*/
+      	CUMULATIVE_SUPPLYQTY,				/*Cumulative Supply Peg Quantity*/
+      	CURRENT_TIMESTAMP as LOAD_DATE_TIME,
+      	U_SUB_SEGMENT,						/*Sub-Segment*/
+      	U_INDDMD_TYPE,						/*Indipendent Demand Type*/
+      	PLANNING_FMON_SORT,					/*Planning Fiscal Month Sort*/
+       	PLANNING_FQ_SORT,					/*Planning Fiscal Quarter Sort*/
+       	'X' as DELETION_FLAG
+       	, PRIORITY                          /*Priority*/
+          , U_SEGMENTATION 					/*Segmentation*/
+          , SHORTAGE 
+          , CUMULATIVE_SHIPMENTQTY            /*Shipment Quantity*/ 
+          , U_PPLEVEL
+      	,LOCATION_DESC         
+      FROM {{ ref('E_SC_SP', 'BV_SUPPLY_RESPONSE_MAIN') }}
+      WHERE SCENARIO_DATE = :V_SCENARIO_DATE 
+       AND  SCENARIO_NAME = :V_SCENARIO_NAME;
+
+
+      /*If duplicates exists in the Demand Response Table it will delete and Move to Hist table*/				   
+      	DELETE FROM {{ ref('E_SC_SP', 'BV_SUPPLY_RESPONSE_MAIN') }}
+      	WHERE SCENARIO_DATE = :V_SCENARIO_DATE 
+          AND  SCENARIO_NAME  = :V_SCENARIO_NAME;	
+          
+       END IF ;    
+
+      /*Insert into Supply Response Table*/
+      INSERT INTO {{ ref('E_SC_SP', 'BV_SUPPLY_RESPONSE_MAIN') }}
+      WITH LT_ORDER_DEMAND AS (SELECT 
+       					  A.ITEM			as ITEM, 				/*Item*/
+       					  A.LOC 			as DMDLOC,				/*Demand Location*/
+       			    	  A.SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  A.SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  A.EXTORDERID		as ORDERID,				/*External Order Id (SOLI)*/
+       					  A.DMDTYPE			as DMDTYPE,				/*Demand Type*/
+       					  B.U_ATP_CATEGORY  as U_ATP_CATEGORY, 		/*ATP Category*/
+       			   		  B.U_UNOFFSET_SHIP_DATE as UNOFFSET_NEEDDATE,/*Unoffset Need Date*/
+       			          to_date(A.NEEDDATE)	 as OFFSETNEEDDT,		/*Need Date Offset*/
+       					  B.U_UNOFFSET_REQ_DATE  as UNOFFSET_REQDATE,/*Unoffset Request Date*/	 			
+      					  DATEADD(DAY,(B.EARLYTARGETDUR * (-1)),CAST(B.SHIPDATE AS DATE)) as OFFSETREQDT,			/*Request Date Offset*/ 					  					
+       					  B.U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  B.U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       					  B.U_INDDMD_TYPE   as U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       					  max(A.SCHEDDATE)	as SCHEDDATE,			/*Scheduled Date*/
+       				      MAX(A.QUANTITY)	as DMDNEEDQTY,			/*Demand Need Quantity*/
+       					  SUM(A.SCHEDQTY)	as SUPPLYPEGQTY
+       				    , B.PRIORITY		   as PRIORITY 			/*Priority*/
+       				 	, B.U_SEGMENTATION     AS U_SEGMENTATION    /*SEGMENTATION*/ 
+       					, 'FG' 				AS U_PPLEVEL	  			   	 
+       			  	 FROM {{ ref('E_SC_SP', 'ESP_INDDMDVIEW_LOAD') }} AS A
+       			  	 LEFT OUTER JOIN 
+       			  	 (SELECT ORDERID,ITEM,LOC,SNAPSHOT_DATE,SIMULATION_NAME,U_ATP_CATEGORY,U_UNOFFSET_SHIP_DATE,U_UNOFFSET_REQ_DATE,
+       			  	  SHIPDATE,EARLYTARGETDUR,U_CUSTOMER,U_SUB_SEGMENT,U_INDDMD_TYPE,PRIORITY,U_SEGMENTATION
+       			  	  FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_CUSTORDER') }}
+       			  	  WHERE  SNAPSHOT_DATE 	= :V_SCENARIO_DATE
+          		      AND    SIMULATION_NAME  = :V_SCENARIO_NAME
+          		      GROUP BY ORDERID,ITEM,LOC,SNAPSHOT_DATE,SIMULATION_NAME,U_ATP_CATEGORY,U_UNOFFSET_SHIP_DATE,U_UNOFFSET_REQ_DATE,
+       			  	  SHIPDATE,EARLYTARGETDUR,U_CUSTOMER,U_SUB_SEGMENT,U_INDDMD_TYPE,PRIORITY,U_SEGMENTATION
+       			  	  ) AS B
+       				  ON A.EXTORDERID     = B.ORDERID       and
+       				    A.ITEM            = B.ITEM          and
+       				    A.LOC             = B.LOC	        and
+       				    A.SCENARIO_DATE   = B.SNAPSHOT_DATE and
+       				    A.SCENARIO_NAME   = B.SIMULATION_NAME 			 	 
+       			 	 WHERE A.DMDTYPE = '1' and
+       			        A.SCENARIO_NAME <> 'WHATIF' and
+      					A.SCENARIO_DATE   = :V_SCENARIO_DATE
+          		   AND  A.SCENARIO_NAME   = :V_SCENARIO_NAME
+          		   AND  TO_TIMESTAMP(LOADDATETIMESTAMP)   >  :MIN_LOAD_DATE_TIME
+          		   AND  TO_TIMESTAMP(LOADDATETIMESTAMP)   <= :MAX_LOAD_DATE_TIME
+       			     GROUP BY A.ITEM,
+       					  A.LOC,				
+       			    	  A.SCENARIO_DATE, 		
+       					  A.SCENARIO_NAME,	
+       					  A.EXTORDERID,			
+       					  A.DMDTYPE,			
+       					  B.U_ATP_CATEGORY, 	
+       					  B.U_UNOFFSET_SHIP_DATE,
+       					  A.NEEDDATE,			
+       					  B.SHIPDATE,			
+       					  B.U_UNOFFSET_REQ_DATE, 			
+      					  B.U_CUSTOMER, 		
+       					  B.U_SUB_SEGMENT, 		
+       					  B.U_INDDMD_TYPE,		
+       					  B.EARLYTARGETDUR		
+       					, B.PRIORITY 			
+       				    , B.U_SEGMENTATION    
+       				    
+       					  
+       			        UNION
+       			        
+       			   SELECT 
+       			   		  A.ITEM			as ITEM, 				
+       					  A.LOC 			as DMDLOC,				
+       			   		  A.SCENARIO_DATE 	as SCENARIO_DATE, 		
+       					  A.SCENARIO_NAME   as SCENARIO_NAME,		
+       					  A.FCSTSEQNUM		as ORDERID,				
+       					  A.DMDTYPE			as DMDTYPE,				
+       					  B.U_ATP_CATEGORY  as U_ATP_CATEGORY, 		
+       					  DATEADD(DAY,6,cast(A.NEEDDATE as date)) as UNOFFSET_NEEDDATE,	
+       					  A.NEEDDATE 		as OFFSETNEEDDT,		
+       					  DATEADD(DAY,6,cast(A.NEEDDATE as date))as UNOFFSET_REQDATE,		 			 	 			
+       					  A.NEEDDATE 		as OFFSETREQDT,			
+       					  B.U_CUSTOMER		as U_CUSTOMER, 			
+       				   	  B.U_SUB_SEGMENT	as U_SUB_SEGMENT, 		
+       				   	  B.U_INDDMD_TYPE   as U_INDDMD_TYPE,		
+       				      max(A.SCHEDDATE)		as SCHEDDATE,			
+       				      MAX(A.QUANTITY)		as DMDNEEDQTY,			
+       				      SUM(A.SCHEDQTY)		as SUPPLYPEGQTY,
+       				      B.PRIORITY		as PRIORITY, 			
+       				 	  B.U_SEGMENTATION  as  U_SEGMENTATION,    	
+       				 	  B.U_PPLEVEL		AS U_PPLEVEL
+       			  	 FROM {{ ref('E_SC_SP', 'ESP_INDDMDVIEW_LOAD') }} AS A
+       			  	 LEFT OUTER JOIN 
+       			  	 (SELECT SNAPSHOT_DATE,SIMULATION_NAME,SEQNUM,ITEM,LOC,U_ATP_CATEGORY,U_CUSTOMER,U_SUB_SEGMENT,U_INDDMD_TYPE,
+       			  	  PRIORITY,U_SEGMENTATION,U_PPLEVEL
+       			  	  FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_FORECAST') }} 
+       			  	  WHERE SNAPSHOT_DATE  = :V_SCENARIO_DATE AND 
+       			  	        SIMULATION_NAME  = :V_SCENARIO_NAME 	        
+       			  	  GROUP BY SNAPSHOT_DATE,SIMULATION_NAME,SEQNUM,ITEM,LOC,U_ATP_CATEGORY,U_CUSTOMER,U_SUB_SEGMENT,U_INDDMD_TYPE,
+       			  	  PRIORITY,U_SEGMENTATION,U_PPLEVEL
+       			  	 ) AS B
+       				 ON A.FCSTSEQNUM = B.SEQNUM and
+       				    A.ITEM       = B.ITEM   and
+       				    A.LOC        = B.LOC	and
+       				    A.SCENARIO_NAME = B.SIMULATION_NAME AND
+       				    A.SCENARIO_DATE = B.SNAPSHOT_DATE
+       			 	 WHERE A.DMDTYPE = '2' 
+       			   AND  A.SCENARIO_NAME <> 'WHATIF' 
+      			   AND 	A.SCENARIO_DATE = :V_SCENARIO_DATE
+          		   AND  A.SCENARIO_NAME = :V_SCENARIO_NAME
+          		   AND  TO_TIMESTAMP(LOADDATETIMESTAMP)   >  :MIN_LOAD_DATE_TIME
+          		   AND  TO_TIMESTAMP(LOADDATETIMESTAMP)   <= :MAX_LOAD_DATE_TIME
+       			     GROUP BY A.ITEM,
+       					  A.LOC,				
+       			    	  A.SCENARIO_DATE, 		
+       					  A.SCENARIO_NAME,	
+       					  A.FCSTSEQNUM,			
+       					  A.DMDTYPE,			
+       					  B.U_ATP_CATEGORY, 	
+       					  A.NEEDDATE,			
+       					  B.U_CUSTOMER, 		
+       					  B.U_SUB_SEGMENT,		
+       					  B.U_INDDMD_TYPE 	
+       				    , B.PRIORITY 			
+       				    , B.U_SEGMENTATION     
+       				    , B.U_PPLEVEL
+
+       ),
+
+       /* Get the Order Details of Supply*/
+      LT_ORDER_SUPPLY AS (SELECT 
+       					  A.ITEM			as ITEM, 				/*Item*/
+       					  A.LOC 			as DMDLOC,				/*Demand Location*/
+       			    	  A.SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  A.SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  A.EXTORDERID		as ORDERID,				/*External Order Id (SOLI)*/
+       					  A.DMDTYPE			as DMDTYPE,				/*Demand Type*/
+       					  B.U_ATP_CATEGORY  as U_ATP_CATEGORY, 		/*ATP Category*/
+       			   		  B.U_UNOFFSET_SHIP_DATE as UNOFFSET_NEEDDATE,/*Unoffset Need Date*/
+       			          cast(A.NEEDDATE as date)		as OFFSETNEEDDT,		/*Need Date Offset*/
+       					  B.U_UNOFFSET_REQ_DATE as UNOFFSET_REQDATE,/*Unoffset Request Date*/	 			
+      					  DATEADD(DAY, (B.EARLYTARGETDUR * (-1)),cast(B.SHIPDATE as date)) as OFFSETREQDT,			/*Request Date Offset*/ 					  					
+       					  B.U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  B.U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       					  B.U_INDDMD_TYPE   as U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       					  A.SCHEDDATE		as SCHEDDATE,			/*Scheduled Date*/
+       				      MAX(A.QUANTITY)	as DMDNEEDQTY,			/*Demand Need Quantity*/
+       					  SUM(A.SCHEDQTY)	as SUPPLYPEGQTY
+       				    , B.PRIORITY		as PRIORITY 			/*Priority*/
+       				 	, B.U_SEGMENTATION  AS U_SEGMENTATION    /*SEGMENTATION*/ 
+       				 	, 'FG'				AS U_PPLEVEL
+       					 	  			   	 
+       			  	 FROM {{ ref('E_SC_SP', 'ESP_INDDMDVIEW_LOAD') }} AS A
+       			  	 LEFT OUTER JOIN
+       			  	 (SELECT ORDERID,ITEM,LOC,SNAPSHOT_DATE,SIMULATION_NAME,U_ATP_CATEGORY,U_UNOFFSET_SHIP_DATE,U_UNOFFSET_REQ_DATE,
+       			  	  SHIPDATE,EARLYTARGETDUR,U_CUSTOMER,U_SUB_SEGMENT,U_INDDMD_TYPE,PRIORITY,U_SEGMENTATION
+       			  	  FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_CUSTORDER') }}
+       			  	  WHERE  SNAPSHOT_DATE 	  = :V_SCENARIO_DATE
+          		      AND    SIMULATION_NAME  = :V_SCENARIO_NAME
+          		      GROUP BY ORDERID,ITEM,LOC,SNAPSHOT_DATE,SIMULATION_NAME,U_ATP_CATEGORY,U_UNOFFSET_SHIP_DATE,U_UNOFFSET_REQ_DATE,
+       			  	   SHIPDATE,EARLYTARGETDUR,U_CUSTOMER,U_SUB_SEGMENT,U_INDDMD_TYPE,PRIORITY,U_SEGMENTATION
+       			  	  )AS B
+       				 ON A.EXTORDERID = B.ORDERID and
+       				    A.ITEM       = B.ITEM    and
+       				    A.LOC        = B.LOC	 and
+       				    A.SCENARIO_NAME = B.SIMULATION_NAME AND
+       				    A.SCENARIO_DATE = B.SNAPSHOT_DATE			 	
+       			 	 WHERE a.DMDTYPE = '1' and
+       			        A.SCENARIO_NAME <> 'WHATIF' and
+      					A.SCENARIO_DATE	= :V_SCENARIO_DATE 
+          		   AND  A.SCENARIO_NAME = :V_SCENARIO_NAME
+          		   AND  TO_TIMESTAMP(LOADDATETIMESTAMP)   >  :MIN_LOAD_DATE_TIME
+          		   AND  TO_TIMESTAMP(LOADDATETIMESTAMP)   <= :MAX_LOAD_DATE_TIME
+       			     GROUP BY A.ITEM,
+       					  A.LOC,				/*Demand Location*/
+       			    	  A.SCENARIO_DATE, 		/*Snapshot Date*/
+       					  A.SCENARIO_NAME,	/*Simulation Name*/
+       					  A.EXTORDERID,			/*External Order Id (SOLI)*/
+       					  A.DMDTYPE,			/*Demand Type*/
+       					  B.U_ATP_CATEGORY, 	/*ATP Category*/
+       					  B.U_UNOFFSET_SHIP_DATE,/*Unoffset Need Date*/
+       					  A.NEEDDATE,			/*Need Date Offset*/
+       					  A.SCHEDDATE,			/*Scheduled Date*/
+       					  B.SHIPDATE,			/*Ship Date*/
+       					  B.U_UNOFFSET_REQ_DATE,/*Unoffset Request Date*/	 			
+      					  B.U_CUSTOMER, 		/*Customer*/
+       					  B.U_SUB_SEGMENT, 		/*Sub-Segment*/
+       					  B.U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       					  B.EARLYTARGETDUR		/*Early Target Duration*/
+       					, B.PRIORITY 			/*Priority*/
+       				    , B.U_SEGMENTATION      /*SEGMENTATION*/
+       				    
+       					  
+       			        UNION
+       			        
+       			   SELECT 
+       			   		  A.ITEM			as ITEM, 				/*Item*/
+       					  A.LOC 			as DMDLOC,				/*Demand Location*/
+       			   		  A.SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  A.SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  A.FCSTSEQNUM		as ORDERID,				/*External Order Id (SOLI)*/
+       					  A.DMDTYPE			as DMDTYPE,				/*Demand Type*/
+       					  B.U_ATP_CATEGORY  as U_ATP_CATEGORY, 		/*ATP Category*/
+       					  DATEADD(DAY,6,cast(A.NEEDDATE as date)) as UNOFFSET_NEEDDATE,	/*Unoffset Need Date*/ 
+       					  A.NEEDDATE 		as OFFSETNEEDDT,		/*Offset Need Date*/
+       					  DATEADD(DAY,6,cast(A.NEEDDATE as date)) as UNOFFSET_REQDATE,	/*Unoffset Request Date*/ 	 			
+       					  A.NEEDDATE 		as OFFSETREQDT,			/*Request Date Offset*/
+       					  B.U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       				   	  B.U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       				   	  B.U_INDDMD_TYPE   as U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       				  	  A.SCHEDDATE		as SCHEDDATE,			/*Scheduled Date*/
+       				      MAX(A.QUANTITY)		as DMDNEEDQTY,			/*Demand Need Quantity*/
+       				      SUM(A.SCHEDQTY)		as SUPPLYPEGQTY
+       				    , B.PRIORITY		as PRIORITY 			/*Priority*/
+       				 	, B.U_SEGMENTATION  as  U_SEGMENTATION    	/*Segmentation*/ 
+       				 --	,'' as U_PPLEVEL
+       					, B.U_PPLEVEL		AS U_PPLEVEL
+       				 	
+       				 	
+       			  	 FROM {{ ref('E_SC_SP', 'ESP_INDDMDVIEW_LOAD') }} AS A
+       			  	 LEFT OUTER JOIN 
+       			  	 (SELECT  SNAPSHOT_DATE,SIMULATION_NAME,SEQNUM,ITEM,LOC,U_ATP_CATEGORY,U_CUSTOMER,U_SUB_SEGMENT,U_INDDMD_TYPE,
+       			  	  PRIORITY,U_SEGMENTATION, U_PPLEVEL
+       			  	  FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_FORECAST') }} 
+       			  	  WHERE SNAPSHOT_DATE    = :V_SCENARIO_DATE AND 
+       			  	        SIMULATION_NAME  = :V_SCENARIO_NAME 	        
+       			  	  GROUP BY SNAPSHOT_DATE,SIMULATION_NAME,SEQNUM,ITEM,LOC,U_ATP_CATEGORY,U_CUSTOMER,U_SUB_SEGMENT,U_INDDMD_TYPE,
+       			  	  PRIORITY,U_SEGMENTATION,U_PPLEVEL
+       			  	 ) AS B
+       				 ON A.FCSTSEQNUM = B.SEQNUM and
+       				    A.ITEM       = B.ITEM   and
+       				    A.LOC        = B.LOC	and
+       				    A.SCENARIO_NAME = B.SIMULATION_NAME AND
+       				    A.SCENARIO_DATE = B.SNAPSHOT_DATE
+       			 	 WHERE a.DMDTYPE = '2' 
+       			   AND  A.SCENARIO_NAME <> 'WHATIF' 
+      			   AND 	A.SCENARIO_DATE	= :V_SCENARIO_DATE 
+          		   AND  A.SCENARIO_NAME = :V_SCENARIO_NAME
+          		   AND  TO_TIMESTAMP(LOADDATETIMESTAMP)   >  :MIN_LOAD_DATE_TIME
+          		   AND  TO_TIMESTAMP(LOADDATETIMESTAMP)   <= :MAX_LOAD_DATE_TIME
+       			     GROUP BY A.ITEM,
+       					  A.LOC,				/*Demand Location*/
+       			    	  A.SCENARIO_DATE, 		/*Snapshot Date*/
+       					  A.SCENARIO_NAME,	/*Simulation Name*/
+       					  A.FCSTSEQNUM,			/*External Order Id (SOLI)*/
+       					  A.DMDTYPE,			/*Demand Type*/
+       					  B.U_ATP_CATEGORY, 	/*ATP Category*/
+       					  A.NEEDDATE,			/*Need Date*/
+       					  A.SCHEDDATE,			/*Schedule Date*/
+       					  B.U_CUSTOMER, 		/*Customer*/
+       					  B.U_SUB_SEGMENT,		/*Sub-Segment*/
+       					  B.U_INDDMD_TYPE 	/*Indipendent Demand Type*/
+       				    , B.PRIORITY 			/*Priority*/
+       				    , B.U_SEGMENTATION      /*SEGMENTATION*/
+       				    , B.U_PPLEVEL
+      ),
+
+      /*Get dataset sorted as per planning date*/
+      LT_PLANNING_DEMAND AS (
+      	
+      				/*Demand Need for UnOffset Need Date*/
+      				SELECT
+      						ITEM			as ITEM, 				/*Item*/
+       					  	DMDLOC 			as DMDLOC,				/*Demand Location*/
+       					  	SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  	SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  	DMDTYPE			as DMDTYPE,				/*Demand Type*/
+       					  	U_ATP_CATEGORY  as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       					  	'NEED_DATE_UNOFFSET' as DATETYPE,		/*Date Type*/ 
+       					    case when UNOFFSET_NEEDDATE < DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    then DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    else UNOFFSET_NEEDDATE 
+       					    end  as PLANNINGDATE,						/*Unoffset Need Date*/
+       					  	U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  	U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       					  	U_INDDMD_TYPE   as U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       					  	PRIORITY		as PRIORITY, 			/*Priority*/
+       				 	  	U_SEGMENTATION  as  U_SEGMENTATION,    /*Segmentation*/ 
+       				 	  	U_PPLEVEL 		AS U_PPLEVEL ,
+       				        sum(DMDNEEDQTY)		as DMDNEEDQTY,			/*Demand Need Quantity*/
+       						0.00			as SUPPLYPEGQTY			/*Supply Peg Quantity*/
+       						
+       				   FROM LT_ORDER_DEMAND
+       				   GROUP BY 
+       				   			ITEM,
+       				   			DMDLOC,
+       				   			SCENARIO_DATE,
+       				   			SCENARIO_NAME,
+       				   			DMDTYPE,
+       				   			U_ATP_CATEGORY,
+       				   			UNOFFSET_NEEDDATE,
+       				   			U_CUSTOMER,
+       				   			U_SUB_SEGMENT,
+       				   			U_INDDMD_TYPE,
+       				   			PRIORITY, 
+       				 			U_SEGMENTATION,
+       				 			U_PPLEVEL 
+       				  UNION ALL
+       				   
+       				  
+       				   
+       				  /*Demand Need for Offset Need Date*/
+       				  
+       				  SELECT
+      						ITEM			as ITEM, 				/*Item*/
+       					  	DMDLOC 			as DMDLOC,				/*Demand Location*/
+       					  	SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  	SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  	DMDTYPE			as DMDTYPE,				/*Demand Type*/
+       					  	U_ATP_CATEGORY  as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       					  	'NEED_DATE' 	as DATETYPE,			/*Date Type*/
+       					    case when OFFSETNEEDDT < DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    then DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    else OFFSETNEEDDT 
+       					    end  as PLANNINGDATE, 					/*Unoffset Need Date*/
+       					  	U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  	U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       					  	U_INDDMD_TYPE   as U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       					  	PRIORITY		as PRIORITY, 			/*Priority*/
+       				 	  	U_SEGMENTATION  as  U_SEGMENTATION,   /*Segmentation*/ 
+       				 	  	U_PPLEVEL		AS U_PPLEVEL,
+       					    sum(DMDNEEDQTY)		as DMDNEEDQTY,			/*Demand Need Quantity*/
+       						0.00			as SUPPLYPEGQTY			/*Supply Peg Quantity*/
+       				   FROM LT_ORDER_DEMAND
+       				   GROUP BY 
+       				   			ITEM,
+       				   			DMDLOC,
+       				   			SCENARIO_DATE,
+       				   			SCENARIO_NAME,
+       				   			DMDTYPE,
+       				   			U_ATP_CATEGORY,
+       				   			OFFSETNEEDDT,
+       				   			U_CUSTOMER,
+       				   			U_SUB_SEGMENT,
+       				   			U_INDDMD_TYPE,
+       				   			PRIORITY, 
+       				 			U_SEGMENTATION,
+       				 			U_PPLEVEL
+       				   UNION ALL
+       				   
+       				   
+       				   /*Demand Need for Request Date Unoffset*/
+       				   
+       				   SELECT
+      						ITEM			as ITEM, 				/*Item*/
+       					  	DMDLOC 			as DMDLOC,				/*Demand Location*/
+       					  	SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  	SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  	DMDTYPE			as DMDTYPE,				/*Demand Type*/
+       					  	U_ATP_CATEGORY  as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       					  	'REQUEST_DATE_UNOFFSET' as DATETYPE,	/*Date Type*/
+       					    case when UNOFFSET_REQDATE < DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    then DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    else UNOFFSET_REQDATE 
+       					    end  as PLANNINGDATE, 						/*Unoffset Need Date*/
+       					  	U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  	U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       					  	U_INDDMD_TYPE   as U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       					  	PRIORITY		as PRIORITY, 			/*Priority*/
+       				 	  	U_SEGMENTATION  as  U_SEGMENTATION,   /*Segmentation*/ 
+       				 	  	U_PPLEVEL       AS  U_PPLEVEL,
+       					   sum(DMDNEEDQTY)		as DMDNEEDQTY,			/*Demand Need Quantity*/
+       						0.00			as SUPPLYPEGQTY			/*Supply Peg Quantity*/
+       				   FROM LT_ORDER_DEMAND
+       				   GROUP BY 
+       				   			ITEM,
+       				   			DMDLOC,
+       				   			SCENARIO_DATE,
+       				   			SCENARIO_NAME,
+       				   			DMDTYPE,
+       				   			U_ATP_CATEGORY,
+       				   			UNOFFSET_REQDATE,
+       				   			U_CUSTOMER,
+       				   			U_SUB_SEGMENT,
+       				   			U_INDDMD_TYPE,
+       				   			PRIORITY, 
+       				 			U_SEGMENTATION,
+       				 			U_PPLEVEL 
+       				   UNION ALL
+       				   
+       				  
+       				   
+       				   /*Demand Need for Request Date*/
+       				   
+       				   SELECT
+      						ITEM			as ITEM, 				/*Item*/
+       					  	DMDLOC 			as DMDLOC,				/*Demand Location*/
+       					  	SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  	SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  	DMDTYPE			as DMDTYPE,				/*Demand Type*/
+       					  	U_ATP_CATEGORY  as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       					  	'REQUEST_DATE'	as DATETYPE,			/*Date Type*/
+       					    case when OFFSETREQDT < DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    then DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    else OFFSETREQDT 
+       					    end  as PLANNINGDATE, 						/*Unoffset Need Date*/
+       					  	U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  	U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       					  	U_INDDMD_TYPE   as U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       					  	PRIORITY		as PRIORITY, 			/*Priority*/
+       				 	  	U_SEGMENTATION  as  U_SEGMENTATION,   /*Segmentation*/ 
+       				 	  	U_PPLEVEL       AS U_PPLEVEL,
+       					    sum(DMDNEEDQTY)		as DMDNEEDQTY,			/*Demand Need Quantity*/
+       						0.00			as SUPPLYPEGQTY			/*Supply Peg Quantity*/
+       				   FROM LT_ORDER_DEMAND
+       				   GROUP BY 
+       				   			ITEM,
+       				   			DMDLOC,
+       				   			SCENARIO_DATE,
+       				   			SCENARIO_NAME,
+       				   			DMDTYPE,
+       				   			U_ATP_CATEGORY,
+       				   			OFFSETREQDT,
+       				   			U_CUSTOMER,
+       				   			U_SUB_SEGMENT,
+       				   			U_INDDMD_TYPE,
+       				   			PRIORITY, 
+       				 			U_SEGMENTATION,
+       				 			U_PPLEVEL 
+       ),
+
+       --Get the supply pegged quantity
+      LT_PLANNING_SUPPLY AS ( 
+       				  SELECT
+      						ITEM			as ITEM, 				
+       					  	DMDLOC 			as DMDLOC,				
+       					  	SCENARIO_DATE 	as SCENARIO_DATE, 		
+       					  	SCENARIO_NAME   as SCENARIO_NAME,		
+       					  	DMDTYPE			as DMDTYPE,				
+       					  	U_ATP_CATEGORY  as U_ATP_CATEGORY, 		
+       					    case when SCHEDDATE < DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    then DATEADD(DAY,-30,cast(SCENARIO_DATE as date))
+       					    else SCHEDDATE 
+       					    end  as PLANNINGDATE,						
+       					  	U_CUSTOMER		as U_CUSTOMER, 			
+       					  	U_SUB_SEGMENT	as U_SUB_SEGMENT, 		
+       					  	U_INDDMD_TYPE   as U_INDDMD_TYPE,		
+       					  	PRIORITY		as PRIORITY, 			
+       				 	  	U_SEGMENTATION  as  U_SEGMENTATION,   
+       				 	  	U_PPLEVEL		AS U_PPLEVEL,
+       				    	0.00			as DMDNEEDQTY,			
+       					    sum(SUPPLYPEGQTY)	as SUPPLYPEGQTY			
+       				   FROM LT_ORDER_SUPPLY
+       				   GROUP BY 
+       				   			ITEM,
+       				   			DMDLOC,
+       				   			SCENARIO_DATE,
+       				   			SCENARIO_NAME,
+       				   			DMDTYPE,
+       				   			U_ATP_CATEGORY,
+       				   			SCHEDDATE,
+       				   			U_CUSTOMER,
+       				   			U_SUB_SEGMENT,
+       				   			U_INDDMD_TYPE,
+       				   			PRIORITY, 
+       				 			U_SEGMENTATION,
+       				 			U_PPLEVEL
+      ),
+      					   			
+      --Get the max value of date 				   
+      LT_MAX_PLAN AS(
+                          SELECT 
+       					SCENARIO_DATE,			
+       					SCENARIO_NAME,		
+       					MAX(SCHEDDATE) as MAX_PLANNINGDATE
+       					FROM {{ ref('E_SC_SP', 'ESP_INDDMDVIEW_LOAD') }}
+      					WHERE SCENARIO_DATE  = :V_SCENARIO_DATE
+          		        AND   SCENARIO_NAME  = :V_SCENARIO_NAME
+      					AND   SCHEDQTY      !=  0.00
+       					GROUP BY 
+       							 SCENARIO_DATE,
+       							 SCENARIO_NAME
+       							 
+      ), 					   			
+      --Get the min value of date 				   
+      LT_MIN_PLAN_DEMAND AS(
+                          SELECT 
+       					ITEM,				
+       					DMDLOC,					
+       					SCENARIO_DATE,			
+       					SCENARIO_NAME,		
+       					DMDTYPE,									
+       					DATETYPE,
+       					MIN(PLANNINGDATE) as MIN_PLANNINGDATE,
+       					--MAX(PLANNINGDATE) as MAX_PLANNINGDATE
+       					FROM LT_PLANNING_DEMAND
+       					GROUP BY ITEM,
+       							 DMDLOC,
+       							 SCENARIO_DATE,
+       							 SCENARIO_NAME,
+       							 DMDTYPE,
+       							 DATETYPE
+      ),
+       							 						 
+      --Get the min value of date 				   
+      LT_MAX_PLAN_SUPPLY AS (
+      				SELECT 
+       					ITEM,					
+       					DMDLOC,					
+       					SCENARIO_DATE,			
+       					SCENARIO_NAME,		
+       					DMDTYPE,				 					 
+       					MIN(PLANNINGDATE) as MIN_PLANNINGDATE,
+       					--MAX(PLANNINGDATE) as MAX_PLANNINGDATE
+       					FROM LT_PLANNING_SUPPLY
+       					GROUP BY ITEM,
+       							 DMDLOC,
+       							 SCENARIO_DATE,
+       							 SCENARIO_NAME,
+       							 DMDTYPE
+      ),
+
+      --Add Max and Min Planning Date to main data flow 	
+      LT_PLANNING_DMDDATE AS ( SELECT 	
+      						A.ITEM			as ITEM, 					/*Item*/
+       					  	A.DMDLOC 		as DMDLOC,					/*Demand Location*/
+       					  	A.SCENARIO_DATE as SCENARIO_DATE, 			/*Snapshot Date*/
+       					  	A.SCENARIO_NAME as SCENARIO_NAME,		    /*Simulation Name*/
+       					  	A.DMDTYPE	    as DMDTYPE,				   /*Demand Type*/
+       					  	COALESCE (A.U_ATP_CATEGORY,  '')  as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       					  	A.DATETYPE		 as DATETYPE,				/*Date Type*/
+       					  	A.PLANNINGDATE	 as PLANNINGDATE,			/*Unoffset Need Date*/
+       					  	C.WORK_WEEK_NAME as PLANNINGWW,				/*Planning Work Week*/
+       					  	C.FISCAL_YEAR_NAME as PLANNING_FISCAL_YR,	/*Planning Fiscal Year Name*/
+       					  	C.FISCAL_QTR_NAME as PLANNING_FQ,		/*Planning Fiscal Quarter Name*/
+       					  	C.FISCAL_MONTH_NAME   as PLANNING_FMON,		/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE as PLANNING_WW_BEGIN,/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE  as PLANNING_WW_END,	/*Planning Work Week End Date*/ 
+       					  	COALESCE (A.U_CUSTOMER, '') as U_CUSTOMER, 				/*Customer*/
+       					  	COALESCE (A.U_SUB_SEGMENT, '') as U_SUB_SEGMENT, 			/*Sub-Segment*/
+       					  	COALESCE (A.U_INDDMD_TYPE, '') as U_INDDMD_TYPE,			/*Indipendent Demand Type*/
+       					  	A.PRIORITY as PRIORITY,						/*Priority*/
+       				 		COALESCE (A.U_SEGMENTATION , '') as U_SEGMENTATION,			/*Segmentation*/
+       				 		A.U_PPLEVEL AS U_PPLEVEL,
+       					  	sum(A.DMDNEEDQTY)as DMDNEEDQTY,				/*Demand Need Quantity*/
+       					  	sum(A.SUPPLYPEGQTY)	as SUPPLYPEGQTY,		/*Supply Peg Quantity*/
+       					  	CASE WHEN B.MIN_PLANNINGDATE < A.SCENARIO_DATE
+       					  	THEN B.MIN_PLANNINGDATE
+       					  	ELSE A.SCENARIO_DATE
+       					  	END AS MIN_PLANNINGDATE,					/*Min Planning Date*/
+       					  	/*CASE WHEN B.MAX_PLANNINGDATE <= A.SCENARIO_DATE
+       					  	THEN DATEADD(DAY,370,A.SCENARIO_DATE)
+       					  	ELSE DATEADD(DAY,370,B.MAX_PLANNINGDATE) 
+       					  	END AS MAX_PLANNINGDATE,	*/			/*Max Planning Date*/
+      						DATEADD(DAY,370,D.MAX_PLANNINGDATE) as MAX_PLANNINGDATE,
+       					  	'1' as COND									/*Condition for cross Join*/
+       				   FROM LT_PLANNING_DEMAND as A
+       				   LEFT OUTER JOIN LT_MIN_PLAN_DEMAND as B
+       				   ON A.ITEM 		 = B.ITEM 	and
+       				   	  A.DMDLOC		 = B.DMDLOC and
+       				   	  A.SCENARIO_DATE = B.SCENARIO_DATE and
+       				   	  A.SCENARIO_NAME = B.SCENARIO_NAME and
+       				   	  A.DMDTYPE		 = B.DMDTYPE and
+       				   	  A.DATETYPE	 = B.DATETYPE
+      					
+       				   LEFT OUTER JOIN {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }} as C
+       				   ON A.PLANNINGDATE = cast(C.FULL_DATE as date)
+                        
+      				   LEFT OUTER JOIN LT_MAX_PLAN  D
+      				   ON A.SCENARIO_DATE = D.SCENARIO_DATE and
+       				   	  A.SCENARIO_NAME = D.SCENARIO_NAME 
+      				  
+       				GROUP BY 
+       				   		A.ITEM, 					/*Item*/
+       					  	A.DMDLOC,					/*Demand Location*/
+       					  	A.SCENARIO_DATE, 			/*Snapshot Date*/
+       					  	A.SCENARIO_NAME,			/*Simulation Name*/
+       					  	A.DMDTYPE,					/*Demand Type*/
+       					  	A.U_ATP_CATEGORY, 			/*ATP Category*/ 
+       					  	A.DATETYPE,					/*Date Type*/
+       					  	A.PLANNINGDATE,				/*Unoffset Need Date*/
+       					  	C.WORK_WEEK_NAME,			/*Planning Work Week*/
+       					  	C.FISCAL_YEAR_NAME,			/*Planning Fiscal Year*/
+       					  	C.FISCAL_QTR_NAME,		/*Planning Fiscal Quarter*/
+       					  	C.FISCAL_MONTH_NAME,		/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE,		/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE,		/*Planning Work Week End Date*/ 
+       					  	A.U_CUSTOMER, 				/*Customer*/
+       					  	A.U_SUB_SEGMENT,	 		/*Sub-Segment*/
+       					  	A.U_INDDMD_TYPE,			/*Indipendent Demand Type*/
+       					  	A.PRIORITY,
+       					  	A.U_SEGMENTATION,
+       					  	A.U_PPLEVEL,
+       					  	B.MIN_PLANNINGDATE,
+      						D.MAX_PLANNINGDATE
+      ),
+
+      --Add Max and Min Planning Date to main data flow 	
+      LT_PLANNING_SUPPDATE AS ( SELECT 	
+      						A.ITEM			as ITEM, 					/*Item*/
+       					  	A.DMDLOC 		as DMDLOC,					/*Demand Location*/
+       					  	A.SCENARIO_DATE as SCENARIO_DATE, 			/*Snapshot Date*/
+       					  	A.SCENARIO_NAME as SCENARIO_NAME,		/*Simulation Name*/
+       					  	A.DMDTYPE		 as DMDTYPE,				/*Demand Type*/
+       					  	COALESCE (A.U_ATP_CATEGORY,  '') as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       					  	A.PLANNINGDATE	 as PLANNINGDATE,			/*Unoffset Need Date*/
+       					  	C.WORK_WEEK_NAME as PLANNINGWW,				/*Planning Work Week*/
+       					  	C.FISCAL_YEAR_NAME as PLANNING_FISCAL_YR,	/*Planning Fiscal Year Name*/
+       					  	C.FISCAL_QTR_NAME as PLANNING_FQ,		/*Planning Fiscal Quarter Name*/
+       					  	C.FISCAL_MONTH_NAME   as PLANNING_FMON,		/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE as PLANNING_WW_BEGIN,/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE  as PLANNING_WW_END,	/*Planning Work Week End Date*/ 
+       					  	COALESCE (A.U_CUSTOMER, '') as U_CUSTOMER, 				/*Customer*/
+       					  	COALESCE (A.U_SUB_SEGMENT, '') as U_SUB_SEGMENT, 			/*Sub-Segment*/
+       					  	COALESCE (A.U_INDDMD_TYPE, '') as U_INDDMD_TYPE,			/*Indipendent Demand Type*/
+       					  	A.PRIORITY as PRIORITY,						/*Priority*/
+       				 		COALESCE (A.U_SEGMENTATION , '') as U_SEGMENTATION,			/*Segmentation*/
+       				 		A.U_PPLEVEL		AS U_PPLEVEL,
+       					  	sum(A.DMDNEEDQTY)as DMDNEEDQTY,				/*Demand Need Quantity*/
+       					  	sum(A.SUPPLYPEGQTY)	as SUPPLYPEGQTY,		/*Supply Peg Quantity*/
+       					  	CASE WHEN B.MIN_PLANNINGDATE < A.SCENARIO_DATE
+       					  	THEN B.MIN_PLANNINGDATE
+       					  	ELSE A.SCENARIO_DATE
+       					  	END AS MIN_PLANNINGDATE,					/*Min Planning Date*/
+       					  	/*CASE WHEN B.MAX_PLANNINGDATE <= A.SCENARIO_DATE
+       					  	THEN DATEADD(DAY,370,A.SCENARIO_DATE)
+       					  	ELSE DATEADD(DAY,370,B.MAX_PLANNINGDATE)
+       					  	END AS MAX_PLANNINGDATE,	*/			/*Max Planning Date*/
+      						DATEADD(DAY,370,D.MAX_PLANNINGDATE) as MAX_PLANNINGDATE,
+       					  	'1' as COND									/*Condition for cross Join*/
+       				   FROM LT_PLANNING_SUPPLY as A
+       				   LEFT OUTER JOIN LT_MAX_PLAN_SUPPLY as B
+       				   ON A.ITEM 		  = B.ITEM 	and
+       				   	  A.DMDLOC		  = B.DMDLOC and
+       				   	  A.SCENARIO_DATE = B.SCENARIO_DATE and
+       				   	  A.SCENARIO_NAME = B.SCENARIO_NAME and
+       				   	  A.DMDTYPE		  = B.DMDTYPE 
+       				   LEFT OUTER JOIN {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }} as C
+       				   ON A.PLANNINGDATE = cast(C.FULL_DATE as date)
+                         LEFT OUTER JOIN LT_MAX_PLAN  D
+      				   ON A.SCENARIO_DATE = D.SCENARIO_DATE and
+       				   	  A.SCENARIO_NAME = D.SCENARIO_NAME 
+       				GROUP BY 
+       				   		A.ITEM, 					/*Item*/
+       					  	A.DMDLOC,					/*Demand Location*/
+       					  	A.SCENARIO_DATE, 			/*Snapshot Date*/
+       					  	A.SCENARIO_NAME,			/*Simulation Name*/
+       					  	A.DMDTYPE,					/*Demand Type*/
+       					  	A.U_ATP_CATEGORY, 			/*ATP Category*/ 
+       					  	--A.DATETYPE,					/*Date Type*/
+       					  	A.PLANNINGDATE,				/*Unoffset Need Date*/
+       					  	C.WORK_WEEK_NAME,			/*Planning Work Week*/
+       					  	C.FISCAL_YEAR_NAME,			/*Planning Fiscal Year*/
+       					  	C.FISCAL_QTR_NAME,		/*Planning Fiscal Quarter*/
+       					  	C.FISCAL_MONTH_NAME,		/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE,		/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE,		/*Planning Work Week End Date*/ 
+       					  	A.U_CUSTOMER, 				/*Customer*/
+       					  	A.U_SUB_SEGMENT,	 		/*Sub-Segment*/
+       					  	A.U_INDDMD_TYPE,			/*Indipendent Demand Type*/
+       					  	A.PRIORITY,					/*Priority*/
+       					  	A.U_SEGMENTATION,			/*Segmentation*/
+       					  	A.U_PPLEVEL,
+       					  	B.MIN_PLANNINGDATE,
+      						D.MAX_PLANNINGDATE
+      ),
+
+      --Get Enterprise date Details
+      LT_ENT_DATE AS(
+                    SELECT  cast(FULL_DATE as date) as FULL_DATE_TRIMMED,
+      					  WORK_WEEK_NAME,
+      					  '1' AS COND 
+      			  FROM {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }}
+      			  WHERE CAST(FULL_DATE as date) >= TO_DATE('2020-01-01')	
+      ),			 
+       	 	
+      /*Week Scaffolding*/ 				   	  
+      LT_WEEK_DMD AS ( SELECT 	
+      				B.WORK_WEEK_NAME  as PLANNING_WORKWK,		/*Planning Work Week*/
+      				A.ITEM			  as ITEM, 					/*Item*/
+       				A.DMDLOC 		  as DMDLOC,				/*Demand Location*/
+       				A.SCENARIO_DATE   as SCENARIO_DATE, 			/*Snapshot Date*/
+       				A.SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       				A.DMDTYPE		  as DMDTYPE,				/*Demand Type*/
+       				COALESCE (A.U_ATP_CATEGORY, '') as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       				A.DATETYPE		  as DATETYPE,				/*Date Type*/
+       				COALESCE (A.U_CUSTOMER, '')  as U_CUSTOMER, 			/*Customer*/
+       				COALESCE (A.U_SUB_SEGMENT, '') as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       				COALESCE (A.U_INDDMD_TYPE, '') as U_INDDMD_TYPE,			/*Indipendent Demand Type*/
+       				A.PRIORITY as PRIORITY,						/*Priority*/
+       				COALESCE (A.U_SEGMENTATION , '') as U_SEGMENTATION,		/*Segmentation*/
+       				A.U_PPLEVEL 	  AS U_PPLEVEL
+       							
+       				FROM LT_ENT_DATE as B 
+       		   LEFT OUTER JOIN LT_PLANNING_DMDDATE as A
+       		      on B.COND = A.COND
+       		   WHERE B.FULL_DATE_TRIMMED >= A.MIN_PLANNINGDATE AND
+      				 B.FULL_DATE_TRIMMED <= A.MAX_PLANNINGDATE
+       		   GROUP BY B.WORK_WEEK_NAME,
+       		   			A.ITEM,
+       		   			A.DMDLOC,
+       		   			A.SCENARIO_DATE,
+       		   			A.SCENARIO_NAME,
+       		   			A.DMDTYPE,
+       		   			A.U_ATP_CATEGORY,
+       		   			A.DATETYPE,
+       		   			A.U_CUSTOMER,
+       		   			A.U_SUB_SEGMENT,
+       		   			A.U_INDDMD_TYPE,
+       		   			A.PRIORITY,
+       		   			A.U_SEGMENTATION,
+       		   			A.U_PPLEVEL
+      ),
+       		   			
+      /*Week Scaffolding for Supply*/ 
+      LT_WEEK_SUPPLY AS (
+                      SELECT 	
+      				B.WORK_WEEK_NAME  as PLANNING_WORKWK,		/*Planning Work Week*/
+      				A.ITEM			  as ITEM, 					/*Item*/
+       				A.DMDLOC 		  as DMDLOC,				/*Demand Location*/
+       				A.SCENARIO_DATE	  as SCENARIO_DATE, 			/*Snapshot Date*/
+       				A.SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       				A.DMDTYPE		  as DMDTYPE,				/*Demand Type*/
+       				COALESCE (A.U_ATP_CATEGORY, '') as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       				COALESCE (A.U_CUSTOMER, '') as U_CUSTOMER, 			/*Customer*/
+       				COALESCE (A.U_SUB_SEGMENT, '') as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       				COALESCE (A.U_INDDMD_TYPE, '') as U_INDDMD_TYPE,			/*Indipendent Demand Type*/
+       				A.PRIORITY as PRIORITY,						/*Priority*/
+       				COALESCE (A.U_SEGMENTATION , '') as U_SEGMENTATION,		/*Segmentation*/
+       				A.U_PPLEVEL		  AS U_PPLEVEL
+       				FROM LT_ENT_DATE as B 
+       		   LEFT OUTER JOIN LT_PLANNING_SUPPDATE as A
+       		      on B.COND = A.COND
+       		   WHERE B.FULL_DATE_TRIMMED >= A.MIN_PLANNINGDATE AND
+       		         B.FULL_DATE_TRIMMED <= A.MAX_PLANNINGDATE
+       		   GROUP BY B.WORK_WEEK_NAME,
+       		   			A.ITEM,
+       		   			A.DMDLOC,
+       		   			A.SCENARIO_DATE,
+       		   			A.SCENARIO_NAME,
+       		   			A.DMDTYPE,
+       		   			A.U_ATP_CATEGORY,
+       		   			A.U_CUSTOMER,
+       		   			A.U_SUB_SEGMENT,
+       		   			A.U_INDDMD_TYPE,
+       		   			A.PRIORITY,
+       		   			A.U_Segmentation,
+       		   			A.U_PPLEVEL
+      ),		   			
+
+        					
+      LT_CONSOLIDATED_DMD AS (
+                              SELECT 
+      						A.PLANNING_WORKWK		as PLANNING_WORKWK,		/*Planning Work Week*/				
+       				   		A.ITEM					as ITEM,				/*Item*/
+       				   		A.DMDLOC				as DMDLOC,				/*Demand Location*/
+       				   		A.SCENARIO_DATE			as SCENARIO_DATE, 		/*Snapshot Date*/
+       				   		A.SCENARIO_NAME   		as SCENARIO_NAME ,	/*Simulation Name*/
+       				   		A.DMDTYPE				as DMDTYPE,				/*Demand Type*/
+       						A.U_ATP_CATEGORY		as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       						A.DATETYPE				as DATETYPE,			/*Date Type*/
+       						A.U_SUB_SEGMENT			as U_SUB_SEGMENT,		/*Sub-Segment*/
+       						A.U_INDDMD_TYPE		   	as U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       						A.U_CUSTOMER			as U_CUSTOMER, 			/*Customer*/
+       						A.PRIORITY				as PRIORITY,			/*Priority*/
+       						A.U_SEGMENTATION		as U_SEGMENTATION,		/*Segmentation*/
+       						A.U_PPLEVEL				AS U_PPLEVEL,
+       						C.FISCAL_YEAR_NAME		as PLANNING_FISCAL_YR,	/*Planning Fiscal Year Name*/
+       					  	C.FISCAL_QTR_NAME    	as PLANNING_FQ,			/*Planning Fiscal Quarter Name*/
+       					  	C.FISCAL_MONTH_NAME		as PLANNING_FMON,		/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE	as PLANNING_WW_BEGIN,	/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE	as PLANNING_WW_END,		/*Planning Work Week End Date*/ 
+       					  	C.FISCAL_PERIOD_SORT	as PLANNING_FMON_SORT,	/*Fiscal Period Sort*/
+       					  	C.FISCAL_QTR_SORT    	as PLANNING_FQ_SORT,	/*Fiscal Quarter Sort*/
+       					    sum(B.DMDNEEDQTY)		as DMDNEEDQTY,			/*Demand Quantity*/
+       					    sum(B.SUPPLYPEGQTY)		as SUPPLYPEGQTY			/*Supply Peg Quantity*/
+       				   FROM LT_WEEK_DMD as A
+       				   LEFT OUTER JOIN LT_PLANNING_DMDDATE AS B
+       				   ON A.PLANNING_WORKWK = B.PLANNINGWW 	and
+       				   	  A.ITEM            = B.ITEM	   	and
+       				   	  A.DMDLOC          = B.DMDLOC     	and
+       				   	  A.SCENARIO_DATE	= B.SCENARIO_DATE and
+       				   	  A.SCENARIO_NAME   = B.SCENARIO_NAME and
+       				   	  A.DMDTYPE			= B.DMDTYPE		and
+       				   	  A.U_ATP_CATEGORY  = B.U_ATP_CATEGORY and
+       				   	  A.DATETYPE		= B.DATETYPE	and
+       				   	  A.U_CUSTOMER		= B.U_CUSTOMER	and
+       				   	  A.U_SUB_SEGMENT	= B.U_SUB_SEGMENT and
+       				   	  A.U_INDDMD_TYPE	= B.U_INDDMD_TYPE and
+       				   	  A.PRIORITY		= B.PRIORITY and
+       				   	  A.U_SEGMENTATION	= B.U_SEGMENTATION 
+       				   	AND  A.U_PPLEVEL		= B.U_PPLEVEL
+       				   	  
+       				  LEFT OUTER JOIN (
+      					SELECT WORK_WEEK_NAME, FISCAL_YEAR_NAME,FISCAL_QTR_NAME,FISCAL_MONTH_NAME,WORK_WEEK_BEGIN_DATE,WORK_WEEK_END_DATE,FISCAL_PERIOD_SORT,FISCAL_QTR_SORT FROM {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }} GROUP BY ALL
+      					)as C
+       				   ON A.PLANNING_WORKWK = C.WORK_WEEK_NAME
+       				   group by
+       				   		A.PLANNING_WORKWK,		/*Planning Work Week*/				
+       				   		A.ITEM	,				/*Item*/
+       				   		A.DMDLOC,				/*Demand Location*/
+       				   		A.SCENARIO_DATE, 		/*Snapshot Date*/
+       				   		A.SCENARIO_NAME,		/*Simulation Name*/
+       				   		A.DMDTYPE,				/*Demand Type*/
+       						A.U_ATP_CATEGORY, 		/*ATP Category*/ 
+       						A.DATETYPE,				/*Date Type*/
+       						A.U_SUB_SEGMENT,		/*Sub-Segment*/
+       						A.U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       						A.U_CUSTOMER, 			/*Customer*/
+       						A.PRIORITY,				/*Priority*/
+       						A.U_SEGMENTATION,		/*Segmentation*/
+       						A.U_PPLEVEL,
+       						C.FISCAL_YEAR_NAME,		/*Planning Fiscal Year Name*/
+       					  	C.FISCAL_QTR_NAME,	    /*Planning Fiscal Quarter Name*/
+       					  	C.FISCAL_MONTH_NAME,	/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE,	/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE,	/*Planning Work Week End Date*/
+       					  	C.FISCAL_PERIOD_SORT,	/*Fiscal Period Sort*/
+       					  	C.FISCAL_QTR_SORT    	/*Fiscal Quarter Sort*/
+      ),
+       					  	
+      LT_CONSOLIDATED_SUPPLY  AS (
+                              SELECT 
+      						A.PLANNING_WORKWK		as PLANNING_WORKWK,		/*Planning Work Week*/				
+       				   		A.ITEM					as ITEM,				/*Item*/
+       				   		A.DMDLOC				as DMDLOC,				/*Demand Location*/
+       				   		A.SCENARIO_DATE			as SCENARIO_DATE, 		/*Snapshot Date*/
+       				   		A.SCENARIO_NAME  		as SCENARIO_NAME ,	    /*Simulation Name*/
+       				   		A.DMDTYPE				as DMDTYPE,				/*Demand Type*/
+       						A.U_ATP_CATEGORY		as U_ATP_CATEGORY, 		/*ATP Category*/ 
+       						A.U_SUB_SEGMENT			as U_SUB_SEGMENT,		/*Sub-Segment*/
+       						A.U_INDDMD_TYPE		   	as U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       						A.U_CUSTOMER			as U_CUSTOMER, 			/*Customer*/
+       						A.PRIORITY				as PRIORITY,			/*Priority*/
+       						A.U_SEGMENTATION		as U_SEGMENTATION,		/*Segmentation*/
+       						A.U_PPLEVEL				AS U_PPLEVEL,
+       						C.FISCAL_YEAR_NAME		as PLANNING_FISCAL_YR,	/*Planning Fiscal Year Name*/
+       					  	C.FISCAL_QTR_NAME    	as PLANNING_FQ,			/*Planning Fiscal Quarter Name*/
+       					  	C.FISCAL_MONTH_NAME		as PLANNING_FMON,		/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE	as PLANNING_WW_BEGIN,	/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE	as PLANNING_WW_END,		/*Planning Work Week End Date*/ 
+       					  	C.FISCAL_PERIOD_SORT	as PLANNING_FMON_SORT,	/*Fiscal Period Sort*/
+       					  	C.FISCAL_QTR_SORT	    as PLANNING_FQ_SORT,	/*Fiscal Quarter Sort*/
+       					    sum(B.DMDNEEDQTY)		as DMDNEEDQTY,			/*Demand Quantity*/
+       					    sum(B.SUPPLYPEGQTY)		as SUPPLYPEGQTY			/*Supply Peg Quantity*/
+       				   FROM LT_WEEK_SUPPLY as A
+       				   LEFT OUTER JOIN LT_PLANNING_SUPPDATE AS B
+       				   ON A.PLANNING_WORKWK = B.PLANNINGWW 	and
+       				   	  A.ITEM            = B.ITEM	   	and
+       				   	  A.DMDLOC          = B.DMDLOC     	and
+       				   	  A.SCENARIO_DATE	= B.SCENARIO_DATE and
+       				   	  A.SCENARIO_NAME   = B.SCENARIO_NAME and
+       				   	  A.DMDTYPE			= B.DMDTYPE		and
+       				   	  A.U_ATP_CATEGORY  = B.U_ATP_CATEGORY and
+       				   	  A.U_CUSTOMER		= B.U_CUSTOMER	and
+       				   	  A.U_SUB_SEGMENT	= B.U_SUB_SEGMENT and
+       				   	  A.U_INDDMD_TYPE	= B.U_INDDMD_TYPE and
+       				   	  A.PRIORITY		= B.PRIORITY and
+       				   	  A.U_SEGMENTATION	= B.U_SEGMENTATION and
+                            A.U_PPLEVEL		= B.U_PPLEVEL 
+       				   	  
+       				  LEFT OUTER JOIN (
+      					SELECT WORK_WEEK_NAME, FISCAL_YEAR_NAME,FISCAL_QTR_NAME,FISCAL_MONTH_NAME,WORK_WEEK_BEGIN_DATE,WORK_WEEK_END_DATE,FISCAL_PERIOD_SORT,FISCAL_QTR_SORT FROM {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }} GROUP BY ALL
+      					)as C
+       				   ON A.PLANNING_WORKWK = C.WORK_WEEK_NAME
+       				   group by
+       				   		A.PLANNING_WORKWK,		/*Planning Work Week*/				
+       				   		A.ITEM	,				/*Item*/
+       				   		A.DMDLOC,				/*Demand Location*/
+       				   		A.SCENARIO_DATE, 		/*Snapshot Date*/
+       				   		A.SCENARIO_NAME,		/*Simulation Name*/
+       				   		A.DMDTYPE,				/*Demand Type*/
+       						A.U_ATP_CATEGORY, 		/*ATP Category*/ 
+       						A.U_SUB_SEGMENT,		/*Sub-Segment*/
+       						A.U_INDDMD_TYPE,		/*Indipendent Demand Type*/
+       						A.U_CUSTOMER, 			/*Customer*/
+       						A.PRIORITY,				/*Priority*/
+       						A.U_SEGMENTATION,		/*Segmentation*/
+       						A.U_PPLEVEL,
+       						C.FISCAL_YEAR_NAME,		/*Planning Fiscal Year Name*/
+       					  	C.FISCAL_QTR_NAME,	    /*Planning Fiscal Quarter Name*/
+       					  	C.FISCAL_MONTH_NAME,	/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE,	/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE,	/*Planning Work Week End Date*/
+       					  	C.FISCAL_PERIOD_SORT,	/*Fiscal Period Sort*/
+       					  	C.FISCAL_QTR_SORT	    /*Fiscal Quarter Sort*/ 
+      ),					  	
+       				   	  
+      LT_CUMULATIVE_DMD AS (
+                          SELECT 			
+      					PLANNING_WORKWK,				/*Planning Work Week*/				
+       				   	ITEM, 							/*Item*/
+       				   	DMDLOC,							/*Demand Location*/
+       				   	SCENARIO_DATE, 					/*Snapshot Date*/
+       				   	SCENARIO_NAME ,				    /*Simulation Name*/
+       				   	DMDTYPE,						/*Demand Type*/
+       					U_ATP_CATEGORY, 				/*ATP Category*/ 
+       					DATETYPE,						/*Date Type*/
+       					U_SUB_SEGMENT,					/*Sub-Segment*/
+       					U_INDDMD_TYPE,					/*Indipendent Demand Type*/
+       					U_CUSTOMER, 					/*Customer*/
+       					PRIORITY,						/*Priority*/
+       					U_SEGMENTATION,					/*Segmentation*/
+       					U_PPLEVEL,
+       					PLANNING_FISCAL_YR,				/*Planning Fiscal Year*/
+       					PLANNING_FQ,					/*Planning Fiscal Quarter*/
+       					PLANNING_FMON,					/*Planning Fiscal Month*/
+       					PLANNING_WW_BEGIN,				/*Planning Work Week Begin Date*/
+       					PLANNING_WW_END,				/*Planning Work Week End Date*/ 
+       					PLANNING_FMON_SORT,				/*Planning Fiscal Month Sort*/
+       					PLANNING_FQ_SORT,				/*Planning Fiscal Quarter Sort*/
+       					DMDNEEDQTY,						/*Demand Quantity*/
+       					SUPPLYPEGQTY,					/*Supply Peg Quantity*/	
+       					SUM(DMDNEEDQTY) OVER (PARTITION BY
+       										  SCENARIO_DATE,
+       										  SCENARIO_NAME,
+       										  DATETYPE,
+       										  ITEM,
+       										  DMDLOC,
+       										  DMDTYPE,
+       										  U_ATP_CATEGORY,
+       										  U_CUSTOMER,
+       										  U_SUB_SEGMENT,
+       										  U_INDDMD_TYPE,
+       										  PRIORITY,
+       										  U_SEGMENTATION,
+       										  U_PPLEVEL
+       										  ORDER BY
+       										  PLANNING_WORKWK) as CUMULATIVE_DMDNEEDQTY,
+      				 	SUPPLYPEGQTY as CUMULATIVE_SUPPLYQTY
+       				    FROM LT_CONSOLIDATED_DMD
+      ),
+       										  
+       										  
+      LT_CUMULATIVE_SUPPLY AS (
+                          SELECT 			
+      					PLANNING_WORKWK,				/*Planning Work Week*/				
+       				   	ITEM, 							/*Item*/
+       				   	DMDLOC,							/*Demand Location*/
+       				   	SCENARIO_DATE, 					/*Snapshot Date*/
+       				   	SCENARIO_NAME ,				    /*Simulation Name*/
+       				   	DMDTYPE,						/*Demand Type*/
+       					U_ATP_CATEGORY, 				/*ATP Category*/ 
+       					U_SUB_SEGMENT,					/*Sub-Segment*/
+       					U_INDDMD_TYPE,					/*Indipendent Demand Type*/
+       					U_CUSTOMER, 					/*Customer*/
+       					PRIORITY,						/*Priority*/
+       					U_SEGMENTATION,				    /*Segmentation*/
+       					U_PPLEVEL,
+       					PLANNING_FISCAL_YR,				/*Planning Fiscal Year*/
+       					PLANNING_FQ,					/*Planning Fiscal Quarter*/
+       					PLANNING_FMON,					/*Planning Fiscal Month*/
+       					PLANNING_WW_BEGIN,				/*Planning Work Week Begin Date*/
+       					PLANNING_WW_END,				/*Planning Work Week End Date*/ 
+       					PLANNING_FMON_SORT,				/*Planning Fiscal Month Sort*/
+       					PLANNING_FQ_SORT,				/*Planning Fiscal Quarter Sort*/
+       					DMDNEEDQTY,						/*Demand Quantity*/
+       					SUPPLYPEGQTY,					/*Supply Peg Quantity*/	
+       					DMDNEEDQTY  as CUMULATIVE_DMDNEEDQTY,
+      				 	SUM(SUPPLYPEGQTY) OVER (PARTITION BY
+       										  SCENARIO_DATE,
+       										  SCENARIO_NAME,
+       										  ITEM,
+       										  DMDLOC,
+       										  DMDTYPE,
+       										  U_ATP_CATEGORY,
+       										  U_CUSTOMER,
+       										  U_SUB_SEGMENT,
+       										  U_INDDMD_TYPE,
+       										  PRIORITY,	
+       										  U_SEGMENTATION,
+       										  U_PPLEVEL
+       										  ORDER BY
+       										  PLANNING_WORKWK) as CUMULATIVE_SUPPLYQTY
+       				FROM LT_CONSOLIDATED_SUPPLY
+      ),		
+       								
+      --Join the demand and supply
+      LT_JOIN AS (
+                          SELECT 			
+      					A.PLANNING_WORKWK,				/*Planning Work Week*/				
+       				   	A.ITEM, 						/*Item*/
+       				   	A.DMDLOC,						/*Demand Location*/
+       				   	A.SCENARIO_DATE, 				/*Snapshot Date*/
+       				   	A.SCENARIO_NAME ,				/*Simulation Name*/
+       				   	A.DMDTYPE,						/*Demand Type*/
+       					A.U_ATP_CATEGORY, 				/*ATP Category*/ 
+       					A.DATETYPE,						/*Date Type*/
+       					A.U_SUB_SEGMENT,				/*Sub-Segment*/
+       					A.U_INDDMD_TYPE,				/*Indipendent Demand Type*/
+       					A.U_CUSTOMER, 					/*Customer*/
+       					A.PRIORITY,						/*Priority*/
+       					A.U_SEGMENTATION,				/*Segmentation*/
+       					A.U_PPLEVEL,
+       					A.PLANNING_FISCAL_YR,			/*Planning Fiscal Year*/
+       					A.PLANNING_FQ,					/*Planning Fiscal Quarter*/
+       					A.PLANNING_FMON,				/*Planning Fiscal Month*/
+       					A.PLANNING_WW_BEGIN,			/*Planning Work Week Begin Date*/
+       					A.PLANNING_WW_END,				/*Planning Work Week End Date*/ 
+       					A.PLANNING_FMON_SORT,			/*Planning Fiscal Month Sort*/
+       					A.PLANNING_FQ_SORT,				/*Planning Fiscal Quarter Sort*/
+       					A.DMDNEEDQTY,					/*Demand Quantity*/
+       					B.SUPPLYPEGQTY,					/*Supply Peg Quantity*/	
+       					ifnull(A.CUMULATIVE_DMDNEEDQTY,0) as CUMULATIVE_DMDNEEDQTY,
+       					ifnull(B.CUMULATIVE_SUPPLYQTY,0) as CUMULATIVE_SUPPLYQTY
+      				 					 	
+      				 	--IF ('Cum DMD LV'>'Cum Suply LV') THEN ('Cum DMD LV'-'Cum Suply LV') ELSE (0)
+      			  FROM  LT_CUMULATIVE_DMD as A
+      			  LEFT OUTER JOIN LT_CUMULATIVE_SUPPLY AS B
+      			  ON   A.PLANNING_WORKWK	= B.PLANNING_WORKWK and
+      			  	   A.ITEM				= B.ITEM and
+      			  	   A.DMDLOC				= B.DMDLOC and
+      			  	   A.SCENARIO_DATE		= B.SCENARIO_DATE and
+      			  	   A.SCENARIO_NAME   	= B.SCENARIO_NAME and
+      			  	   A.DMDTYPE			= B.DMDTYPE and
+      			  	   A.U_ATP_CATEGORY		= B.U_ATP_CATEGORY and
+      			  	   A.U_SUB_SEGMENT		= B.U_SUB_SEGMENT and
+      			  	   A.U_INDDMD_TYPE		= B.U_INDDMD_TYPE and
+      			  	   A.U_CUSTOMER			= B.U_CUSTOMER and
+      			  	   A.PRIORITY			= B.PRIORITY and
+      			  	   A.U_SEGMENTATION		= B.U_SEGMENTATION and
+      			  	   A.U_PPLEVEL			= B.U_PPLEVEL AND
+      			  	   A.PLANNING_FISCAL_YR = B.PLANNING_FISCAL_YR and
+      			  	   A.PLANNING_FQ		= B.PLANNING_FQ	and
+      			  	   A.PLANNING_FMON		= B.PLANNING_FMON and
+      			  	   A.PLANNING_WW_BEGIN	= B.PLANNING_WW_BEGIN and
+      			  	   A.PLANNING_WW_END	= B.PLANNING_WW_END and
+      			  	   A.PLANNING_FMON_SORT	= B.PLANNING_FMON_SORT and
+      			  	   A.PLANNING_FQ_SORT	= B.PLANNING_FQ_SORT
+      ),
+      /***************************************************	Shipment Data  **************************************************/		
+
+      QTR AS (	SELECT SNAPSHOTDATE AS SCENARIO_DATE, 
+       			   TO_DATE(FISCAL_QTR_BEGIN_DATE) FISCAL_QUARTER_BEGIN_DATE
+       			   FROM  {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SHIPMENTS') }} A 
+       		       LEFT OUTER JOIN  {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }} B
+       		       ON A.SNAPSHOTDATE = cast(B.FULL_DATE as date)
+       		       WHERE SNAPSHOTDATE = :V_SCENARIO_DATE AND SIMULATION_NAME = :V_SCENARIO_NAME
+      			   GROUP BY ALL
+      ),
+       		       
+      QTR_SHIPMENT AS (       SELECT  PART, 	
+       			            A.SNAPSHOTDATE AS SCENARIO_DATE, 
+       			            SIMULATION_NAME AS SCENARIO_NAME,	
+       			            CUSTOMER_NAME, 		
+       			            SUBSEGMENT,		
+       			            QUANTITY,
+       			            DUE_DATE
+       			            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SHIPMENTS') }} A 
+       			            LEFT OUTER JOIN QTR B
+       			            ON A.SNAPSHOTDATE =B.SCENARIO_DATE
+       			            WHERE DUE_DATE >= FISCAL_QUARTER_BEGIN_DATE AND DUE_DATE<=A.SNAPSHOTDATE
+                              AND A.SNAPSHOTDATE = :V_SCENARIO_DATE AND SIMULATION_NAME = :V_SCENARIO_NAME
+      ),
+       			
+      CUMULATIVE_SHIPMENT AS (	SELECT PART, 	
+       			                   SCENARIO_DATE, 
+       			                   SCENARIO_NAME,	
+       			                   CUSTOMER_NAME, 		
+       			                   SUBSEGMENT,		
+       			                   SUM(QUANTITY) AS CUMULATIVE_SHIPMENTQTY
+       			                   FROM QTR_SHIPMENT
+       			                   GROUP BY PART, 	
+       			                            SCENARIO_DATE, 
+       			                            SCENARIO_NAME,	
+       			                            CUSTOMER_NAME, 		
+       			                            SUBSEGMENT
+      ),
+                  
+       CUMULATIVE_SHIPMENT_DUEDATE AS ( SELECT distinct A.PART AS ITEM, 	
+       			                           A.SCENARIO_DATE , 
+       			                           A.SCENARIO_NAME,	
+       			                           A.CUSTOMER_NAME as U_CUSTOMER, 		
+       			                           A.SUBSEGMENT as U_SUB_SEGMENT,		
+       			                           CASE WHEN A.DUE_DATE < A.SCENARIO_DATE THEN A.SCENARIO_DATE ELSE A.DUE_DATE END AS DUE_DATE,
+       			                           B.CUMULATIVE_SHIPMENTQTY
+       			                           FROM QTR_SHIPMENT A 
+       			                           LEFT OUTER JOIN CUMULATIVE_SHIPMENT B
+       			                           ON  A.PART            = B.PART
+       			                           AND A.SCENARIO_DATE   = B.SCENARIO_DATE
+       			                           AND A.SCENARIO_NAME   = B.SCENARIO_NAME 
+       			                           AND A.CUSTOMER_NAME   = B.CUSTOMER_NAME
+       			                           AND A.SUBSEGMENT      = B.SUBSEGMENT
+      									   
+       ),
+
+       LT_PLANNING_SHIPMENT AS (
+      	
+      				--Demand Need for UnOffset Need Date
+      				SELECT
+      						ITEM			as ITEM, 				/*Item*/
+       					  	SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  	SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					    'NEED_DATE_UNOFFSET' as DATETYPE,		/*Date Type*/ 
+       					    DUE_DATE        as PLANNINGDATE,		/*Unoffset Need Date*/
+       					  	U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  	U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       				        CUMULATIVE_SHIPMENTQTY
+       				   FROM CUMULATIVE_SHIPMENT_DUEDATE
+       				 
+       				   			
+       				  UNION ALL
+       				   
+       				  --Demand Need for Offset Need Date
+       				  
+       				  SELECT
+      						ITEM			as ITEM, 				/*Item*/
+       					  	SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  	SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  	'NEED_DATE' 	as DATETYPE,			/*Date Type*/
+       					    DUE_DATE        as  PLANNINGDATE,				/*Unoffset Need Date*/
+       					  	U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  	U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       				        CUMULATIVE_SHIPMENTQTY
+       				   FROM CUMULATIVE_SHIPMENT_DUEDATE
+       				   
+       				   			
+       				   UNION ALL
+       				   
+       				   --Demand Need for Request Date Unoffset
+       				   
+       				   SELECT
+      						ITEM			as ITEM, 				/*Item*/
+       					  	SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  	SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  	'REQUEST_DATE_UNOFFSET' as DATETYPE,	/*Date Type*/
+       					    DUE_DATE        as PLANNINGDATE,		/*Unoffset Need Date*/
+       					  	U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  	U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       				        CUMULATIVE_SHIPMENTQTY
+       				   FROM CUMULATIVE_SHIPMENT_DUEDATE
+       				   
+       				   			
+       				   UNION ALL
+       				   
+       				   --Demand Need for Request Date
+       				   
+       				   SELECT 
+      						ITEM			as ITEM, 				/*Item*/
+       					  	SCENARIO_DATE 	as SCENARIO_DATE, 		/*Snapshot Date*/
+       					  	SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       					  	'REQUEST_DATE'	as DATETYPE,		    /*Date Type*/
+       					    DUE_DATE        as PLANNINGDATE, 		/*Unoffset Need Date*/
+       					  	U_CUSTOMER		as U_CUSTOMER, 			/*Customer*/
+       					  	U_SUB_SEGMENT	as U_SUB_SEGMENT, 		/*Sub-Segment*/
+       				        CUMULATIVE_SHIPMENTQTY
+       				   FROM CUMULATIVE_SHIPMENT_DUEDATE
+      ),
+
+      LT_MAX_PLAN_SHIPMENT AS (
+                          SELECT DISTINCT
+       					ITEM,					--Material/Product
+       					SCENARIO_DATE,			--Snapshot Date
+       					SCENARIO_NAME,		--Scenario
+                          DATETYPE,
+       					MIN(PLANNINGDATE) as MIN_PLANNINGDATE,
+       					MAX(PLANNINGDATE) as MAX_PLANNINGDATE
+       					FROM LT_PLANNING_SHIPMENT
+       					GROUP BY ITEM,
+       							 SCENARIO_DATE,
+       							 SCENARIO_NAME,
+       							 DATETYPE
+       ),
+       
+      LT_PLANNING_SHIPMENTDATE AS (
+                              SELECT DISTINCT
+      						A.ITEM			as ITEM, 					/*Item*/
+       					  	A.SCENARIO_DATE	as SCENARIO_DATE, 			/*Snapshot Date*/
+       					  	A.SCENARIO_NAME as SCENARIO_NAME,		/*Simulation Name*/
+       					  	A.DATETYPE		 as DATETYPE,				/*Date Type*/
+       					  	A.PLANNINGDATE	 as PLANNINGDATE,			/*Unoffset Need Date*/
+       					  	C.WORK_WEEK_NAME as PLANNINGWW,				/*Planning Work Week*/
+       					  	C.FISCAL_YEAR_NAME as PLANNING_FISCAL_YR,	/*Planning Fiscal Year Name*/
+       					  	C.FISCAL_QTR_NAME as PLANNING_FQ,		/*Planning Fiscal Quarter Name*/
+       					  	C.FISCAL_MONTH_NAME   as PLANNING_FMON,		/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE as PLANNING_WW_BEGIN,/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE  as PLANNING_WW_END,	/*Planning Work Week End Date*/ 
+       					  	COALESCE (A.U_CUSTOMER, '') as U_CUSTOMER, 				/*Customer*/
+       					  	COALESCE (A.U_SUB_SEGMENT, '') as U_SUB_SEGMENT, 			/*Sub-Segment*/
+       					  	A.CUMULATIVE_SHIPMENTQTY,
+       					  	CASE WHEN B.MIN_PLANNINGDATE < A.SCENARIO_DATE
+       					  	THEN B.MIN_PLANNINGDATE
+       					  	ELSE A.SCENARIO_DATE
+       					  	END AS MIN_PLANNINGDATE,					/*Min Planning Date*/
+       					  	CASE WHEN B.MAX_PLANNINGDATE <= A.SCENARIO_DATE
+       					  	THEN DATEADD(DAY,370,A.SCENARIO_DATE)
+       					  	ELSE DATEADD(DAY,370,B.MAX_PLANNINGDATE)
+       					  	END AS MAX_PLANNINGDATE,					/*Max Planning Date*/
+       					  	'1' as COND									/*Condition for cross Join*/
+       				   FROM LT_PLANNING_SHIPMENT as A
+       				   LEFT OUTER JOIN LT_MAX_PLAN_SHIPMENT as B
+       				   ON A.ITEM 		 = B.ITEM 	and
+       				   	  A.SCENARIO_DATE = B.SCENARIO_DATE and
+       				   	  A.SCENARIO_NAME = B.SCENARIO_NAME 
+       				   	  and A.DATETYPE	 = B.DATETYPE
+       				   LEFT OUTER JOIN (
+      					SELECT FULL_DATE,WORK_WEEK_NAME,FISCAL_YEAR_NAME,FISCAL_QTR_NAME,FISCAL_MONTH_NAME,WORK_WEEK_BEGIN_DATE,WORK_WEEK_END_DATE FROM {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }} GROUP BY ALL
+      					) as C
+       				   ON A.PLANNINGDATE = cast(C.FULL_DATE as date)
+      				  
+      ),
+      						  
+       						
+      LT_ENT_DATE_SHIPMENT AS ( 
+                            SELECT cast(FULL_DATE as date) as FULL_DATE_TRIMMED,
+      					  WORK_WEEK_NAME,
+      					  '1' AS COND 
+      			  FROM {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }}
+      			  WHERE  cast(FULL_DATE as date) >= (SELECT FISCAL_QUARTER_BEGIN_DATE FROM QTR)  
+      ),
+
+
+      /*Week Scaffolding*/ 				   	  
+      LT_WEEK_SHIPMENT AS (
+                      SELECT DISTINCT
+      				B.WORK_WEEK_NAME  as PLANNING_WORKWK,		/*Planning Work Week*/
+      				A.ITEM			  as ITEM, 					/*Item*/
+       				A.SCENARIO_DATE   as SCENARIO_DATE, 			/*Snapshot Date*/
+       				A.SCENARIO_NAME   as SCENARIO_NAME,		/*Simulation Name*/
+       				A.DATETYPE		  as DATETYPE,				/*Date Type*/
+       				COALESCE (A.U_CUSTOMER, '') as U_CUSTOMER, 			/*Customer*/
+       				COALESCE (A.U_SUB_SEGMENT, '') as U_SUB_SEGMENT  		/*Sub-Segment*/
+       						
+       		   FROM LT_ENT_DATE_SHIPMENT as B 
+       		   LEFT OUTER JOIN LT_PLANNING_SHIPMENTDATE as A
+       		      on B.COND = A.COND
+       		   WHERE B.FULL_DATE_TRIMMED >= A.MIN_PLANNINGDATE AND
+       		         B.FULL_DATE_TRIMMED <= A.MAX_PLANNINGDATE
+       		   GROUP BY B.WORK_WEEK_NAME,
+       		   			A.ITEM,
+       		   			A.SCENARIO_DATE,
+       		   			A.SCENARIO_NAME,
+       		   			A.DATETYPE,
+       		   			A.U_CUSTOMER,
+       		   			A.U_SUB_SEGMENT
+      ),
+      LT_CUMULATIVE_SHIPMENT AS (
+                              SELECT DISTINCT
+      						A.PLANNING_WORKWK		as PLANNING_WORKWK,		/*Planning Work Week*/				
+       				   		A.ITEM					as ITEM,				/*Item*/
+       				   		A.SCENARIO_DATE			as SCENARIO_DATE, 		/*Snapshot Date*/
+       				   		A.SCENARIO_NAME  		as SCENARIO_NAME ,	/*Simulation Name*/
+       						A.DATETYPE				as DATETYPE,			/*Date Type*/
+       						A.U_SUB_SEGMENT			as U_SUB_SEGMENT,		/*Sub-Segment*/
+       						A.U_CUSTOMER			as U_CUSTOMER, 			/*Customer*/
+       						C.FISCAL_YEAR_NAME		as PLANNING_FISCAL_YR,	/*Planning Fiscal Year Name*/
+       					  	C.FISCAL_QTR_NAME	    as PLANNING_FQ,			/*Planning Fiscal Quarter Name*/
+       					  	C.FISCAL_MONTH_NAME		as PLANNING_FMON,		/*Planning Fiscal Month*/
+       					  	C.WORK_WEEK_BEGIN_DATE  as PLANNING_WW_BEGIN,	/*Planning Work Week Begin Date*/
+       					  	C.WORK_WEEK_END_DATE	as PLANNING_WW_END,		/*Planning Work Week End Date*/ 
+       					  	C.FISCAL_PERIOD_SORT	as PLANNING_FMON_SORT,	/*Fiscal Period Sort*/
+       					  	C.FISCAL_QTR_SORT	    as PLANNING_FQ_SORT,	/*Fiscal Quarter Sort*/
+       					    B.CUMULATIVE_SHIPMENTQTY	
+       				   FROM LT_WEEK_SHIPMENT as A
+       				   LEFT OUTER JOIN LT_PLANNING_SHIPMENTDATE AS B
+       				   ON  A.ITEM           = B.ITEM	   	and
+       				   	  A.SCENARIO_DATE	= B.SCENARIO_DATE and
+       				   	  A.SCENARIO_NAME = B.SCENARIO_NAME and
+       				   	  A.DATETYPE		= B.DATETYPE	and
+       				   	  A.U_CUSTOMER		= B.U_CUSTOMER	and
+       				   	  A.U_SUB_SEGMENT	= B.U_SUB_SEGMENT 
+       				  LEFT OUTER JOIN {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }} as C
+       				   ON A.PLANNING_WORKWK = C.WORK_WEEK_NAME
+                        
+      ),
+      /********************************************end shipemnt data*************************************************************/	
+
+      SHIPMENT_SUPPLY_JOIN AS ( SELECT A.PLANNING_WORKWK as PLANNING_WORKWK,	/*Planning Work Week*/				
+       				   		A.ITEM					as ITEM,				/*Item*/
+       				   		NULL                    as DMDLOC,
+       				   		A.SCENARIO_DATE			as SCENARIO_DATE, 		/*Snapshot Date*/
+       				   		A.SCENARIO_NAME  		as SCENARIO_NAME ,	/*Simulation Name*/
+       				   		NULL                    as DMDTYPE,							
+       	                    NULL                    as U_ATP_CATEGORY,
+       						A.DATETYPE				as DATETYPE,			/*Date Type*/
+       						A.U_CUSTOMER			as U_CUSTOMER, 			/*Customer*/
+       						A.PLANNING_FISCAL_YR	as PLANNING_FISCAL_YR,	/*Planning Fiscal Year Name*/
+       					  	A.PLANNING_FQ        	as PLANNING_FQ,			/*Planning Fiscal Quarter Name*/
+       					  	A.PLANNING_FMON  		as PLANNING_FMON,		/*Planning Fiscal Month*/
+       					  	A.PLANNING_WW_BEGIN     as PLANNING_WW_BEGIN,	/*Planning Work Week Begin Date*/
+       					  	A.PLANNING_WW_END    	as PLANNING_WW_END,		/*Planning Work Week End Date*/ 
+       					  	0                       as DMDNEEDQTY,						
+       	                    0                       as SUPPLYPEGQTY,
+      						SUM(B.CUMULATIVE_DMDNEEDQTY) as CUMULATIVE_DMDNEEDQTY,
+       					    SUM(B.CUMULATIVE_SUPPLYQTY) as CUMULATIVE_SUPPLYQTY,
+       					  	A.U_SUB_SEGMENT			as U_SUB_SEGMENT,		/*Sub-Segment*/
+       					  	NULL                    as U_INDDMD_TYPE,				
+       					  	A.PLANNING_FMON_SORT	as PLANNING_FMON_SORT,	/*Fiscal Period Sort*/
+       					  	A.PLANNING_FQ_SORT   	as PLANNING_FQ_SORT,	/*Fiscal Quarter Sort*/
+       					  	0                       as PRIORITY,                      
+        	                    NULL                    as U_SEGMENTATION,	
+        	                    NULL 					as U_PPLEVEL,
+       					    A.CUMULATIVE_SHIPMENTQTY
+       					    
+       					    FROM LT_CUMULATIVE_SHIPMENT A
+       					    LEFT OUTER JOIN LT_JOIN B
+       					    ON   A.PLANNING_WORKWK	  = B.PLANNING_WORKWK and
+      			  	             A.ITEM				  = B.ITEM and
+      			  	             A.SCENARIO_DATE	  = B.SCENARIO_DATE and
+      			  	             A.SCENARIO_NAME	  = B.SCENARIO_NAME and
+      			  	             A.U_SUB_SEGMENT	  = B.U_SUB_SEGMENT and
+      			  	             A.U_CUSTOMER		  = B.U_CUSTOMER and
+      			  	             A.PLANNING_FISCAL_YR = B.PLANNING_FISCAL_YR and
+      			  	             A.PLANNING_FQ		  = B.PLANNING_FQ	and
+      			  	             A.PLANNING_FMON	  = B.PLANNING_FMON and
+      			  	             A.PLANNING_WW_BEGIN  = B.PLANNING_WW_BEGIN and
+      			  	             A.PLANNING_WW_END	  = B.PLANNING_WW_END and
+      			  	             A.PLANNING_FMON_SORT = B.PLANNING_FMON_SORT and
+      			  	             A.PLANNING_FQ_SORT	  = B.PLANNING_FQ_SORT and
+      			  	             A.DATETYPE           = B.DATETYPE
+      							 group by all
+      							 
+      			  	           
+       ),
+        	
+      UNION_SUPPLY_SHIPMENT AS (
+                              SELECT  DISTINCT
+                              PLANNING_WORKWK,				
+       				   		ITEM,
+       				   		DMDLOC,
+       				   		SCENARIO_DATE, 
+       				   		SCENARIO_NAME ,
+       				   		DMDTYPE,							
+       	                    U_ATP_CATEGORY,
+       						DATETYPE,
+       						U_CUSTOMER,
+       						PLANNING_FISCAL_YR,
+       					  	PLANNING_FQ,
+       					  	PLANNING_FMON,
+       					  	PLANNING_WW_BEGIN,
+       					  	PLANNING_WW_END,
+       					  	DMDNEEDQTY,						
+       	                    SUPPLYPEGQTY,
+       	                    CUMULATIVE_DMDNEEDQTY,
+       					    CUMULATIVE_SUPPLYQTY,
+       					  	U_SUB_SEGMENT,	
+       					  	U_INDDMD_TYPE,				
+       					  	PLANNING_FMON_SORT,	
+       					  	PLANNING_FQ_SORT,
+       					  	PRIORITY,                      
+        	                    U_SEGMENTATION,	
+       					    0 AS CUMULATIVE_SHIPMENTQTY,
+       					    U_PPLEVEL
+       					    FROM LT_JOIN
+                              
+       					    
+       					    UNION ALL
+       					    
+       					    SELECT  DISTINCT
+                              PLANNING_WORKWK,				
+       				   		ITEM,
+       				   		DMDLOC,
+       				   		SCENARIO_DATE, 
+       				   		SCENARIO_NAME ,
+       				   		DMDTYPE,							
+       	                    U_ATP_CATEGORY,
+       						DATETYPE,
+       						U_CUSTOMER,
+       						PLANNING_FISCAL_YR,
+       					  	PLANNING_FQ,
+       					  	PLANNING_FMON,
+       					  	PLANNING_WW_BEGIN,
+       					  	PLANNING_WW_END,
+       					  	DMDNEEDQTY,						
+       	                    SUPPLYPEGQTY,
+       					    IFNULL(CUMULATIVE_DMDNEEDQTY,0) as CUMULATIVE_DMDNEEDQTY,	
+      	                    IFNULL(CUMULATIVE_SUPPLYQTY,0) as CUMULATIVE_SUPPLYQTY,
+       					  	U_SUB_SEGMENT,	
+       					  	U_INDDMD_TYPE,				
+       					  	PLANNING_FMON_SORT,	
+       					  	PLANNING_FQ_SORT,
+       					  	PRIORITY,                      
+        	                    U_SEGMENTATION,
+       					    CUMULATIVE_SHIPMENTQTY,
+       					    U_PPLEVEL 
+       					    FROM SHIPMENT_SUPPLY_JOIN
+      )
+
+
+      SELECT 			
+      	A.PLANNING_WORKWK,					/*Planning Work Week*/				
+       	A.ITEM, 							/*Item*/
+       	A.DMDLOC,							/*Demand Location*/
+       	A.SCENARIO_DATE, 					/*Snapshot Date*/
+       	A.SCENARIO_NAME ,					/*Simulation Name*/
+       	A.DMDTYPE,							/*Demand Type*/
+       	A.U_ATP_CATEGORY, 					/*ATP Category*/ 
+       	A.DATETYPE,							/*Date Type*/
+       	A.U_CUSTOMER, 						/*Customer*/
+       	A.PLANNING_FISCAL_YR,				/*Planning Fiscal Year*/
+       	A.PLANNING_FQ,						/*Planning Fiscal Quarter*/
+       	A.PLANNING_FMON,					/*Planning Fiscal Month*/
+       	A.PLANNING_WW_BEGIN,				/*Planning Work Week Begin Date*/
+       	A.PLANNING_WW_END,					/*Planning Work Week End Date*/ 
+       	A.DMDNEEDQTY,						/*Demand Quantity*/
+       	A.SUPPLYPEGQTY,						/*Supply Peg Quantity*/	
+       	A.CUMULATIVE_DMDNEEDQTY,			/*Cumulative Demand Need Quantity*/
+      	A.CUMULATIVE_SUPPLYQTY,				/*Cumulative Supply Peg Quantity*/
+      	CURRENT_TIMESTAMP as LOAD_DATE_TIME,
+      	A.U_SUB_SEGMENT,					/*Sub-Segment*/
+      	A.U_INDDMD_TYPE,					/*Indipendent Demand Type*/
+      	A.PLANNING_FMON_SORT,				/*Planning Fiscal Month Sort*/
+       	A.PLANNING_FQ_SORT,					/*Planning Fiscal Quarter Sort*/
+       	A.PRIORITY,                      	/*Priority*/
+        	A.U_SEGMENTATION,	               	/*Segmentation*/   	
+        	CASE 
+      		WHEN (A.CUMULATIVE_DMDNEEDQTY > A.CUMULATIVE_SUPPLYQTY) THEN (A.CUMULATIVE_DMDNEEDQTY - A.CUMULATIVE_SUPPLYQTY)
+      		ELSE 0.0
+      	END AS SHORTAGE,
+      	CUMULATIVE_SHIPMENTQTY,
+      	--'' as U_PPLEVEL
+      	A.U_PPLEVEL,
+      	B.LOCATION_DESC
+
+      FROM UNION_SUPPLY_SHIPMENT as A
+      LEFT OUTER JOIN (SELECT LOCATION,LOCATION_DESC FROM {{ ref('E_SC_MD', 'D_ESP_LOCATION') }} GROUP BY ALL) B
+      ON A.DMDLOC = B.LOCATION
+      ; 	 
+       		
+       RNO_MIN := :RNO_MIN + 1;
+      END WHILE;
+
+      --Store LOAD_DATE_TIME into WATERMARK_TIME
+      SELECT  MAX(LOADDATETIMESTAMP) INTO WATERMARK_TIME
+      FROM {{ ref('E_SC_SP', 'ESP_INDDMDVIEW_LOAD') }}
+      --WHERE SCENARIO_DATE=  :V_SCENARIO_DATE and SCENARIO_NAME=:V_SCENARIO_NAME;
+      WHERE TO_TIMESTAMP(LOADDATETIMESTAMP) > :MIN_LOAD_DATE_TIME AND TO_TIMESTAMP(LOADDATETIMESTAMP) <= :MAX_LOAD_DATE_TIME;
+
+      --Update watermark value
+      CALL  {{ ref('E_SC_UTIL_USER', 'USP_UPDATE_WATER_MARKER_SPO') }} 
+          (:V_DATA_DOMAIN,:V_TARGET_DATABASE,:V_TARGET_SCHEMA,:V_TARGET_TABLE,:V_PROCEDURE_NAME,:P_SCENARIO_NAME,:WATERMARK_TIME);
+      	
+      END;	                    				        
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2c7b5114-6cd8-4327-a38e-f77a54d81fb6
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: NEEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f1e09e30-d9f5-46b0-87d1-2aff60fe7025
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7ab0e5ed-0eac-47df-a711-73ace9229087
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7d364d9c-7175-4b79-b8d8-d57bb4d114f5
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 93b88dc1-5dd3-43b1-b839-e8383f900789
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4e999f2b-765a-41f9-b219-bb16c8271ef8
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ec172488-b255-4dc3-925d-ebc2bc7d4959
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4072d9e9-47d5-4551-9730-a82ae2ee62d4
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2cf130c5-6a90-490f-bbb4-fcc452f57dba
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: CUST
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8bce49b8-88e2-428d-857a-aa5daba4bf0c
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e4cc3301-0f2e-484a-a5fe-6d4064708a89
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: EXTORDERID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 94f97e54-cf0b-4774-81ad-5d69c71fcb24
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a8ea8aa6-e079-4e02-b431-b88d5d5f9170
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SCHEDSTATUS
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6f3732be-5cca-4122-879d-4622219d83a7
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f86f0fda-708f-4a35-8ae3-319ab10b946c
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: FCSTSW
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3b6abba0-83d9-403a-acdd-abaca468bf57
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2dc97947-736c-4f27-a6d6-d00b0fbeab09
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: FCSTSEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d067023c-607b-4d06-bd7f-2ea5c98b0aa9
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 48a009f1-e2d7-4bfb-9579-6fe1d279f332
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: DMDTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b23587a5-15d6-43a7-981e-13b57bd0af3c
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 461cd398-8b8d-4495-bca2-46fc9a0f6f31
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SCHEDSEQNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4f45722f-7ded-4c94-bd7a-1b5506ca4ff9
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a7522dbb-d11f-460c-8c54-6ea8d59e970f
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SEQNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 27754a94-e2c8-4721-bad1-f249fbee0798
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a286b48d-a221-4e86-9f4c-770bc6b7e133
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: LOC
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0294667a-522d-4f82-8911-9df04ac4ab7d
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 85755910-19d8-4897-b3f6-af3c46f643ff
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SOURCE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c7f6cce0-08a8-4012-a348-47d12566415b
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 00c5fbbe-3ce6-4474-846a-e827fbbcd2e0
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f1187517-5b9b-4c5a-9056-af7961a80a6f
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b5e4e101-fe8b-4202-a6a0-f1bb0cd65247
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 919733aa-5af1-4717-952d-3e007360411a
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4280162e-d610-40b3-8a53-8c45779754ba
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: SCHEDQTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 36c7d805-6969-4649-8963-1a4a3b2f0fc6
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 504680a6-1d9b-4bae-8608-61cd8556eda2
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: QUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b0c7c0db-9f96-4c9b-9009-5e3e62e58c69
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 94afb56c-0c16-49e1-b3ab-571d9f22f170
+          stepCounter: bd5effe5-dabc-45df-8d0b-bcadd4540373
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: CONSUMEDQTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d8452aa7-57d2-4249-8497-a1299db7d69c
+                stepCounter: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          D_ESP_LOCATION: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+          ESP_HUB_OUTPUT_V_CUSTORDER: e8364870-65af-4666-9fac-c59d287911ef
+          ESP_HUB_OUTPUT_V_FORECAST: 7d7d04a7-73ff-4299-b97a-4012569774af
+          ESP_HUB_OUTPUT_V_SHIPMENTS: 428c4fe7-dfdd-4173-b5d0-62e592d4a451
+          ESP_INDDMDVIEW_LOAD: efce7aad-37ac-41dd-bbac-5f5744a86c7a
+          V_D_ENTERPRISE_DATE: d47842bb-5fd3-4df6-a25f-3ab6057160cc
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_MASTER_DATA_MD
+            nodeName: V_D_ENTERPRISE_DATE
+          - locationName: E_SC_MD
+            nodeName: D_ESP_LOCATION
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_CUSTORDER
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_FORECAST
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_SHIPMENTS
+          - locationName: E_SC_SP
+            nodeName: ESP_INDDMDVIEW_LOAD
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_SP', 'ESP_INDDMDVIEW_LOAD') }} "ESP_INDDMDVIEW_LOAD"
+            left join {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_FORECAST') }} "ESP_HUB_OUTPUT_V_FORECAST" 
+            on 1=1
+            left join {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SHIPMENTS') }} "ESP_HUB_OUTPUT_V_SHIPMENTS"
+            on 1=1
+            left join {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_CUSTORDER') }} "ESP_HUB_OUTPUT_V_CUSTORDER"
+            on 1=1
+            left join {{ ref('E_MASTER_DATA_MD', 'V_D_ENTERPRISE_DATE') }} "V_D_ENTERPRISE_DATE"
+            on 1=1
+            left join {{ ref('E_SC_MD', 'D_ESP_LOCATION') }} "D_ESP_LOCATION"
+            on 1=1
+        name: SUPPLY_RESPONSE_ETL
+        noLinkRefs: []
+  name: SUPPLY_RESPONSE_ETL
+  overrideSQL: false
+  schema: ""
+  sqlType: "187"
+  type: sql
+  version: 1
+type: Node

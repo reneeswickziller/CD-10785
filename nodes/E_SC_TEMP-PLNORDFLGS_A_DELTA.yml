@@ -1,0 +1,249 @@
+fileVersion: 1
+id: b35f59ae-9770-41f8-b976-10e56b2cda3d
+name: PLNORDFLGS_A_DELTA
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 559af0ae-3b23-424b-bc80-652323fb9248
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b7bc871e-a03f-4cfe-b7aa-665810d11eb8
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c1394b27-6f8b-41a9-b5cc-32d14a459b7c
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 458bb673-ef05-434b-bca7-b5e84033b1da
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 75b9e6f0-4af8-40d1-80b8-35623af79b41
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: DATE
+        description: ""
+        name: STARTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 55c0f3cc-e3d8-4a55-aeeb-987ff38d8103
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ecf327a9-1071-40de-9e87-517a4b0d5925
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: COPRODORDERTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d3792552-fcf0-475d-88fa-c9e4fc832e77
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4dc19d39-20b7-486b-ae5e-4d20fd122c99
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PRODUCTIONMETHOD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8c70d212-75e8-4401-80a9-37dc2ed58d98
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 92995088-b3bd-448e-9f3e-ab300e7cda45
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SEQNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: bc30f534-8f2e-43eb-adec-ae530711a711
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ad8eaece-b4f2-4bb9-8afa-aadc67e1c11e
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: LOC
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a291c897-879f-4698-bd6e-0a9104b3fb82
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f2fd08b5-a601-406f-859c-06e1ef272b2e
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e115f8b0-600f-4cb8-b777-6f5cd3ed7e6b
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bcf0f0ed-ec4c-4eb1-ae88-3f668f3221cf
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f6198304-2f12-49a5-8d00-783f807bb74a
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 19c119b4-6335-486f-8a9a-977ae82ac093
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: SUPPLYPEGQTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7bbab33b-739c-44ed-9eaf-8554580a4e92
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: SUM("PLNORDFLGS_U_DELTA"."SUPPLYPEGQTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c7c7abd0-f2ee-47f5-9994-009caf29947e
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: ""
+        description: ""
+        name: QUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5760d1c4-18d6-4125-a3d2-bea20e67feb9
+                stepCounter: c95acc0c-0134-4dbd-a7e8-23721b127cd0
+            transform: SUM("PLNORDFLGS_U_DELTA"."QUANTITY")
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0ef408de-19c9-4987-b585-16317a090890
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: ""
+        defaultValue: ""
+        description: ""
+        name: DELTA_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "NULL"
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: c9d9df43-fa1f-4bfa-a199-4cf80a23d9e0
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: ""
+        defaultValue: ""
+        description: ""
+        name: NPI_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "'N'"
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b745fa6e-2e5e-4e81-8107-7ff36594da8b
+          stepCounter: b35f59ae-9770-41f8-b976-10e56b2cda3d
+        config: {}
+        dataType: ""
+        defaultValue: ""
+        description: ""
+        name: COPRODUCT_PLAN_ORD_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: IFF("PLNORDFLGS_U_DELTA"."COPRODORDERTYPE" IS NULL,'N',IFF("PLNORDFLGS_U_DELTA"."COPRODORDERTYPE" <> '0','Y','N'))
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: PLNORDFLGS_U_DELTA
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'PLNORDFLGS_U_DELTA') }} "PLNORDFLGS_U_DELTA"
+            GROUP BY ALL
+        name: PLNORDFLGS_A_DELTA
+        noLinkRefs: []
+  name: PLNORDFLGS_A_DELTA
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

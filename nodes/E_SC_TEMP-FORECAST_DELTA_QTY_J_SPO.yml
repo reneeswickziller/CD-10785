@@ -1,0 +1,154 @@
+fileVersion: 1
+id: df953620-2d40-43b9-bbf0-540f072b7bdc
+name: FORECAST_DELTA_QTY_J_SPO
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d0207aa9-32d9-4151-9c92-52b16d4a645e
+          stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DT_NEW
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b90c0968-84bf-4ce5-a38a-7cbb477e6087
+                stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 25033111-53d7-43bc-9f82-def296cf0c79
+          stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e1014704-5838-4105-8379-abf87736a7e5
+                stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 85d452ad-557f-4860-8483-2bdd5f08f0a5
+          stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        hashDetails: null
+        name: U_INDDMD_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 04c2cfee-bc06-4d32-b46e-644a1a38a73c
+                stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9e76714f-db95-4ddc-ab6f-281e2033d9a1
+          stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: NEEDDATE_NEW
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f72dcc60-3ef6-413a-bd54-2ebf8517c2e3
+                stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+            transform: DATE("FORECAST_DELTA_QTY_P_SPO"."NEEDDATE")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 44d720be-e30a-40c3-902c-2c6b9bf10b57
+          stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+        config: {}
+        dataType: NUMBER(21,3)
+        description: ""
+        hashDetails: null
+        name: QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 49f9b0a3-874d-45fc-9eea-11e39c516920
+                stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: cb82e8bd-f3bd-4085-a2a9-13a66a4c75e3
+          stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3c61695c-3366-4554-ad73-12dcb5b2bbe4
+                stepCounter: e425ab60-4341-40dc-9a8c-5eb4766ed768
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6e086310-cb29-4429-88e8-e5ef03747790
+          stepCounter: df953620-2d40-43b9-bbf0-540f072b7bdc
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "\"ESP_HUB_INPUT_V_ESP_RR_FORECAST\".\"SNAPSHOT_TIME\""
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          FORECAST_DELTA_QTY_P_SPO: e425ab60-4341-40dc-9a8c-5eb4766ed768
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_INPUT_V_ESP_RR_FORECAST
+          - locationName: E_SC_TEMP
+            nodeName: FORECAST_DELTA_QTY_P_SPO
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_TEMP', 'FORECAST_DELTA_QTY_P_SPO') }} "FORECAST_DELTA_QTY_P_SPO"
+            LEFT OUTER JOIN (SELECT SNAPSHOT_TIME,SNAPSHOT_DT FROM {{ ref('E_SC_SP', 'ESP_HUB_INPUT_V_ESP_RR_FORECAST') }} GROUP BY 1,2) "ESP_HUB_INPUT_V_ESP_RR_FORECAST"
+            ON "FORECAST_DELTA_QTY_P_SPO"."SNAPSHOT_DT"="ESP_HUB_INPUT_V_ESP_RR_FORECAST"."SNAPSHOT_DT" 
+        name: FORECAST_DELTA_QTY_J_SPO
+        noLinkRefs: []
+  name: FORECAST_DELTA_QTY_J_SPO
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

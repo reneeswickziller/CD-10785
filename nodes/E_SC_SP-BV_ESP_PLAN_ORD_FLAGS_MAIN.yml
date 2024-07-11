@@ -1,0 +1,388 @@
+fileVersion: 1
+id: 20bba594-a62c-4939-bf28-69c131e5fe79
+name: BV_ESP_PLAN_ORD_FLAGS_MAIN
+operation:
+  config:
+    SQL_Code: |-
+      DECLARE END_DT TIMESTAMP_NTZ;
+      START_DT TIMESTAMP_NTZ;
+      V_MIN_VAL INTEGER:= 0;
+      V_MAX_VAL INTEGER:= 0;
+      CNT INTEGER;
+      WATER_MARKER TIMESTAMP_NTZ;
+      V_SCENARIO_DATE DATE;
+      V_SCENARIO_NAME VARCHAR (50);
+
+      BEGIN
+      SELECT
+        CURRENT_TIMESTAMP INTO:END_DT;
+
+      SELECT
+        WATER_MARKER_TIMESTAMP INTO:START_DT
+      FROM
+        {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+      WHERE
+        PROCEDURE_NAME = 'BV_ESP_PLAN_ORD_FLAGS_INSERT'
+        AND SCENARIO_NAME = '{{parameters.SCENARIO_NAME}}';
+
+      CREATE OR REPLACE TEMPORARY TABLE
+        {{ref_no_link(node.location.name, node.name+"_{{parameters.SCENARIO_NAME}}"+"_RNO" )}} AS (
+          SELECT
+            SNAPSHOTDATE,
+            SIMULATION_NAME,
+            ROW_NUMBER() OVER (
+              ORDER BY
+                SNAPSHOTDATE,
+                SIMULATION_NAME
+            ) RNO
+          from
+             {{ ref('E_SC_SP','ESP_HUB_OUTPUT_V_PLANORDER') }}
+          WHERE
+            ("LOADDATETIMESTAMP" BETWEEN:START_DT AND: END_DT)
+            AND 1 = CASE
+              WHEN 'ALL' = '{{parameters.SCENARIO_DATE}}' THEN 1
+              WHEN SNAPSHOTDATE = '{{parameters.SCENARIO_DATE}}' THEN 1
+              ELSE 0
+            END
+            AND SIMULATION_NAME = '{{parameters.SCENARIO_NAME}}'
+          GROUP BY
+            SNAPSHOTDATE,
+            SIMULATION_NAME
+        );
+
+      SELECT
+        MIN(RNO),
+        MAX(RNO) INTO:V_MIN_VAL,
+      :V_MAX_VAL
+      FROM
+        {{ref_no_link(node.location.name, node.name+"_{{parameters.SCENARIO_NAME}}"+"_RNO" )}};
+
+      WHILE (:V_MIN_VAL <=:V_MAX_VAL) DO
+      SELECT
+        SNAPSHOTDATE,
+        SIMULATION_NAME INTO:V_SCENARIO_DATE,
+      :V_SCENARIO_NAME
+      FROM
+        {{ref_no_link(node.location.name, node.name+"_{{parameters.SCENARIO_NAME}}"+"_RNO" )}}
+      WHERE
+        RNO =:V_MIN_VAL;
+
+      SELECT
+        COUNT(*) INTO:CNT
+      FROM
+       {{ref_no_link(node.location.name, node.name) }}
+      WHERE
+        SCENARIO_DATE =:V_SCENARIO_DATE
+        AND SCENARIO_NAME =:V_SCENARIO_NAME;
+
+      IF (:CNT > 0) THEN
+      INSERT INTO
+        {{ref_no_link(node.location.name, node.name.replace("MAIN", "HIST")) }}
+      SELECT
+        "SCHEDDATE",
+        "SCENARIO_DATE",
+        "STARTDATE",
+        "PRODUCTIONMETHOD",
+        "SEQNUM",
+        "LOC",
+        "ITEM",
+        "SCENARIO_NAME",
+        "QUANTITY",
+        "NPI_FLAG",
+        "COPRODUCT_PLAN_ORD_FLAG",
+        "EXECUTABLE_FLAG",
+        "LOADDATETIMESTAMP"
+      FROM
+        {{ref_no_link(node.location.name, node.name) }}
+      WHERE
+        SCENARIO_DATE =:V_SCENARIO_DATE
+        AND SCENARIO_NAME =:V_SCENARIO_NAME;
+
+      DELETE FROM {{ref_no_link(node.location.name, node.name) }}
+      WHERE
+        SCENARIO_DATE =:V_SCENARIO_DATE
+        AND SCENARIO_NAME =:V_SCENARIO_NAME;
+
+      END IF;
+
+      INSERT INTO
+        {{ref_no_link(node.location.name, node.name) }} (
+          SCHEDDATE,
+          SCENARIO_DATE,
+          STARTDATE,
+          PRODUCTIONMETHOD,
+          SEQNUM,
+          LOC,
+          ITEM,
+          SCENARIO_NAME,
+          QUANTITY,
+          NPI_FLAG,
+          COPRODUCT_PLAN_ORD_FLAG,
+          EXECUTABLE_FLAG,
+          LOADDATETIMESTAMP
+        )
+      SELECT
+        "PLNORDFLGS_LOAD"."SCHEDDATE" AS "SCHEDDATE",
+        "PLNORDFLGS_LOAD"."SCENARIO_DATE" AS "SCENARIO_DATE",
+        "PLNORDFLGS_LOAD"."STARTDATE" AS "STARTDATE",
+        "PLNORDFLGS_LOAD"."PRODUCTIONMETHOD" AS "PRODUCTIONMETHOD",
+        "PLNORDFLGS_LOAD"."SEQNUM" AS "SEQNUM",
+        "PLNORDFLGS_LOAD"."LOC" AS "LOC",
+        "PLNORDFLGS_LOAD"."ITEM" AS "ITEM",
+        "PLNORDFLGS_LOAD"."SCENARIO_NAME" AS "SCENARIO_NAME",
+        "PLNORDFLGS_LOAD"."QUANTITY" AS "QUANTITY",
+        "PLNORDFLGS_LOAD"."NPI_FLAG" AS "NPI_FLAG",
+        "PLNORDFLGS_LOAD"."COPRODUCT_PLAN_ORD_FLAG" AS "COPRODUCT_PLAN_ORD_FLAG",
+        "PLNORDFLGS_LOAD"."EXECUTABLE_FLAG" AS "EXECUTABLE_FLAG",
+        "PLNORDFLGS_LOAD"."LOADDATETIMESTAMP" AS "LOADDATETIMESTAMP"
+      FROM
+        {{ ref('E_SC_TEMP', 'PLNORDFLAGS_LOAD') }}
+      WHERE
+        SCENARIO_DATE =:V_SCENARIO_DATE
+        AND SCENARIO_NAME =:V_SCENARIO_NAME;
+
+      V_MIN_VAL:=:V_MIN_VAL + 1;
+
+      END WHILE;
+
+      SELECT
+        MAX("LOADDATETIMESTAMP") INTO:WATER_MARKER
+      FROM
+        {{ref_no_link(node.location.name, node.name) }}
+      WHERE
+        SCENARIO_NAME = '{{parameters.SCENARIO_NAME}}';
+
+      UPDATE {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+      SET
+        WATER_MARKER_TIMESTAMP =:WATER_MARKER
+      WHERE
+        PROCEDURE_NAME = 'BV_ESP_PLAN_ORD_FLAGS_INSERT'
+        AND SCENARIO_NAME = '{{parameters.SCENARIO_NAME}}';
+
+      DROP TABLE {{ref_no_link(node.location.name, node.name+"_{{parameters.SCENARIO_NAME}}"+"_RNO" )}};
+
+      END;
+    Source_Table_Source: "{{ref('E_SC_TEMP','PLNORDFLAGS_SPO_PLANORDER')}}"
+    incconfigfiltervalue: BV_ESP_PLAN_ORD_FLAGS_INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_SP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 680037ec-95ea-4c1c-990f-aa50c7c2b22b
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 471e5738-60e2-448f-856b-fceccf3f315b
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0c46c5ad-676c-49ca-aa3d-269701317ba3
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config:
+          whereselector: true
+        dataType: DATE
+        description: ""
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d878d6df-608b-4eb1-9180-3eefda731b9e
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6f5178ee-0428-49e7-9c3d-9c8732b69599
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: DATE
+        description: ""
+        name: STARTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 38968d1e-4439-411d-9f00-7a633e4ca499
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0b04225d-8a19-413f-9a87-681d9f498f9e
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: PRODUCTIONMETHOD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a24f6696-03bf-48c3-b043-a96119aa7cfa
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ec9880d6-aa83-479b-97fb-ea8815382efc
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SEQNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c494b990-0106-46e2-956f-3be24d443918
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7d5e27b3-642e-4eed-8337-ee926cb02be5
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: LOC
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 810c0764-2a50-4f70-9905-1542b5b1a7fa
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 063d6d6b-ddaa-4062-b7ea-fc8d27827b58
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5f550700-4596-4000-8e83-2bdb3c883b59
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5ad5ff9e-e98a-4c7c-9c2c-cc133e57a1a6
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config:
+          whereselector: true
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 22358723-cf85-47e6-bf77-65e717dc91cf
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7d5fdaf7-c31c-4bd5-b7fa-e31777cfb945
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: QUANTITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 35811ea2-aa9c-431d-89e5-38adca4426da
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ac164945-7fc8-494d-9484-6eedd5c68048
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: NPI_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7a5c0a7b-3f10-43ab-8acd-ea1b84c33f48
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6751081c-2128-4d8e-981e-70d740d57df9
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: COPRODUCT_PLAN_ORD_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: dc797fa7-c3bb-4ad1-845c-b32c7ef16054
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8a93d747-1ef8-450f-8883-9b5f7078bd11
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: EXECUTABLE_FLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8b1ad552-4ad4-4339-83d6-84eb09c1663f
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 99eb66c2-4bc6-4031-a435-c00e00c67ce1
+          stepCounter: 20bba594-a62c-4939-bf28-69c131e5fe79
+        config:
+          incatt: true
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: fc5052a0-71ce-4387-b578-6ea2970d9800
+                stepCounter: b4246b3f-5294-4571-889a-5c73f4fbce67
+            transform: ""
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: PLNORDFLGS_LOAD
+        join:
+          joinCondition: FROM {{ ref('E_SC_TEMP', 'PLNORDFLGS_LOAD') }} "PLNORDFLGS_LOAD"
+        name: BV_ESP_PLAN_ORD_FLAGS_MAIN
+        noLinkRefs: []
+  name: BV_ESP_PLAN_ORD_FLAGS_MAIN
+  overrideSQL: false
+  schema: ""
+  sqlType: "230"
+  type: sql
+  version: 1
+type: Node

@@ -1,0 +1,465 @@
+fileVersion: 1
+id: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+name: R_ESP_NONHEALTHY_INVENTORY_LEADER
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: C_SC_MP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b70da80a-c950-4652-9b13-f4e4bdfe2d57
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCENARIO_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d49a3f33-f62c-4104-9f84-ef60c41368d0
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fdae97b1-1d8c-4d29-bea6-e8c592e42e87
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 447f6322-6bab-403f-aaf9-0f6783f7bde3
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1383e4a7-dd17-4fa0-a611-3953d5367ef1
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(20)
+        description: ""
+        hashDetails: null
+        name: INVENTORY_HEALTH
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 48d643c3-34ae-43e2-8c1d-b2c93b3cb81c
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 04e5ea17-f93c-4353-a53b-3da5a893a804
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(32)
+        description: ""
+        hashDetails: null
+        name: UNIT_OF_MEASURE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 70823762-b28b-4145-affc-0f16f52e986a
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 15802327-fb06-46d1-8f83-3f74c98f3e63
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: INVENTORY_UOM_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 61408273-9fab-4890-ba14-ce0b04124449
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: SUM("R_ESP_NH_LEADER_A1"."INVENTORY_UOM_QTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f360a0fc-f362-43d7-8c25-b3d728acaca0
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: SUPPLYPEG_UOM_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6c1d24ec-4280-4979-a467-e53ac5bfdee8
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: MAX("R_ESP_NH_LEADER_A1"."SUPPLYPEG_UOM_QTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7adfc35b-d01f-4383-baa3-3ff361d4f8af
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: dc290959-eb97-4ad3-9287-e658fce74e85
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3d764a00-76f4-44c7-bf4f-c5a508695218
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: INVITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 01178dc4-1d6c-41ee-9cc3-0c8fd3a01f55
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0503339b-5752-40c4-96e3-101f64af22c4
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: PLNORD_U_SEGMENTATION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1725cfdc-1cad-4083-b6d1-afb3d36af8aa
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4b5f2518-7d84-40a6-9e8a-c6d857775763
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: INV_END_ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: eaa36d9c-7ce3-46c9-9770-b5489810d3d8
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e6beb69c-eba7-4148-b15c-99f89455e3d9
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ZER_INV_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 69182bfd-0162-473a-b2f3-e7a8313386c7
+                stepCounter: f01d7661-1c67-4eeb-ac28-b80f39195fd9
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2329a81f-0e62-4055-a6bc-46bd7a315bd6
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: WORK_WEEK
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: cce5b9f2-44a3-42b1-a2bf-0521ddd57ef7
+                stepCounter: f84918a8-7c90-4918-b7f5-98dd58a7ae24
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 89b2c75b-0e94-4147-9b79-5f7d762308c0
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: PACKAGE_HEIGHT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6325e481-ad64-4a55-bcf0-7626563e02ba
+                stepCounter: 8179e653-b005-44c4-998e-5b27a7da7b8a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1d0c5d1f-1bd8-40b2-9716-856b2aee3ce0
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: AUTOMOTIVE_LOT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 05d5c9dd-9d49-43d5-a068-bc1754e79b33
+                stepCounter: 8179e653-b005-44c4-998e-5b27a7da7b8a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fc7d9656-dfe0-4795-bdd8-594801fd18e8
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: PROBE_SHIP_PART_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e2060afb-cb6e-42dd-8845-b7f2b16f494c
+                stepCounter: 8179e653-b005-44c4-998e-5b27a7da7b8a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 26f8ae7c-da59-4c8f-ba19-e7c7fcbe2be5
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: RETAIL_BOUND
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 19ac52e0-84cc-4438-86dd-2e376d249580
+                stepCounter: 8179e653-b005-44c4-998e-5b27a7da7b8a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ab91fa6b-feac-4c32-ad39-d17e0b5fc3ab
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: NPI_FLAG
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: e249200a-3e25-4950-a88e-04682ef265d7
+                stepCounter: 8179e653-b005-44c4-998e-5b27a7da7b8a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 07a92161-caa9-40d5-ad56-fdfac0526438
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(250)
+        description: ""
+        name: DEFAULT_MARKET_SEGMENT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d33a6f25-450b-4883-85e5-4869fbb59bf6
+                stepCounter: 8179e653-b005-44c4-998e-5b27a7da7b8a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 0fd0ae2d-e1d4-436c-b1f8-6a2071ddc3aa
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: SC_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f497d009-97dd-4ccb-8bd5-162707921b63
+                stepCounter: 8179e653-b005-44c4-998e-5b27a7da7b8a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 33d55adf-ba43-4fa6-8102-f517a351b2ee
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: MPN_BUSINESS_UNIT
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 915089d1-f2aa-4f57-9005-a5ceafff4e4d
+                stepCounter: 8179e653-b005-44c4-998e-5b27a7da7b8a
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6ea231b9-6109-45de-836a-402321e86fda
+          stepCounter: 296f4c8c-850b-475c-bc0d-7e6157e41a43
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        name: EXCLUSION_STRATEGY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6536d9b0-88d1-4d34-b75d-22d645484035
+                stepCounter: 8179e653-b005-44c4-998e-5b27a7da7b8a
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: |-
+            {{ stage('Override Create SQL') }}
+            	CREATE OR REPLACE VIEW {{ ref('DEV_BDW_EA_E_SUPPLY_CHAIN_MP', 'R_ESP_NONHEALTHY_INVENTORY_LEADER_FINAL')}} AS (
+            		SELECT 
+             SCENARIO_DATE AS SCENARIO_DATE,
+             SIMULATION_NAME AS SIMULATION_NAME,
+             INVENTORY_HEALTH AS INVENTORY_HEALTH,
+             UNIT_OF_MEASURE AS UNIT_OF_MEASURE,
+             INVENTORY_UOM_QTY AS INVENTORY_UOM_QTY,
+             SUPPLYPEG_UOM_QTY AS SUPPLYPEG_UOM_QTY,
+             LOADDATETIMESTAMP AS LOADDATETIMESTAMP,
+             INVITEM AS INVITEM,
+             PLNORD_U_SEGMENTATION AS PLNORD_U_SEGMENTATION,
+             INV_END_ITEM AS INV_END_ITEM,
+             ZER_INV_QTY AS ZER_INV_QTY
+             FULL_DATE AS FULL_DATE,
+             WORK_WEEK AS WORK_WEEK,
+             FISCAL_YEAR AS FISCAL_YEAR,
+             FISCAL_QUARTER AS FISCAL_QUARTER,
+             WORK_WEEK_BEGIN_DATE AS WORK_WEEK_BEGIN_DATE,
+             WORK_WEEK_END_DATE AS WORK_WEEK_END_DATE,
+             FISCAL_MONTH_NAME AS FISCAL_MONTH_NAME,
+             FISCAL_PERIOD_SORT AS FISCAL_PERIOD_SORT,
+             FISCAL_QUARTER_BEGIN_DATE_FLAG AS FISCAL_QUARTER_BEGIN_DATE_FLAG,
+             FISCAL_MONTH_BEGIN_DATE AS FISCAL_MONTH_BEGIN_DATE,
+             FISCAL_QUARTER_END_DATE_FLAG AS FISCAL_QUARTER_END_DATE_FLAG,
+             FISCAL_MONTH_END_DATE AS FISCAL_MONTH_END_DATE,
+             FISCAL_WEEK_COUNT AS FISCAL_WEEK_COUNT,
+             FISCAL_DAY_OF_QUARTER_NUMBER_REMAINING AS FISCAL_DAY_OF_QUARTER_NUMBER_REMAINING,
+             FISCAL_QUARTER_SORT AS FISCAL_QUARTER_SORT,
+             WORK_WEEK_SORT AS WORK_WEEK_SORT,
+             FISCAL_QUARTER_END_DATE AS FISCAL_QUARTER_END_DATE,
+             FISCAL_YEAR_END_DATE AS FISCAL_YEAR_END_DATE
+             PRODUCT_NUMBER AS PRODUCT_NUMBER,
+             PRODUCT AS PRODUCT,
+             PRODUCT_FAMILY AS PRODUCT_FAMILY,
+             DESIGN_ID AS DESIGN_ID,
+             PACKAGE_TYPE AS PACKAGE_TYPE,
+             ASSEMBLY_TYPE AS ASSEMBLY_TYPE,
+             PRODUCT_GROUP AS PRODUCT_GROUP,
+             PRODUCT_TECHNOLOGY AS PRODUCT_TECHNOLOGY,
+             PRODUCT_SUBTECHNOLOGY AS PRODUCT_SUBTECHNOLOGY,
+             SERIES AS SERIES,
+             LEAD_COUNT AS LEAD_COUNT,
+             CONFIGURATION_WIDTH AS CONFIGURATION_WIDTH,
+             MODULE_DENSITY AS MODULE_DENSITY,
+             MEMORY_COMPONENT_QTY AS MEMORY_COMPONENT_QTY,
+             MPN AS MPN,
+             PLANNING_STRATEGY AS PLANNING_STRATEGY,
+             PRODUCT_TYPE AS PRODUCT_TYPE,
+             CONFIGURATION_DEPTH AS CONFIGURATION_DEPTH,
+             DIE_IN_PACKAGE AS DIE_IN_PACKAGE,
+             PACKAGE_LENGTH AS PACKAGE_LENGTH,
+             PACKAGE_WIDTH AS PACKAGE_WIDTH,
+             PROFIT_CENTER_GROUP AS PROFIT_CENTER_GROUP,
+             MATERIAL_GROUP AS MATERIAL_GROUP,
+             MATERIAL_TYPE AS MATERIAL_TYPE,
+             CROSS_DIST_MATERIAL_STATUS AS CROSS_DIST_MATERIAL_STATUS,
+             ENTBOM_INDICATOR AS ENTBOM_INDICATOR,
+             ENTBOM_TOAD AS ENTBOM_TOAD,
+             GCSR_REQ_ID AS GCSR_REQ_ID,
+             MODULE_FAMILY AS MODULE_FAMILY,
+             SSD_MODEL AS SSD_MODEL,
+             SSD_FLAG AS SSD_FLAG,
+             MODULE_FORM AS MODULE_FORM,
+             MODULE_COMPONENT_FLAG AS MODULE_COMPONENT_FLAG,
+             TECHNOLOGY AS TECHNOLOGY,
+             PRODUCT_DESCRIPTION AS PRODUCT_DESCRIPTION,
+             MATERIAL_GROUP_DESCRIPTION AS MATERIAL_GROUP_DESCRIPTION,
+             MPN_DESC AS MPN_DESC,
+             BIZOPS AS BIZOPS,
+             DEMAND_ANALYST AS DEMAND_ANALYST,
+             GSM_HV AS GSM_HV,
+             GSM_NPP AS GSM_NPP,
+             ORDER_FULLFILL AS ORDER_FULLFILL,
+             SD_ANALYST AS SD_ANALYST,
+             FINANCE_BUSINESS_UNIT AS FINANCE_BUSINESS_UNIT,
+             PRODUCT_NUMBER_DESC AS PRODUCT_NUMBER_DESC,
+             ESP_FLAG AS ESP_FLAG,
+             SNAPSHOT_DATE_TIME AS SNAPSHOT_DATE_TIME,
+             LOAD_DATE_TIME AS LOAD_DATE_TIME,
+             CARDS_IN_PACKAGE AS CARDS_IN_PACKAGE,
+             APO_MODULE_BOUND AS APO_MODULE_BOUND,
+             DELETE_FLAG AS DELETE_FLAG,
+             U_PPLEVEL AS U_PPLEVEL,
+             PROJECT_NAME AS PROJECT_NAME,
+             DISPOSITION_LEVEL AS DISPOSITION_LEVEL,
+             PRODUCT_GRADE AS PRODUCT_GRADE,
+             ARK_ID AS ARK_ID,
+             NPI_LOT AS NPI_LOT,
+             NPI_LOT_OWNER AS NPI_LOT_OWNER,
+             MARKETING_SPEED AS MARKETING_SPEED,
+             CUSTOM_TESTED AS CUSTOM_TESTED,
+             PACKAGE_HEIGHT AS PACKAGE_HEIGHT,
+             AUTOMOTIVE_LOT AS AUTOMOTIVE_LOT,
+             PROBE_SHIP_PART_TYPE AS PROBE_SHIP_PART_TYPE,
+             RETAIL_BOUND AS RETAIL_BOUND,
+             MFG_PLANNING_GROUP AS MFG_PLANNING_GROUP,
+             NPI_FLAG AS NPI_FLAG,
+             DEFAULT_MARKET_SEGMENT AS DEFAULT_MARKET_SEGMENT,
+             SC_SUB_GROUP AS SC_SUB_GROUP,
+             SC_GROUP AS SC_GROUP,
+             MPN_BUSINESS_UNIT AS MPN_BUSINESS_UNIT,
+             TIER_GROUP AS TIER_GROUP,
+             PRODUCT_TIER AS PRODUCT_TIER,
+             EXCLUSION_STRATEGY AS EXCLUSION_STRATEGY
+             FROM {{ ref('TEMP_STORAGE', 'R_ESP_NH_LEADER_A1') }}
+            INNER JOIN {{ ref('PROD_BDW_EA_E_SUPPLY_CHAIN_MD', 'D_ESP_DATE') }} "D_ESP_DATE"
+            ON "{{ ref('TEMP_STORAGE', 'R_ESP_NH_LEADER_A1') }}"./*COLUMN*/ = "D_ESP_DATE"./*COLUMN*/
+            INNER JOIN {{ ref('PROD_BDW_EA_E_SUPPLY_CHAIN_MD', 'D_ESP_MATERIAL_CHARACTERISTICS') }} "D_ESP_MATERIAL_CHARACTERISTICS"
+            ON "{{ ref('TEMP_STORAGE', 'R_ESP_NH_LEADER_A1') }}"./*COLUMN*/ = "D_ESP_MATERIAL_CHARACTERISTICS"./*COLUMN*/
+            	)
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_DATE
+          - locationName: E_SC_MD
+            nodeName: D_ESP_MATERIAL_CHARACTERISTICS
+          - locationName: E_SC_TEMP
+            nodeName: R_ESP_NH_LEADER_A1
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'R_ESP_NH_LEADER_A1') }} "R_ESP_NH_LEADER_A1"
+            INNER JOIN {{ ref('E_SC_MD', 'D_ESP_DATE') }} "D_ESP_DATE"
+            ON "R_ESP_NH_LEADER_A1"."SCENARIO_DATE" = "D_ESP_DATE"."FULL_DATE"
+            INNER JOIN {{ ref('E_SC_MD', 'D_ESP_MATERIAL_CHARACTERISTICS') }} "D_ESP_MATERIAL_CHARACTERISTICS"
+            ON "R_ESP_NH_LEADER_A1"."INVITEM" = "D_ESP_MATERIAL_CHARACTERISTICS"."PRODUCT_NUMBER"
+            group by all;
+        name: R_ESP_NONHEALTHY_INVENTORY_LEADER
+        noLinkRefs: []
+  name: R_ESP_NONHEALTHY_INVENTORY_LEADER
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

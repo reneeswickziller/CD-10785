@@ -1,0 +1,138 @@
+fileVersion: 1
+id: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+name: ESP_NH_A1
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6f72c6c0-64be-47f6-aad1-7ecc54bd5611
+          stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 44309732-3502-4d36-9dd4-a466fe1eefb7
+                stepCounter: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9e116214-c10f-4e97-95b8-284b501e6648
+          stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ANCHOR
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 549e6777-4d8d-406b-8ee6-56f681c87757
+                stepCounter: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e3cc013e-6c61-4bda-887e-43691460c536
+          stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+        config: {}
+        dataType: VARCHAR(25)
+        description: ""
+        hashDetails: null
+        name: CON_ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5e19b374-32cc-43e0-ae49-76d52df4d195
+                stepCounter: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5391387f-6592-4738-9103-449050ca34ff
+          stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+        config: {}
+        dataType: VARCHAR(15)
+        description: ""
+        hashDetails: null
+        name: CON_LOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: bc39b456-8203-4ef9-b573-4bdfc2f75ba3
+                stepCounter: 930d1564-0c2e-429f-b275-f6c4e7f9ace3
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3d4d659d-63bf-4d8f-bcf0-f4a59c516709
+          stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: ANCHOR_ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: LEFT("BOM_TRAVERSAL"."ANCHOR",6)
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: a5c1956a-bae2-47d8-af32-1561a2c1f6da
+          stepCounter: 54b01b74-bd86-4d1d-a638-28c8208b9a13
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: ANCHOR_LOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: RIGHT("BOM_TRAVERSAL"."ANCHOR",4)
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          BOM_TRAVERSAL: 15084365-4b8b-4389-a91e-a7e7386038e3
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: BOM_TRAVERSAL
+        join:
+          joinCondition: FROM {{ ref('E_SC_MD', 'BOM_TRAVERSAL') }} "BOM_TRAVERSAL"
+        name: ESP_NH_A1
+        noLinkRefs: []
+  name: ESP_NH_A1
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

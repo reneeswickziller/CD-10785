@@ -1,0 +1,86 @@
+fileVersion: 1
+id: fe2e2e5c-c05f-4be7-a9f1-43271e7015ce
+name: SUBCON_UNION_SUPERSESSION_FBOM
+operation:
+  config:
+    insertStrategy: UNION
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: true
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b571f508-7525-492b-bcb8-430c95b76399
+          stepCounter: fe2e2e5c-c05f-4be7-a9f1-43271e7015ce
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: MATERIAL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: df60eebf-c013-48c9-8d91-e9e5b6ce4ad5
+                stepCounter: 17dc2dde-9c9e-4bce-9198-e1e300e9dcb2
+            transform: ""
+          - columnReferences:
+              - columnCounter: cb7d7421-b2ee-4380-b96e-9b67573bab36
+                stepCounter: d1f94a68-4b9b-4fea-a29d-f02a786e606b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 774487e2-818f-48bf-800f-518544d942d7
+          stepCounter: fe2e2e5c-c05f-4be7-a9f1-43271e7015ce
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: ALT_ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9dc685a4-b6c0-4616-b83d-267f6a9771bf
+                stepCounter: 17dc2dde-9c9e-4bce-9198-e1e300e9dcb2
+            transform: ""
+          - columnReferences:
+              - columnCounter: cb7d7421-b2ee-4380-b96e-9b67573bab36
+                stepCounter: d1f94a68-4b9b-4fea-a29d-f02a786e606b
+            transform: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          BV_V_ZESP_SUPERSESSION: 5dbf30f0-946f-4096-9eec-af5b344faa8e
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MP
+            nodeName: BV_V_ZESP_SUPERSESSION
+        join:
+          joinCondition: FROM {{ ref('E_SC_MP', 'BV_V_ZESP_SUPERSESSION') }} "BV_V_ZESP_SUPERSESSION"
+        name: SUBCON_V_UNION_SUPERSESSION_FBOM
+        noLinkRefs: []
+      - aliases:
+          SUBCON_V_BOM_ASSEMBLY_ANALYSIS: d1f94a68-4b9b-4fea-a29d-f02a786e606b
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: SUBCON_V_BOM_ASSEMBLY_ANALYSIS
+        join:
+          joinCondition: FROM {{ ref('E_SC_TEMP', 'SUBCON_V_BOM_ASSEMBLY_ANALYSIS') }}  "SUBCON_V_BOM_ASSEMBLY_ANALYSIS"
+        name: FBOM
+        noLinkRefs: []
+  name: SUBCON_UNION_SUPERSESSION_FBOM
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

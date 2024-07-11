@@ -1,0 +1,151 @@
+fileVersion: 1
+id: cbd07cf0-86c4-495c-adff-780658260a95
+name: D_ESP_POSTPONEMENT_LEVEL
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_MD
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f0a66ce0-155d-4d8d-8689-0ddebd68a2a7
+          stepCounter: cbd07cf0-86c4-495c-adff-780658260a95
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: SNAPSHOT_DATE_TIME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5bb6c412-4f10-4a43-baac-f0b0c905dae6
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e7663499-65b4-4834-8b00-9a1e68c7e28b
+          stepCounter: cbd07cf0-86c4-495c-adff-780658260a95
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: U_CUSTOMER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3809134f-2a53-412a-89e7-a77e87e412b7
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2d39edae-7941-425c-b69b-1e3eba6bb708
+          stepCounter: cbd07cf0-86c4-495c-adff-780658260a95
+        config: {}
+        dataType: NUMBER(34,9)
+        description: ""
+        name: SEQNUM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 30cb0e26-30f8-4a93-b680-f4e798c7e5eb
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 672de97e-74d6-40f8-a3a0-848be84b75e0
+          stepCounter: cbd07cf0-86c4-495c-adff-780658260a95
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: LOC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0640e361-0376-44a8-8371-18acb8ab4626
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: cce4d810-9f3b-403b-986b-b5cef2ddedde
+          stepCounter: cbd07cf0-86c4-495c-adff-780658260a95
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: ITEM
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c311d2ae-2b11-4532-a6fd-9de213b36444
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 63ba5f06-73bf-4bda-9279-a0202a85b370
+          stepCounter: cbd07cf0-86c4-495c-adff-780658260a95
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SIMULATION_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4ec83031-9f95-4a0b-a7e8-bf99c5a37a90
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bd7daa7a-98fc-4677-9f73-11a7de6f639f
+          stepCounter: cbd07cf0-86c4-495c-adff-780658260a95
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOT_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a275f6d3-595e-4d18-a4cb-3da0846a3a34
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 016f6c79-eff8-4cdc-a03a-12c6830c1cc5
+          stepCounter: cbd07cf0-86c4-495c-adff-780658260a95
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: U_PPLEVEL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c3961ded-5374-4445-a797-54a173af46a2
+                stepCounter: 7d7d04a7-73ff-4299-b97a-4012569774af
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_FORECAST
+        join:
+          joinCondition: FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_FORECAST') }} "ESP_HUB_OUTPUT_V_FORECAST"
+        name: D_ESP_POSTPONEMENT_LEVEL
+        noLinkRefs: []
+  name: D_ESP_POSTPONEMENT_LEVEL
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

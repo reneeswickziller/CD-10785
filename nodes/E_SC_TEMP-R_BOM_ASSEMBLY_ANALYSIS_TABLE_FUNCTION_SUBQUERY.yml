@@ -1,0 +1,103 @@
+fileVersion: 1
+id: 85975465-0f80-43b9-a578-bf6ba9f72f16
+name: R_BOM_ASSEMBLY_ANALYSIS_TABLE_FUNCTION_SUBQUERY
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2d7b9715-b3a5-4e83-900b-c011d12f0062
+          stepCounter: 85975465-0f80-43b9-a578-bf6ba9f72f16
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: COMPONENT_MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b38d7256-1c9e-40c8-b537-707be937af15
+                stepCounter: ef43b85f-3c6e-49d5-bcb7-d29380a44c06
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: dffcd4ff-8adf-4a21-b25e-bb6f26c1803f
+          stepCounter: 85975465-0f80-43b9-a578-bf6ba9f72f16
+        config: {}
+        dataType: VARCHAR(200)
+        description: ""
+        hashDetails: null
+        name: IDENTIFIER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 60a9e377-ce60-47f1-94c7-639256696470
+                stepCounter: ef43b85f-3c6e-49d5-bcb7-d29380a44c06
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7092e47e-9931-44ef-9b3c-ae64eda81038
+          stepCounter: 85975465-0f80-43b9-a578-bf6ba9f72f16
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: MATERIAL_PART_NUMBER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: bc01e349-280d-4953-9042-b3023122064f
+                stepCounter: ef43b85f-3c6e-49d5-bcb7-d29380a44c06
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 39f24590-ad4a-4b4c-9b83-423531818c41
+          stepCounter: 85975465-0f80-43b9-a578-bf6ba9f72f16
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SITE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 884f91af-41f9-4d38-9d73-ffde31d3a0cc
+                stepCounter: ef43b85f-3c6e-49d5-bcb7-d29380a44c06
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MP
+            nodeName: F_BOM_ASSEMBLY_ANALYSIS
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_MP', 'F_BOM_ASSEMBLY_ANALYSIS') }} "F_BOM_ASSEMBLY_ANALYSIS"
+            WHERE COMPONENT_MATERIAL_GROUP in ('310','330','311','350')
+            GROUP BY all
+            order by MATERIAL_PART_NUMBER
+        name: R_BOM_ASSEMBLY_ANALYSIS_TABLE_FUNCTION_SUBQUERY
+        noLinkRefs: []
+  name: R_BOM_ASSEMBLY_ANALYSIS_TABLE_FUNCTION_SUBQUERY
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

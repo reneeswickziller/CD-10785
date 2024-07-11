@@ -1,0 +1,150 @@
+fileVersion: 1
+id: f9cc9f55-44e0-4b35-87c5-de948ab6239b
+name: SUBCON_HIER_SUPERSESSION_FBOM
+operation:
+  config:
+    SQL_Code: |-
+      BEGIN
+
+      TRUNCATE TABLE {{ ref('E_SC_TEMP', 'SUBCON_HIER_SUPERSESSION_FBOM')}};
+
+      insert into 
+        {{ ref('E_SC_TEMP', 'SUBCON_HIER_SUPERSESSION_FBOM')}}  (
+      with recursive
+        bom_hierarchy (parent_id, node_id, level, path) as (
+          select
+            material,
+            alt_item,
+            1 level,
+            array_construct(material) path
+          from
+            {{ ref('E_SC_TEMP', 'SUBCON_UNION_SUPERSESSION_FBOM') }} "SUBCON_UNION_SUPERSESSION_FBOM"
+          where
+            "SUBCON_UNION_SUPERSESSION_FBOM"."MATERIAL" like '3%%-%' 
+            
+          union all
+          
+          select
+            material,
+            alt_item,
+            bom_hierarchy.level + 1 level,
+            array_cat(
+              bom_hierarchy.path,
+              array_construct("SUBCON_UNION_SUPERSESSION_FBOM".material)
+            )
+          from
+            {{ ref('E_SC_TEMP', 'SUBCON_UNION_SUPERSESSION_FBOM') }} "SUBCON_UNION_SUPERSESSION_FBOM"
+                  join bom_hierarchy on bom_hierarchy.parent_id = "SUBCON_UNION_SUPERSESSION_FBOM".alt_item
+          where
+            not array_contains(
+              "SUBCON_UNION_SUPERSESSION_FBOM".alt_item::variant,
+              bom_hierarchy.path
+            )
+        )
+          select
+            parent_id,
+            node_id,
+            level,
+            '->' || array_to_string(path, '->') path
+            --case when level = 1 then empno else path[1] end root
+          from
+            bom_hierarchy
+          order by
+            parent_id);
+        
+        END
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: sql
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6901a0a3-29cf-4f80-ab26-e67fb350b58b
+          stepCounter: f9cc9f55-44e0-4b35-87c5-de948ab6239b
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: PARENT_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b571f508-7525-492b-bcb8-430c95b76399
+                stepCounter: fe2e2e5c-c05f-4be7-a9f1-43271e7015ce
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1ea80e4e-e2e5-4186-8d95-c24f00f0e957
+          stepCounter: f9cc9f55-44e0-4b35-87c5-de948ab6239b
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: NODE_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 774487e2-818f-48bf-800f-518544d942d7
+                stepCounter: fe2e2e5c-c05f-4be7-a9f1-43271e7015ce
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2f51da2e-fb4f-4150-bf3e-e49778e97dc7
+          stepCounter: f9cc9f55-44e0-4b35-87c5-de948ab6239b
+        config: {}
+        dataType: integer
+        defaultValue: ""
+        description: ""
+        name: LEVEL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2dad2a6a-2056-4944-8b14-af535613a652
+          stepCounter: f9cc9f55-44e0-4b35-87c5-de948ab6239b
+        config: {}
+        dataType: varchar(500)
+        defaultValue: ""
+        description: ""
+        name: PATH
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: ""
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: SUBCON_UNION_SUPERSESSION_FBOM
+        join:
+          joinCondition: FROM {{ ref('E_SC_TEMP', 'SUBCON_UNION_SUPERSESSION_FBOM') }} "SUBCON_UNION_SUPERSESSION_FBOM"
+        name: SUBCON_HIER_SUPERSESSION_FBOM
+        noLinkRefs: []
+  name: SUBCON_HIER_SUPERSESSION_FBOM
+  overrideSQL: false
+  schema: ""
+  sqlType: "187"
+  type: sql
+  version: 1
+type: Node

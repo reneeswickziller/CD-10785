@@ -1,0 +1,123 @@
+fileVersion: 1
+id: 28d8f037-c6a7-4bb2-b875-2191c5a735f0
+name: V_AGG_STAS
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5621e329-73b5-4dea-a160-5e276db0a001
+          stepCounter: 28d8f037-c6a7-4bb2-b875-2191c5a735f0
+        config: {}
+        dataType: VARCHAR(1)
+        description: ""
+        name: STLTY
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 850628ce-3aab-47be-b17c-83f617d4f01b
+                stepCounter: 04279b25-9f12-4622-8154-e6a94e31649b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ff98e039-537e-4e73-8971-1d605c5f0192
+          stepCounter: 28d8f037-c6a7-4bb2-b875-2191c5a735f0
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: STLNR
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: cc02afb3-8569-4018-9e89-ed16f615e532
+                stepCounter: 04279b25-9f12-4622-8154-e6a94e31649b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 80f9a2f3-854f-458d-bdba-5d1e1944d8a7
+          stepCounter: 28d8f037-c6a7-4bb2-b875-2191c5a735f0
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        name: STLAL
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f4152eb1-58e7-446d-a9d7-58600752e91e
+                stepCounter: 04279b25-9f12-4622-8154-e6a94e31649b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 77ea367b-5336-439b-920e-5e4fedbae20d
+          stepCounter: 28d8f037-c6a7-4bb2-b875-2191c5a735f0
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: STLKN
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ba6afa46-138a-43f1-b5ca-45a99d9d68bc
+                stepCounter: 04279b25-9f12-4622-8154-e6a94e31649b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 239b6f62-43e3-4c06-9e54-c6d9a1c7b51f
+          stepCounter: 28d8f037-c6a7-4bb2-b875-2191c5a735f0
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: STASZ
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ddfd4f76-49c0-4d78-98c1-b8cca98e0c29
+                stepCounter: 04279b25-9f12-4622-8154-e6a94e31649b
+            transform: MAX("V_STAS"."STASZ")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 80c47008-f574-4fe9-bcf4-0aefc1de9827
+          stepCounter: 28d8f037-c6a7-4bb2-b875-2191c5a735f0
+        config: {}
+        dataType: VARCHAR(8)
+        description: ""
+        name: DATUV
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a512cecc-d5ab-4b81-b431-45a522f47513
+                stepCounter: 04279b25-9f12-4622-8154-e6a94e31649b
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: R_SAP_ECC
+            nodeName: V_STAS
+        join:
+          joinCondition: |-
+            FROM {{ ref('R_SAP_ECC', 'V_STAS') }} "V_STAS"
+            group by All
+            HAVING "DATUV" <= to_char(current_date, 'YYYYMMDD')
+        name: V_AGG_STAS
+        noLinkRefs: []
+  name: V_AGG_STAS
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

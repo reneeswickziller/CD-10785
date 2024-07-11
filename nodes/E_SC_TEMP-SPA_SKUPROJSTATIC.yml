@@ -1,0 +1,281 @@
+fileVersion: 1
+id: 4eb92693-c3d4-4d16-8990-bf2958ced998
+name: SPA_SKUPROJSTATIC
+operation:
+  config:
+    insertStrategy: UNION ALL
+    postSQL: |-
+      DELETE FROM {{ ref('E_SC_TEMP', 'SPA_SKUPROJSTATIC') }} 
+      WHERE SCENARIO_NAME ='{{parameters.SCENARIO_NAME}}'
+      and LOADDATETIMESTAMP <=(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                 WHERE PROCEDURE_NAME = 'ESP_SUPPLY_PLAN_ANALYTICS_INSERT' AND SCENARIO_NAME='{{parameters.SCENARIO_NAME}}')
+      ;
+       
+    preSQL: |-
+      DELETE FROM {{ ref('E_SC_TEMP', 'SPA_SKUPROJSTATIC') }} 
+      WHERE SCENARIO_NAME ='{{parameters.SCENARIO_NAME}}'
+      and (SCENARIO_DATE) IN (SELECT SNAPSHOTDATE FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SKUPROJSTATIC') }} 
+                              WHERE SCENARIO_NAME ='{{parameters.SCENARIO_NAME}}'
+                              and LOADDATETIMESTAMP >(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                      WHERE PROCEDURE_NAME = 'ESP_SUPPLY_PLAN_ANALYTICS_INSERT' AND SCENARIO_NAME='{{parameters.SCENARIO_NAME}}')
+      group by SNAPSHOTDATE                                                         
+      );
+       
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: true
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1677d879-6b10-45a6-963c-2763932e3fb2
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SCENARIO_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 49367791-c1c7-42a7-8e58-f2998e5d1766
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"SIMULATION_NAME\""
+          - columnReferences:
+              - columnCounter: 49367791-c1c7-42a7-8e58-f2998e5d1766
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5ac53a15-b7ae-41b8-864c-243cb0d226d1
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: DATE
+        description: ""
+        name: STARTS_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 69c21144-e165-46c6-a2d2-26ffc473f0b7
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"STARTDATE\""
+          - columnReferences:
+              - columnCounter: 69c21144-e165-46c6-a2d2-26ffc473f0b7
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"STARTDATE\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ed8a59a9-a53e-4599-858d-286c1cd7ec59
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: DATE
+        description: ""
+        name: OUTS_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 69c21144-e165-46c6-a2d2-26ffc473f0b7
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"STARTDATE\""
+          - columnReferences:
+              - columnCounter: 69c21144-e165-46c6-a2d2-26ffc473f0b7
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"STARTDATE\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1fb790b6-be4c-41e7-b930-302899f1ad29
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 83860a99-f6c5-463f-a870-3de1bba7be87
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"SNAPSHOTDATE\""
+          - columnReferences:
+              - columnCounter: 83860a99-f6c5-463f-a870-3de1bba7be87
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"SNAPSHOTDATE\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f00a7031-6236-4d84-b224-055152c235e0
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: DESTINATION_LOCATION
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 94d899b1-da20-4391-9280-47d10e0b7f63
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"LOC\""
+          - columnReferences:
+              - columnCounter: 94d899b1-da20-4391-9280-47d10e0b7f63
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"LOC\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2d351796-a853-43ba-91d8-cd6c5e0b7e11
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: SOURCE_LOCATION
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 94d899b1-da20-4391-9280-47d10e0b7f63
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"LOC\""
+          - columnReferences:
+              - columnCounter: 94d899b1-da20-4391-9280-47d10e0b7f63
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"LOC\""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2e01963f-aa16-4b57-b4f6-43168c132535
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0c67d327-6b27-4f9e-9029-411f177bbcba
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: ""
+          - columnReferences:
+              - columnCounter: 0c67d327-6b27-4f9e-9029-411f177bbcba
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f9a73eaf-2b1c-4154-a78c-fa7cc34a0988
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1bbdc5dc-1132-4f93-938b-1fc319749151
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "\"ESP_HUB_OUTPUT_V_SKUPROJSTATIC\".\"SUPSDPROJOH\""
+          - columnReferences:
+              - columnCounter: 1bbdc5dc-1132-4f93-938b-1fc319749151
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: "0"
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: db1f0ffb-4a4c-4b96-8bbc-1c622e5c5b4b
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ad97f3b3-9ebe-4c79-833e-13f2855f8273
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: ""
+          - columnReferences:
+              - columnCounter: ad97f3b3-9ebe-4c79-833e-13f2855f8273
+                stepCounter: ffea8dc4-9e51-46bd-aa63-a4ab14b82cde
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: f50b6532-998e-4070-a955-8e62a98ff04a
+          stepCounter: 4eb92693-c3d4-4d16-8990-bf2958ced998
+        config: {}
+        dataType: VARCHAR(200)
+        defaultValue: ""
+        description: ""
+        name: DMD_SUPPLY_TYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: iff("SUPSDPROJOH" >= 0 ,'STOCK ON HAND', 'SUPPLY SHORTAGE')
+          - columnReferences: []
+            transform: iff("SUPSDPROJOH" >= 0 , 'SUPPLY SHORTAGE', 'STOCK ON HAND')
+        transform: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_SKUPROJSTATIC
+          - locationName: E_SC_UTIL_USER
+            nodeName: LOAD_CONTROL_SC_SPO
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SKUPROJSTATIC') }} "ESP_HUB_OUTPUT_V_SKUPROJSTATIC"
+            WHERE "ESP_HUB_OUTPUT_V_SKUPROJSTATIC"."SIMULATION_NAME"='{{parameters.SCENARIO_NAME}}' 
+            and "ESP_HUB_OUTPUT_V_SKUPROJSTATIC"."LOADDATETIMESTAMP">(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                                    WHERE PROCEDURE_NAME = 'ESP_SUPPLY_PLAN_ANALYTICS_INSERT' AND SCENARIO_NAME='{{parameters.SCENARIO_NAME}}')
+            AND
+            (SIMULATION_NAME,SNAPSHOTDATE,ITEM,LOC) IN (
+            SELECT SIMULATION_NAME,SNAPSHOTDATE,ITEM,LOC FROM(
+            SELECT SIMULATION_NAME,SNAPSHOTDATE,ITEM,LOC,SUM(TOTDMD) AS TOTDMD,SUM(TOTFCST) AS TOTFCST,SUM(TOTSUPPLY) AS TOTSUPPLY,SUM(TOTARRIV) AS TOTARRIV, SUM(TOTINTRANSIN) AS TOTINTRANSIN,  SUM(TOTINTRANSOUT) AS TOTINTRANSOUT,SUM(TOTSHIP) AS TOTSHIP, SUM(PROJAVAIL) AS PROJAVAIL, SUM(PROJOH) AS PROJOH, SUM(SUPSDPROJOH) AS SUPSDPROJOH
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SKUPROJSTATIC') }} 
+            GROUP BY SIMULATION_NAME,SNAPSHOTDATE,ITEM,LOC
+            )
+            WHERE "TOTDMD" != 0 OR "TOTFCST" != 0 OR "TOTSUPPLY" != 0 OR "TOTARRIV" != 0 OR "TOTINTRANSIN" != 0 OR "TOTINTRANSOUT" != 0 OR "TOTSHIP" != 0 OR "PROJAVAIL" != 0 OR "PROJOH" != 0 OR "SUPSDPROJOH" != 0
+            )
+        name: SKUPROJSTATIC_MAIN
+        noLinkRefs: []
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_DATE
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_SKUPROJSTATIC
+          - locationName: E_SC_UTIL_USER
+            nodeName: LOAD_CONTROL_SC_SPO
+        join:
+          joinCondition: |
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SKUPROJSTATIC') }} "ESP_HUB_OUTPUT_V_SKUPROJSTATIC"
+            INNER JOIN (SELECT WORK_WEEK_END_DATE FROM {{ref('E_SC_MD','D_ESP_DATE')}} GROUP BY WORK_WEEK_END_DATE
+            ) "D_ESP_DATE"
+            ON  "ESP_HUB_OUTPUT_V_SKUPROJSTATIC"."STARTDATE"="D_ESP_DATE"."WORK_WEEK_END_DATE"
+            WHERE "ESP_HUB_OUTPUT_V_SKUPROJSTATIC"."SIMULATION_NAME"='{{parameters.SCENARIO_NAME}}' 
+            and "ESP_HUB_OUTPUT_V_SKUPROJSTATIC"."LOADDATETIMESTAMP">(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+                                                                    WHERE PROCEDURE_NAME = 'ESP_SUPPLY_PLAN_ANALYTICS_INSERT' AND SCENARIO_NAME='{{parameters.SCENARIO_NAME}}') 
+            AND
+            (SIMULATION_NAME,SNAPSHOTDATE,ITEM,LOC) IN (
+            SELECT SIMULATION_NAME,SNAPSHOTDATE,ITEM,LOC FROM(
+            SELECT SIMULATION_NAME,SNAPSHOTDATE,ITEM,LOC,SUM(TOTDMD) AS TOTDMD,SUM(TOTFCST) AS TOTFCST,SUM(TOTSUPPLY) AS TOTSUPPLY,SUM(TOTARRIV) AS TOTARRIV, SUM(TOTINTRANSIN) AS TOTINTRANSIN,  SUM(TOTINTRANSOUT) AS TOTINTRANSOUT,SUM(TOTSHIP) AS TOTSHIP, SUM(PROJAVAIL) AS PROJAVAIL, SUM(PROJOH) AS PROJOH, SUM(SUPSDPROJOH) AS SUPSDPROJOH
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_SKUPROJSTATIC') }} 
+            GROUP BY SIMULATION_NAME,SNAPSHOTDATE,ITEM,LOC
+            )
+            WHERE "TOTDMD" != 0 OR "TOTFCST" != 0 OR "TOTSUPPLY" != 0 OR "TOTARRIV" != 0 OR "TOTINTRANSIN" != 0 OR "TOTINTRANSOUT" != 0 OR "TOTSHIP" != 0 OR "PROJAVAIL" != 0 OR "PROJOH" != 0 OR "SUPSDPROJOH" != 0
+            )
+        name: SKUPROJSTATIC_ESP_DATE_LV
+        noLinkRefs: []
+  name: SPA_SKUPROJSTATIC
+  overrideSQL: false
+  schema: ""
+  sqlType: persistentStage
+  type: sql
+  version: 1
+type: Node

@@ -1,0 +1,249 @@
+fileVersion: 1
+id: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+name: ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_FGPN
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: |-
+      delete from {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_FGPN')}}
+
+      where 1=  CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                 WHEN SCENARIO_NAME='{{parameters.SCENARIO_NAME}}' THEN 1
+                 ELSE 0 END
+
+      and "LOADDATETIMESTAMP" <=(SELECT WATER_MARKER_TIMESTAMP FROM {{ ref('E_SC_UTIL_USER','LOAD_CONTROL_SC_SPO') }}
+
+                                WHERE PROCEDURE_NAME = 'BV_ESP_DIE_MIX_DIDA_INSERT'  and  SCENARIO_NAME='{{parameters.SCENARIO_NAME}}' )
+    preSQL: |
+      delete from {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_FGPN')}}
+      where (SCENARIO_DATE,SCENARIO_NAME) IN (SELECT SCENARIO_DATE,SCENARIO_NAME FROM {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_DID') }} 
+                                              where 1= CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                                                         WHEN SCENARIO_NAME='{{parameters.SCENARIO_NAME}}' THEN 1
+                                                         ELSE 0 END 
+                                              GROUP BY SCENARIO_DATE,SCENARIO_NAME           
+                                              );
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 56cc3bff-9b7d-4ac7-b6d5-0557011f73df
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a3bfc361-fbf6-48b0-9c6b-78209f45765c
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2995a21c-3d79-4bdb-b553-3536b95a10da
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SCENARIO_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: cbb9aee4-cdff-4339-90ec-92f2a682874d
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e217e0b3-2619-43d2-bed6-06fc540d1956
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: DMD_MPN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c163af42-0831-41cb-80bf-714aa0139c58
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d4204b33-4164-463e-a12a-3be09d73c176
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: DMD_FGPN
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 35ffa2c6-6cc9-469e-af28-bda8e22c8b3f
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4124d26d-ee98-41e4-b292-accec98c5204
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: DMD_PCG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8a156f56-bad4-4851-8ff3-667b0cac7d8f
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5d5b9699-2126-4e3d-8225-9c51b21c6a28
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: SUPPLY_PCG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c5015089-c9c7-47b8-ad3b-15cf3114ac98
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5b6b4382-2990-44b8-9acf-84df6e205b9c
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        hashDetails: null
+        name: FISCAL_MONTH_NAME
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: db0a6271-b4a4-4b72-b149-d51b4753bdbd
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 27c7cf53-af8b-4378-8207-b95d3d471eb1
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        hashDetails: null
+        name: DID_DMDQTY_MTH
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0ec59e98-c3c0-4e44-bf0a-c2e504e27f4c
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2a06b462-1c35-4fac-8006-e0678322e826
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        hashDetails: null
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a2d60035-7b2d-42e5-a93c-bb5dbe766cd5
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 44e764d2-a460-49c1-b3e2-24469c56c636
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: SUPPLY_DID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 048da81c-6edc-44f8-98f8-ebaa11d969c2
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: ffd20a20-96af-4402-bdb6-ea787ad7adcf
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: SUPPLY_FGPN
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1ef2567c-429c-4938-8ca5-9602fe463ce3
+                stepCounter: 9b8bff7b-ee6f-4461-b76d-3480bd51faa4
+            transform: ""
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: cf47f9b3-876d-4e80-9d7b-6774d5cc5370
+          stepCounter: 92cbba81-d7dd-44df-80ae-ea04ab0e145d
+        config: {}
+        dataType: VARCHAR(128)
+        description: ""
+        hashDetails: null
+        name: ENTBOM_TOAD
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4b2296f6-d0f3-44d3-a03b-edfff53a1a20
+                stepCounter: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          DIE_MIX_DIDA_EMC: 9b8bff7b-ee6f-4461-b76d-3480bd51faa4
+          ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_DID: 681163a0-8ff0-4c75-a9c4-cb59de7c305e
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: DIE_MIX_DIDA_EMC
+          - locationName: E_SC_TEMP
+            nodeName: ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_DID
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_DID') }} "ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_DID"
+            LEFT OUTER JOIN {{ ref('E_SC_TEMP', 'DIE_MIX_DIDA_EMC') }} "DIE_MIX_DIDA_EMC"
+            ON "ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_DID"."SUPPLY_DID" = "DIE_MIX_DIDA_EMC"."DESIGN_ID"
+            WHERE 1 = CASE WHEN '{{parameters.SCENARIO_NAME}}'='ALL' THEN 1
+                           WHEN "ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_DID"."SCENARIO_NAME"='{{parameters.SCENARIO_NAME}}' THEN 1
+                           ELSE 0 END
+        name: ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_FGPN
+        noLinkRefs: []
+  name: ESP_DIE_MIX_DIDA_RATIO_DMD_12_SUPPLY_FGPN
+  overrideSQL: false
+  schema: ""
+  sqlType: persistentStage
+  type: sql
+  version: 1
+type: Node

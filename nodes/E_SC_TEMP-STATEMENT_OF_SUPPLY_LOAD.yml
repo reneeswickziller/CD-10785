@@ -1,0 +1,355 @@
+fileVersion: 1
+id: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+name: STATEMENT_OF_SUPPLY_LOAD
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f6d43cc2-4ba2-4273-a403-b3f077d2d8b8
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: PLANNED_ORDER_FIRMED
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6be27e3c-ca7a-4d02-8269-c09edb27376c
+                stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+            transform: SUM("STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."QUANTITY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7678adee-4a13-498b-a6ac-ace906189d7c
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SCHEDDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a2c7f3e5-ebc9-4ab0-894c-674ac86676ad
+                stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 45a77a30-8e79-4b01-8454-bbb57b0e3cd1
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SCENARIO_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2a4110ef-01a8-4305-b3d2-9a9358588087
+                stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c4e678a6-b281-4640-83d3-8bc81064aeaa
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: LOADDATETIMESTAMP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7e0b8c4b-4e48-48a9-9cc7-1e53265048eb
+                stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 320ff051-c6ed-48e6-a2a6-ddd99303fb33
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: LOCATION
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 26fa7d48-2e10-4f86-b205-c1493974569e
+                stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ad8f0fe0-67a9-4187-85b9-4f04b150de17
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 944c5cbd-0cdc-41ba-8472-37c3cb8bfc68
+                stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 63ec8662-f180-4bf5-b4c0-fa38d2f13dae
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: SCENARIO_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 68f338b3-b844-4fbc-80ef-469b65b29eea
+                stepCounter: fa9e9e49-1ddf-42ea-8091-57f372537df4
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 087bf097-f0a1-4f1d-9bb4-90e2c5593690
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: NUMBER(34,6)
+        description: ""
+        name: PLANNED_ORDER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ef928e70-289f-4870-9576-ebb5211d4407
+                stepCounter: c102c80c-62f1-41bb-8ce6-0547af4357d8
+            transform: SUM("STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR"."QTY")
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 877c8ff9-50ab-4b06-b3d1-c0c123d40ae5
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: LOAD_DATE_TIME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: CURRENT_TIMESTAMP()
+        transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: de7ff1aa-6e0d-4e69-a353-98bad777706c
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(9)
+        description: ""
+        name: PLANNING_WORK_WEEK
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 222ab5da-34c3-42e5-a2e4-932e71bb9082
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6fd0fc06-c5d3-47fb-91c4-d6cb447277a2
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: PLANNING_FISCAL_YEAR
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8831ae36-51ff-4f04-b728-8bdc2482e7b8
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d4efae57-677f-4aa5-aab4-c5f04f50f8b8
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(5)
+        description: ""
+        name: PLANNING_FISCAL_QUARTER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2111ea35-2e1b-4946-a8e5-a13f5697423f
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 08a24552-7ed9-45e6-aff8-48c41e4b43e3
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: DATE
+        description: ""
+        name: PLANNING_WORK_WEEK_BEGIN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 5b2f20fe-42ca-49eb-9a66-5687f5c73fef
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 40f3fa50-c704-4973-9de5-154010b86b20
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: DATE
+        description: ""
+        name: PLANNING_WORK_WEEK_END_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b75a5b91-8031-4e65-9b38-bf8bc1e0741f
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 93107de9-8b7c-4dbe-bbf0-941b921440df
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        name: PLANNING_FISCAL_MONTH_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 08eac279-03da-45ef-a494-193fb898a173
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f166b064-f7bd-49c3-9e90-79483f8cd31b
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        name: PLANNING_FISCAL_PERIOD_SORT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b7e31d92-d21f-426b-98ae-00352764c38e
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4037d849-71c4-430e-b2ea-290683db4d19
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        name: PLANNING_FISCAL_QUARTER_SORT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 3b5a8b9c-4195-414a-9188-11694623ae32
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5de1f524-fc3f-4aea-b6f0-e30b4a9e806f
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(6)
+        description: ""
+        name: PLANNING_WORK_WEEK_SORT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 44642cfb-f674-4695-8bd5-b65b0670dd5b
+                stepCounter: d1bf39c4-c56c-4f66-8f0a-986c58bfab0c
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c7c0a3a0-263a-4684-bf72-401799a4e061
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: LOCATION_DESC
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: aa000872-befb-4efe-bc3c-05cb17487ec5
+                stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bc1f2cfc-3c1e-4e31-bd07-f1c2cc8a245c
+          stepCounter: 2cff80c0-8bd1-4d52-8781-ca7a711f268f
+        config: {}
+        dataType: VARCHAR(13)
+        description: ""
+        name: AREA
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b03ae9c4-5695-42c9-b50b-c72da8fd031b
+                stepCounter: 440bd4d3-0bfb-4bab-bada-201ff6c4dc9c
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_MD
+            nodeName: D_ESP_DATE
+          - locationName: E_SC_MD
+            nodeName: D_ESP_LOCATION
+          - locationName: E_SC_MD
+            nodeName: D_ESP_PRODUCT_LOCATION
+          - locationName: E_SC_TEMP
+            nodeName: STATEMENT_OF_SUPPLY_PLANORDER_AGGR
+          - locationName: E_SC_TEMP
+            nodeName: STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'STATEMENT_OF_SUPPLY_PLANORDER_AGGR') }} "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"
+            LEFT OUTER JOIN {{ ref('E_SC_TEMP', 'STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR') }} "STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR"
+            ON "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."SIMULATION_NAME" = "STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR"."SIMULATION_NAME"
+            AND "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."SNAPSHOTDATE" = "STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR"."SNAPSHOT_DATE"
+            AND "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."ITEM" = "STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR"."ITEM"
+            AND "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."LOC" = "STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR".LOC
+            AND "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."SCHEDDATE" = "STATEMENT_OF_SUPPLY_SCHEDRCPTS_AGGR"."SCHEDDATE"
+            LEFT OUTER JOIN {{ ref('E_SC_MD', 'D_ESP_DATE') }} "D_ESP_DATE"
+            ON "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."SCHEDDATE" = CAST("D_ESP_DATE"."FULL_DATE" AS DATE)
+            LEFT OUTER JOIN {{ ref('E_SC_MD', 'D_ESP_LOCATION') }} "D_ESP_LOCATION"
+            ON "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."LOC" = "D_ESP_LOCATION"."LOCATION"
+            LEFT OUTER JOIN {{ ref('E_SC_MD', 'D_ESP_PRODUCT_LOCATION') }} "D_ESP_PRODUCT_LOCATION"
+            ON "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."ITEM" = "D_ESP_PRODUCT_LOCATION"."MATERIAL"
+            AND "STATEMENT_OF_SUPPLY_PLANORDER_AGGR"."LOC" = "D_ESP_PRODUCT_LOCATION"."LOCATION"
+
+            /*WHERE "V_STATEMENT_OF_SUPPLY_PLANORDER"."SIMULATION_NAME" IN ('PRODUCTION','BUILD','CON_SI')
+            AND ("V_STATEMENT_OF_SUPPLY_PLANORDER"."SIMULATION_NAME"= '{{parameters.SCENARIO_NAME}}' 
+                 OR 'ALL' = '{{parameters.SCENARIO_NAME}}'
+                ) 
+            AND ("V_STATEMENT_OF_SUPPLY_PLANORDER"."SNAPSHOTDATE"= '{{parameters.SCENARIO_DATE}}' 
+                 OR 'ALL' = '{{parameters.SCENARIO_DATE}}'
+                )*/   
+            GROUP BY ALL
+        name: STATEMENT_OF_SUPPLY_LOAD
+        noLinkRefs: []
+  name: STATEMENT_OF_SUPPLY_LOAD
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

@@ -1,0 +1,72 @@
+fileVersion: 1
+id: 6ca5d59f-5aee-448b-a778-b89249c6f520
+name: V_PROD_ORDER_FIRM_VARIANCE_AGGREGATION_1
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6fb797e7-b543-44c2-9a3e-8cab0e152737
+          stepCounter: 6ca5d59f-5aee-448b-a778-b89249c6f520
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: PLANNED_ORDER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b4517c01-6b74-4d52-b5db-0a82876a0c54
+                stepCounter: b93af809-c50f-4e5b-a546-50d04a693371
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4f473089-3de6-4275-8465-2dbed91cb38f
+          stepCounter: 6ca5d59f-5aee-448b-a778-b89249c6f520
+        config: {}
+        dataType: DECIMAL(30,3)
+        description: ""
+        hashDetails: null
+        name: LIVE_ACTUAL_ORDER_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2ddbd93a-4b85-4ff9-b166-b7b84b6f565a
+                stepCounter: b93af809-c50f-4e5b-a546-50d04a693371
+            transform: SUM("V_PROD_ORDER_FIRM_VARIANCE_SUM_ACT_ORD"."TOTAL_ACTUAL_ORDER_QTY")
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          V_PROD_ORDER_FIRM_VARIANCE_SUM_ACT_ORD: b93af809-c50f-4e5b-a546-50d04a693371
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: V_PROD_ORDER_FIRM_VARIANCE_SUM_ACT_ORD
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'V_PROD_ORDER_FIRM_VARIANCE_SUM_ACT_ORD') }} "V_PROD_ORDER_FIRM_VARIANCE_SUM_ACT_ORD"
+            GROUP BY "V_PROD_ORDER_FIRM_VARIANCE_SUM_ACT_ORD"."PLANNED_ORDER"
+        name: V_PROD_ORDER_FIRM_VARIANCE_AGGREGATION_1
+        noLinkRefs: []
+  name: V_PROD_ORDER_FIRM_VARIANCE_AGGREGATION_1
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

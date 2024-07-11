@@ -1,0 +1,125 @@
+fileVersion: 1
+id: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+name: D_ESP_LOCATION
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_MD
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: e5e347de-e490-4675-b4e2-98259d864724
+          stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: LOCATION
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: aa000872-befb-4efe-bc3c-05cb17487ec5
+          stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: LOCATION_DESC
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 73fc71fb-07d7-4498-893a-0b9f98e1847d
+          stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: PLANT_TYPE
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 031e7a08-4f35-45fe-a1e1-48fe97f808f6
+          stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+        config: {}
+        dataType: VARCHAR(1)
+        defaultValue: ""
+        description: ""
+        name: ESP_FLAG
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4fdcc21c-8e1d-40d5-a7ce-fbd962462271
+          stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+        config: {}
+        dataType: VARCHAR(1)
+        defaultValue: ""
+        description: ""
+        name: DELETE_FLAG
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: bc3850cb-f91f-4e5f-84b8-7d0a8850cc5c
+          stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: SNAPSHOT_DATE_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7a4bbd01-4605-42b4-973f-5cc01cfe02cc
+          stepCounter: b40a719c-dd28-4e39-8cfb-d804a3a6b658
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: LOAD_DATE_TIME
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_MD', 'D_ESP_LOCATION') }}
+  name: D_ESP_LOCATION
+  schema: ""
+  sqlType: Source
+  table: D_ESP_LOCATION
+  type: sourceInput
+  version: 1
+type: Node

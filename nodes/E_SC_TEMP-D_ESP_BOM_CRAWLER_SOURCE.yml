@@ -1,0 +1,177 @@
+fileVersion: 1
+id: 84f47c17-453e-420b-b272-65b205af57f2
+name: D_ESP_BOM_CRAWLER_SOURCE
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: ffa123a5-5907-43d8-a81a-fe6bb29eaed3
+          stepCounter: 84f47c17-453e-420b-b272-65b205af57f2
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOT_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 23be7614-b918-4664-b60b-e1ce7b8c4402
+                stepCounter: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: fa28b260-d085-499d-b4f1-382ea69fa858
+          stepCounter: 84f47c17-453e-420b-b272-65b205af57f2
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: ANCHOR_PRODUCT_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9164a8d9-1b9c-48b2-9af4-1f91bc0565a5
+                stepCounter: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: aded90ef-2736-4d4d-a1c1-930585d8d79d
+          stepCounter: 84f47c17-453e-420b-b272-65b205af57f2
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: COMPONENT_MATERIAL_GROUP
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: bbfb3686-8544-4c2d-b42c-f488b0dad01c
+                stepCounter: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: dab1f396-2bd8-4d4a-84ee-d3897075b2b1
+          stepCounter: 84f47c17-453e-420b-b272-65b205af57f2
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: COMPONENT_PRODUCT_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c45150bb-fd7e-420a-a434-f91a05b4c82a
+                stepCounter: 4b0eeaca-9967-4859-bd3d-1976ac56b80f
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 29c2921e-ec57-408e-8c69-d40dfcfc2a95
+          stepCounter: 84f47c17-453e-420b-b272-65b205af57f2
+        config: {}
+        dataType: VARCHAR(30)
+        description: ""
+        hashDetails: null
+        name: COMPONENT_DESIGN_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 47e0cb42-5ae7-4ed9-b366-26b9f9c84efd
+                stepCounter: 4b0eeaca-9967-4859-bd3d-1976ac56b80f
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e774e0b6-7778-40a7-93bc-b8da79f152d6
+          stepCounter: 84f47c17-453e-420b-b272-65b205af57f2
+        config: {}
+        dataType: VARCHAR(40)
+        description: ""
+        hashDetails: null
+        name: COMPONENT_PRODUCT_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: aab18f99-91a3-449c-9539-c178bdd20f3d
+                stepCounter: 4b0eeaca-9967-4859-bd3d-1976ac56b80f
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: bd816e62-1c9c-438b-8008-376572341608
+          stepCounter: 84f47c17-453e-420b-b272-65b205af57f2
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: COMPONENT_PRODUCT_TIER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1f4cd334-0dd1-497e-9e11-5f884fb65271
+                stepCounter: 4b0eeaca-9967-4859-bd3d-1976ac56b80f
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ: a93a0744-1ce2-426e-9d2d-c682c6bf6105
+          ESP_BOM_CRAW_SRC_D_ESPMC_PROJ: 4b0eeaca-9967-4859-bd3d-1976ac56b80f
+          ESP_BOM_CRAW_SRC_D_ESPMC_PROJ1: 4b0eeaca-9967-4859-bd3d-1976ac56b80f
+        customSQL:
+          customSQL: |-
+            {{ stage('Override Create SQL') }}
+            	CREATE OR REPLACE VIEW {{ ref('E_SC_MD', 'D_ESP_BOM_CRAWLER_SOURCE')}} AS (
+            		SELECT distinct 
+             SNAPSHOT_DATE AS SNAPSHOT_DATE,
+             ANCHOR_ITEM AS ANCHOR_PRODUCT_NUMBER,
+             COMPONENT_MATERIAL_GROUP AS COMPONENT_MATERIAL_GROUP,
+             ESP_BOM_CRAW_SRC_D_ESPMC_PROJ.PRODUCT_NUMBER AS COMPONENT_PRODUCT_NUMBER,
+             ESP_BOM_CRAW_SRC_D_ESPMC_PROJ.DESIGN_ID AS COMPONENT_DESIGN_ID,
+             ESP_BOM_CRAW_SRC_D_ESPMC_PROJ.PRODUCT_DESCRIPTION AS COMPONENT_PRODUCT_DESCRIPTION,
+             ESP_BOM_CRAW_SRC_D_ESPMC_PROJ.PRODUCT_TIER AS COMPONENT_PRODUCT_TIER,
+            ESP_BOM_CRAW_SRC_D_ESPMC_PROJ1.DESIGN_ID AS ANCHOR_DESIGN_ID,
+             ESP_BOM_CRAW_SRC_D_ESPMC_PROJ1.MATERIAL_GROUP AS ANCHOR_MATERIAL_GROUP
+             FROM {{ ref('E_SC_TEMP', 'ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ') }} ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ
+
+            left JOIN {{ ref('E_SC_TEMP', 'ESP_BOM_CRAW_SRC_D_ESPMC_PROJ') }} "ESP_BOM_CRAW_SRC_D_ESPMC_PROJ"
+            ON "ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ"."CON_ITEM" = "ESP_BOM_CRAW_SRC_D_ESPMC_PROJ"."PRODUCT_NUMBER"
+
+            left JOIN {{ ref('E_SC_TEMP', 'ESP_BOM_CRAW_SRC_D_ESPMC_PROJ') }} "ESP_BOM_CRAW_SRC_D_ESPMC_PROJ1"
+            ON "ANCHOR_PRODUCT_NUMBER" = "ESP_BOM_CRAW_SRC_D_ESPMC_PROJ1"."PRODUCT_NUMBER"
+
+            	)
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ
+          - locationName: E_SC_TEMP
+            nodeName: ESP_BOM_CRAW_SRC_D_ESPMC_PROJ
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ') }} "ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ"
+
+            LEFT JOIN {{ ref('E_SC_TEMP', 'ESP_BOM_CRAW_SRC_D_ESPMC_PROJ') }} "ESP_BOM_CRAW_SRC_D_ESPMC_PROJ"
+            ON "ESP_BOM_CRAW_SRC_D_BOMTRAV_PROJ"."CON_ITEM" = "ESP_BOM_CRAW_SRC_D_ESPMC_PROJ"."PRODUCT_NUMBER"
+
+            LEFT JOIN {{ ref('E_SC_TEMP', 'ESP_BOM_CRAW_SRC_D_ESPMC_PROJ') }} "ESP_BOM_CRAW_SRC_D_ESPMC_PROJ1"
+            ON "ESP_BOM_CRAW_SRC_D_BOMTRAV_ESPMC_JOIN".ANCHOR_PRODUCT_NUMBER = "ESP_BOM_CRAW_SRC_D_ESPMC_PROJ1".PRODUCT_NUMBER
+        name: D_ESP_BOM_CRAWLER_SOURCE
+        noLinkRefs: []
+  name: D_ESP_BOM_CRAWLER_SOURCE
+  overrideSQL: true
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

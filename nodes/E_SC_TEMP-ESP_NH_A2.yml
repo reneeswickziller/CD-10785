@@ -1,0 +1,132 @@
+fileVersion: 1
+id: b833b7ad-65bf-4a21-830f-89fafbce2a00
+name: ESP_NH_A2
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 3816ff92-0734-42b4-9387-07465008460c
+          stepCounter: b833b7ad-65bf-4a21-830f-89fafbce2a00
+        config: {}
+        dataType: DATE
+        description: ""
+        hashDetails: null
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b766e780-3b53-466f-b67f-2269cbea78e2
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 05ecc83a-83d9-4a6e-a3f0-d61bd70f6786
+          stepCounter: b833b7ad-65bf-4a21-830f-89fafbce2a00
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: COPRODORDERTYPE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: f9a9d70d-bfe9-4923-af5f-8ea1e125ee17
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: acfc50c6-6952-4cdf-b24a-83b0f8bb4162
+          stepCounter: b833b7ad-65bf-4a21-830f-89fafbce2a00
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SEQNUM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6bba95d6-4153-43ae-9572-bef1c7d89c7c
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5f2cc074-5720-4693-98d3-67126c364abc
+          stepCounter: b833b7ad-65bf-4a21-830f-89fafbce2a00
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: LOC
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 10dfb6ba-f531-4c3e-9ca3-c6fca4985860
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b4ceed25-abf9-4914-8da0-790526e2d417
+          stepCounter: b833b7ad-65bf-4a21-830f-89fafbce2a00
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        hashDetails: null
+        name: ITEM
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 372cf661-51b2-40d2-8a57-c869c604ab90
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e0cbcfdf-d05b-4999-9832-f389d627ba95
+          stepCounter: b833b7ad-65bf-4a21-830f-89fafbce2a00
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        hashDetails: null
+        name: SIMULATION_NAME
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 934516ca-5d54-485f-8316-00e18eb1f2fe
+                stepCounter: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          ESP_HUB_OUTPUT_V_PLANORDER: bebe0001-3be0-4bd3-ac20-4a026df9a3b5
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SP
+            nodeName: ESP_HUB_OUTPUT_V_PLANORDER
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SP', 'ESP_HUB_OUTPUT_V_PLANORDER') }} "ESP_HUB_OUTPUT_V_PLANORDER"
+            where "COPRODORDERTYPE"='0'
+        name: ESP_NH_A2
+        noLinkRefs: []
+  name: ESP_NH_A2
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

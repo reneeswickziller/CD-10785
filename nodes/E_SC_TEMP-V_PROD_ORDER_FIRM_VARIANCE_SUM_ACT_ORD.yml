@@ -1,0 +1,89 @@
+fileVersion: 1
+id: b93af809-c50f-4e5b-a546-50d04a693371
+name: V_PROD_ORDER_FIRM_VARIANCE_SUM_ACT_ORD
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: b4517c01-6b74-4d52-b5db-0a82876a0c54
+          stepCounter: b93af809-c50f-4e5b-a546-50d04a693371
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        hashDetails: null
+        name: PLANNED_ORDER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 00074577-738b-4dab-bb60-729e99b572f7
+                stepCounter: 07ee541a-4778-4f8a-a25d-2458d59b0ccc
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2ddbd93a-4b85-4ff9-b166-b7b84b6f565a
+          stepCounter: b93af809-c50f-4e5b-a546-50d04a693371
+        config: {}
+        dataType: DECIMAL(30,3)
+        description: ""
+        hashDetails: null
+        name: TOTAL_ACTUAL_ORDER_QTY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 8b6ece3c-45c4-4934-ba5a-bbcb5fafb853
+                stepCounter: 07ee541a-4778-4f8a-a25d-2458d59b0ccc
+            transform: SUM("V_PROD_ORDER_FIRM_VARIANCE_LOOKUP_FISCAL_WORK_WEEK_1"."TOTAL_ACTUAL_ORDER_QTY")
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: e2acb41b-909b-4682-8b70-58325756a7e6
+          stepCounter: b93af809-c50f-4e5b-a546-50d04a693371
+        config: {}
+        dataType: VARCHAR(2)
+        description: ""
+        hashDetails: null
+        name: WORK_WEEK
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 0ae3d54a-2927-465d-9e59-50592294c995
+                stepCounter: 07ee541a-4778-4f8a-a25d-2458d59b0ccc
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          V_PROD_ORDER_FIRM_VARIANCE_LOOKUP_FISCAL_WORK_WEEK_1: 07ee541a-4778-4f8a-a25d-2458d59b0ccc
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: V_PROD_ORDER_FIRM_VARIANCE_LOOKUP_FISCAL_WORK_WEEK_1
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'V_PROD_ORDER_FIRM_VARIANCE_LOOKUP_FISCAL_WORK_WEEK_1') }} 
+            "V_PROD_ORDER_FIRM_VARIANCE_LOOKUP_FISCAL_WORK_WEEK_1"
+            GROUP BY "V_PROD_ORDER_FIRM_VARIANCE_LOOKUP_FISCAL_WORK_WEEK_1"."PLANNED_ORDER",
+            "V_PROD_ORDER_FIRM_VARIANCE_LOOKUP_FISCAL_WORK_WEEK_1"."WORK_WEEK"
+        name: V_PROD_ORDER_FIRM_VARIANCE_SUM_ACT_ORD
+        noLinkRefs: []
+  name: V_PROD_ORDER_FIRM_VARIANCE_SUM_ACT_ORD
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

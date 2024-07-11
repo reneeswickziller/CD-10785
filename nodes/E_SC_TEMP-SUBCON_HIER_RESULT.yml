@@ -1,0 +1,95 @@
+fileVersion: 1
+id: 59c5c11b-088c-412f-9565-41d0cb007c30
+name: SUBCON_HIER_RESULT
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 712bb529-d427-461d-8b3f-0df0ab04c0a4
+          stepCounter: 59c5c11b-088c-412f-9565-41d0cb007c30
+        config: {}
+        dataType: varchar(100)
+        description: ""
+        name: PARENT_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 6901a0a3-29cf-4f80-ab26-e67fb350b58b
+                stepCounter: f9cc9f55-44e0-4b35-87c5-de948ab6239b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d5b9d233-dff5-483c-b30b-e33e07d40e28
+          stepCounter: 59c5c11b-088c-412f-9565-41d0cb007c30
+        config: {}
+        dataType: varchar(100)
+        description: ""
+        name: NODE_ID
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1ea80e4e-e2e5-4186-8d95-c24f00f0e957
+                stepCounter: f9cc9f55-44e0-4b35-87c5-de948ab6239b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5513dbec-4145-4f20-a881-f7e7bb7106c5
+          stepCounter: 59c5c11b-088c-412f-9565-41d0cb007c30
+        config: {}
+        dataType: integer
+        description: ""
+        name: LEVEL
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2f51da2e-fb4f-4150-bf3e-e49778e97dc7
+                stepCounter: f9cc9f55-44e0-4b35-87c5-de948ab6239b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 26f62b36-c53c-4a99-93e5-8aa29da10b4b
+          stepCounter: 59c5c11b-088c-412f-9565-41d0cb007c30
+        config: {}
+        dataType: varchar(500)
+        description: ""
+        name: PATH
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 2dad2a6a-2056-4944-8b14-af535613a652
+                stepCounter: f9cc9f55-44e0-4b35-87c5-de948ab6239b
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: SUBCON_HIER_SUPERSESSION_FBOM
+        join:
+          joinCondition: FROM {{ ref('E_SC_TEMP', 'SUBCON_HIER_SUPERSESSION_FBOM') }} "SUBCON_HIER_SUPERSESSION_FBOM"
+        name: SUBCON_HIER_RESULT
+        noLinkRefs: []
+  name: SUBCON_HIER_RESULT
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

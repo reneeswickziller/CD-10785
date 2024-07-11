@@ -1,0 +1,125 @@
+fileVersion: 1
+id: 860053e4-74c8-4a6d-8440-17ddea34165d
+name: ESP_HUB_INPUT_DEMAND_SPLIT_CPG
+operation:
+  database: ""
+  dataset: ""
+  deployEnabled: true
+  description: ""
+  locationName: E_SC_SP
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: dd769874-ccc5-4e4d-a4b2-2002e98104bf
+          stepCounter: 860053e4-74c8-4a6d-8440-17ddea34165d
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: ENTITY
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: b41909fd-cb3e-43be-9d63-f6aac20ac955
+          stepCounter: 860053e4-74c8-4a6d-8440-17ddea34165d
+        config: {}
+        dataType: VARCHAR(18)
+        defaultValue: ""
+        description: ""
+        name: MPN
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: a2f6acb9-e41c-4345-bec2-9cd9b6d1bfd2
+          stepCounter: 860053e4-74c8-4a6d-8440-17ddea34165d
+        config: {}
+        dataType: VARCHAR(10)
+        defaultValue: ""
+        description: ""
+        name: LOCATION
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: be7dd101-cc93-4311-aa2f-510c6657de9f
+          stepCounter: 860053e4-74c8-4a6d-8440-17ddea34165d
+        config: {}
+        dataType: NUMBER(3,2)
+        defaultValue: ""
+        description: ""
+        name: FACTOR
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 898f6126-793c-4213-87f2-4326f152a539
+          stepCounter: 860053e4-74c8-4a6d-8440-17ddea34165d
+        config: {}
+        dataType: VARCHAR(50)
+        defaultValue: ""
+        description: ""
+        name: MPN_DESC
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 86b66571-eb62-48ce-ade4-59abea19b6e5
+          stepCounter: 860053e4-74c8-4a6d-8440-17ddea34165d
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: VALIDFROM
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: fbc8b5a5-7b60-4d16-b00e-4ef108452d2a
+          stepCounter: 860053e4-74c8-4a6d-8440-17ddea34165d
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        defaultValue: ""
+        description: ""
+        name: VALIDTO
+        nullable: true
+        primaryKey: false
+        uniqueKey: false
+    join:
+      joinCondition: FROM {{ ref('E_SC_SUPPLY_CHAIN', 'ESP_HUB_INPUT_DEMAND_SPLIT_CPG') }}
+  name: ESP_HUB_INPUT_DEMAND_SPLIT_CPG
+  schema: ""
+  sqlType: Source
+  table: ESP_HUB_INPUT_DEMAND_SPLIT_CPG
+  type: sourceInput
+  version: 1
+type: Node

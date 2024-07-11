@@ -1,0 +1,94 @@
+fileVersion: 1
+id: dd422645-9be6-4877-957a-9dd42f917c5d
+name: V_SNOP_RR_DEMAND_FORECAST
+operation:
+  config:
+    insertStrategy: UNION
+    selectDistinct: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: C_SC_SNOP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9da738c8-5646-480f-97dc-bf02d85c50f8
+          stepCounter: dd422645-9be6-4877-957a-9dd42f917c5d
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: SCENARIO_SNAPSHOT
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: c79bc649-bad6-425f-a8aa-90ff59e021fa
+                stepCounter: 208b2378-ab03-4430-98b8-67623ab44361
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9c40cc27-4755-4e67-b1ac-78ee8a97e62c
+          stepCounter: dd422645-9be6-4877-957a-9dd42f917c5d
+        config: {}
+        dataType: VARCHAR(50)
+        description: ""
+        name: CATEGORY
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 90e3a433-588d-4565-8439-5f92ad05b8fe
+                stepCounter: 208b2378-ab03-4430-98b8-67623ab44361
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5dd8184d-c8ed-40af-9b6e-14e46cd7f3f9
+          stepCounter: dd422645-9be6-4877-957a-9dd42f917c5d
+        config: {}
+        dataType: VARCHAR(100)
+        description: ""
+        name: SCENARIO
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 95a15a30-5cbc-40f9-bbf1-8356f8ec3073
+                stepCounter: 208b2378-ab03-4430-98b8-67623ab44361
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 5461ad3d-3e9d-4d73-b3e4-eb12f8c14724
+          stepCounter: dd422645-9be6-4877-957a-9dd42f917c5d
+        config: {}
+        dataType: VARCHAR(10)
+        description: ""
+        name: SNAPSHOT_DATE
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a991a77b-8409-4802-96ac-038f06714665
+                stepCounter: 208b2378-ab03-4430-98b8-67623ab44361
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_SNOP
+            nodeName: BV_SNOP_DEMAND_FORECAST_MAIN
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_SNOP', 'BV_SNOP_DEMAND_FORECAST_MAIN') }} "BV_SNOP_DEMAND_FORECAST_MAIN"
+            GROUP BY ALL
+        name: V_SNOP_RR_DEMAND_FORECAST
+        noLinkRefs: []
+  name: V_SNOP_RR_DEMAND_FORECAST
+  overrideSQL: false
+  schema: ""
+  sqlType: View
+  type: sql
+  version: 1
+type: Node

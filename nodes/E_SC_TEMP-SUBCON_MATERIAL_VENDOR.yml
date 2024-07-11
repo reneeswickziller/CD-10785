@@ -1,0 +1,86 @@
+fileVersion: 1
+id: 3349e35b-7e82-423c-bba6-b61896a8bb19
+name: SUBCON_MATERIAL_VENDOR
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f9a3057c-cfd1-448f-a12a-2cda4a62a0c2
+          stepCounter: 3349e35b-7e82-423c-bba6-b61896a8bb19
+        config: {}
+        dataType: VARCHAR(18)
+        description: ""
+        name: MATERIAL_NUMBER
+        nullable: false
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 1f665fd8-318b-4eed-af1b-ca34a24d435e
+                stepCounter: 36ce982e-d9b6-4808-bebc-da4514d2746d
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: f7240f64-d982-45c0-b0de-4842d754a3f6
+          stepCounter: 3349e35b-7e82-423c-bba6-b61896a8bb19
+        config: {}
+        dataType: VARCHAR(40)
+        description: ""
+        name: MATERIAL_DESCRIPTION
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 9cb5095a-b02b-466f-af24-7b522e2f6a75
+                stepCounter: 36ce982e-d9b6-4808-bebc-da4514d2746d
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 858fcba7-8b51-4734-9e68-213547e4be05
+          stepCounter: 3349e35b-7e82-423c-bba6-b61896a8bb19
+        config: {}
+        dataType: VARCHAR(500)
+        defaultValue: ""
+        description: ""
+        name: VENDOR
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: LEFT(SUBSTRING(MATERIAL_DESCRIPTION,REGEXP_INSTR(MATERIAL_DESCRIPTION,'_',1)+1),REGEXP_INSTR(SUBSTR(MATERIAL_DESCRIPTION,REGEXP_INSTR(MATERIAL_DESCRIPTION,'_')+1),',')-1)
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_MASTER_DATA_MD
+            nodeName: V_D_MATERIAL
+        join:
+          joinCondition: FROM {{ ref('E_MASTER_DATA_MD', 'V_D_MATERIAL') }} "V_D_MATERIAL"
+        name: SUBCON_MATERIAL_VENDOR
+        noLinkRefs: []
+  name: SUBCON_MATERIAL_VENDOR
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node

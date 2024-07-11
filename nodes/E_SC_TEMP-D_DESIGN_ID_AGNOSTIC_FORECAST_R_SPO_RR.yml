@@ -1,0 +1,135 @@
+fileVersion: 1
+id: 1bf152a3-a3b1-4437-b0be-755c66b3ed00
+name: D_DESIGN_ID_AGNOSTIC_FORECAST_R_SPO_RR
+operation:
+  config:
+    insertStrategy: INSERT
+    postSQL: ""
+    preSQL: ""
+    testsEnabled: true
+    truncateBefore: true
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: E_SC_TEMP
+  materializationType: view
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a2cd6992-8ac8-470e-8a4d-73eef3c22c63
+          stepCounter: 1bf152a3-a3b1-4437-b0be-755c66b3ed00
+        config: {}
+        dataType: TIMESTAMP_NTZ(9)
+        description: ""
+        name: SNAPSHOT_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a6cb24a9-5fbf-40e1-ad02-eb6d585d9a96
+                stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9d5ad196-d1a8-47fa-8a44-fe034fd87684
+          stepCounter: 1bf152a3-a3b1-4437-b0be-755c66b3ed00
+        config: {}
+        dataType: VARCHAR(200)
+        description: ""
+        name: MATERIAL_NUMBER
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: a9c4f6fd-3415-4323-b8c8-36a05d2fd99c
+                stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a5f0dcec-ed88-4b4f-9c71-95a7b34c9ddc
+          stepCounter: 1bf152a3-a3b1-4437-b0be-755c66b3ed00
+        config: {}
+        dataType: DATE
+        description: ""
+        name: EFFECTIVE_IN_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 4b636486-5fdd-4fd9-9c78-daae739e0378
+                stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 19b173fc-f107-4a64-8f3f-8131639b139e
+          stepCounter: 1bf152a3-a3b1-4437-b0be-755c66b3ed00
+        config: {}
+        dataType: VARCHAR(200)
+        description: ""
+        name: SOURCE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 39158a57-8caf-42c9-b98b-a7cafa850772
+                stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c6836bc1-9ca1-49ac-a493-53b9ae919bd3
+          stepCounter: 1bf152a3-a3b1-4437-b0be-755c66b3ed00
+        config: {}
+        dataType: DATE
+        description: ""
+        name: SNAPSHOTDATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 20713a52-4882-4bb0-a623-efbbfb8f414b
+                stepCounter: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 8a257eb0-835a-4572-8273-9c4711151669
+          stepCounter: 1bf152a3-a3b1-4437-b0be-755c66b3ed00
+        config: {}
+        dataType: ""
+        defaultValue: ""
+        description: ""
+        name: PRIORITY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: RANK() OVER (PARTITION BY D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST."SNAPSHOT_DATE", D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST."MATERIAL_NUMBER", D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST."EFFECTIVE_IN_DATE" ORDER BY "D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST"."SOURCE" DESC)
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST: 4ece0b09-df2c-4b4a-9dc6-6669bd1b2f32
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: E_SC_TEMP
+            nodeName: D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST
+        join:
+          joinCondition: |-
+            FROM {{ ref('E_SC_TEMP', 'D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST') }} "D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST"
+            GROUP BY
+            "D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST"."SNAPSHOT_DATE",
+            "D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST"."MATERIAL_NUMBER",
+            "D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST"."EFFECTIVE_IN_DATE",
+            "D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST"."SOURCE",
+            "D_DESIGN_ID_AGNOSTIC_FORECAST_P_FORECAST"."SNAPSHOTDATE"
+        name: D_DESIGN_ID_AGNOSTIC_FORECAST_R_SPO_RR
+        noLinkRefs: []
+  name: D_DESIGN_ID_AGNOSTIC_FORECAST_R_SPO_RR
+  overrideSQL: false
+  schema: ""
+  sqlType: Stage
+  type: sql
+  version: 1
+type: Node
